@@ -1,2 +1,2 @@
 # GD-YD-Springboot
-![스크린샷 2024-03-15 오후 2 59 52](https://github.com/GD-YD/GD-YD-Springboot/assets/56204009/b77f8284-1a41-4f8b-a9ad-fca7d8610801)
+![스크린샷 2024-03-15 오후 3 04 17](https://github.com/GD-YD/GD-YD-Springboot/assets/56204009/30580071-80c7-4011-be62-5fcbaf644328)
