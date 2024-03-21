@@ -1,0 +1,5 @@
+rootProject.name = 'gd-yd-springboot'
+
+include 'gd-yd-api'
+include 'gd-yd-core'
+

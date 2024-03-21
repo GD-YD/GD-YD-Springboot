@@ -1,0 +1,60 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.4'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+allprojects {
+	group = 'com.gd-yd'
+	version = '0.0.1'
+	sourceCompatibility = '17'
+
+	repositories {
+		mavenCentral()
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	ext {
+		springCloudVersion = '2023.0.0'
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter'
+		implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+		implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
+}
