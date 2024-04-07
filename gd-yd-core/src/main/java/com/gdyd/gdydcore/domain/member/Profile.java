@@ -35,15 +35,15 @@ public class Profile extends BaseTimeEntity {
     String identificationUrl;
 
     @Column(nullable = false)
-    String StudentId;
+    String studentId;
 
     @Builder
-    public Profile(String name, String school, String major, String grade, String identificationUrl, String StudentId) {
+    public Profile(String name, String school, String major, String grade, String identificationUrl, String studentId) {
         this.name = name;
         this.school = school;
         this.major = major;
         this.grade = grade;
         this.identificationUrl = identificationUrl;
-        this.StudentId = StudentId;
+        this.studentId = studentId;
     }
 }
