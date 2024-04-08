@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @Entity
+@DiscriminatorColumn(name = "student_type")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "member")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -28,16 +30,14 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     String nickName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @Column(nullable = false)
+    String name;
 
-    @Builder
-    public Member(String email, String password, String nickName, Profile profile) {
+    public Member(String email, String password, String nickName, String name) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
-        this.profile = profile;
+        this.name = name;
     }
 
     // TODO : Buisness Logic
