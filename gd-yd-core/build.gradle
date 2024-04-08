@@ -15,3 +15,11 @@ bootJar {
 jar {
     enabled = true
 }
+
+task copyPrivate(type: Copy) {
+    copy {
+        from '../GD-YD-BE-Config'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}
