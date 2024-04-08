@@ -6,3 +6,13 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly("com.mysql:mysql-connector-j")
 }
+
+processResources.dependsOn('copyPrivate')
+
+task copyPrivate(type: Copy) {
+    copy {
+        from '../GD-YD-BE-Config'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}
