@@ -1,9 +1,14 @@
 package com.gdyd.gdydcore.domain.member;
 
+import com.gdyd.gdydcore.domain.board.Comment;
+import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -21,17 +26,23 @@ public class Member extends BaseTimeEntity {
     @EqualsAndHashCode.Include
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String email;
 
     @Column(nullable = false)
     String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String nickName;
 
     @Column(nullable = false)
     String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
+    List<Post> posts = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
+    List<Comment> comments = new ArrayList<>();
 
     public Member(String email, String password, String nickName, String name) {
         this.email = email;
@@ -39,6 +50,4 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
         this.name = name;
     }
-
-    // TODO : Buisness Logic
 }
