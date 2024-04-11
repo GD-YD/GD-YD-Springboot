@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UniversityStudentCommanService {
+public class UniversityStudentCommandService {
 
     private final UniversityStudentService universityStudentService;
 
