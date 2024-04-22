@@ -1,5 +1,8 @@
-rootProject.name = 'gd-yd-springboot'
+rootProject.name = 'gdyd-springboot'
 
 include 'gd-yd-api'
 include 'gd-yd-core'
+include 'gd-yd-support'
+include 'gd-yd-auth'
+include 'gd-yd-infra'
 

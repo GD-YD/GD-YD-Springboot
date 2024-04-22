@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':gd-yd-core')
-//    implementation project(':gd-yd-auth')
+    implementation project(':gd-yd-auth')
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
     runtimeOnly 'com.h2database:h2'

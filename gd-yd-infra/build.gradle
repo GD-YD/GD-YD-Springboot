@@ -1,0 +1,17 @@
+dependencies {
+    implementation project(':gd-yd-support')
+    implementation platform('software.amazon.awssdk:bom:2.20.85')
+//    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+
+//    api ('org.springframework.boot:spring-boot-starter-data-mongodb')
+    api ('org.springframework.boot:spring-boot-starter-web')
+    api ('org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE')
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
