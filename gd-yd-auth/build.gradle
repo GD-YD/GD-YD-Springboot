@@ -1,0 +1,21 @@
+dependencies {
+    implementation project(':gd-yd-core')
+    api ('org.springframework.boot:spring-boot-starter-security')
+    implementation 'org.json:json:20230227'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+task copyPrivate(type: Copy) {
+    copy {
+        from '../GD-YD-BE-Config'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}

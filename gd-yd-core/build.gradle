@@ -1,6 +1,6 @@
 dependencies {
-//    api project(':gd-yd-support')
-//    api project(':gd-yd-infra')
+    api project(':gd-yd-support')
+    api project(':gd-yd-infra')
     api ('org.springframework.boot:spring-boot-starter-data-jpa')
     api ('org.springframework.boot:spring-boot-starter-web')
 
