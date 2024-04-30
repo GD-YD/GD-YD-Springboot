@@ -1,4 +1,4 @@
-package com.gdyd.gdydapi.dto.post;
+package com.gdyd.gdydapi.dto.board;
 
 import com.gdyd.gdydcore.domain.board;
 import com.gdyd.gdydcore.domain.member.Member;

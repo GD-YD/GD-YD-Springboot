@@ -1,5 +1,6 @@
 package com.gdyd.gdydapi.controller.board;
 
+import com.gdyd.gdydcore.service.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,17 +12,12 @@ public class PostController {
 
 
     private final UniversityStudentService universityStudentService;
+    @Autowired
+    private final PostService postService;
 
     @PostMapping("/post")
-    public String createPost(@RequestBody PostRequestDto requestDto) throws IOException {
-        // 요청으로부터 게시글 정보를 추출하여 새로운 Post 객체를 생성합니다.
-        Post post = Post.builder()
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
-                .build();
-
-        // 게시글을 레포지토리에 저장합니다.
-        universityStudentService.savePost(post);
+    public String createPost(@RequestBody PostDto postDto) throws IOException {
+        postService.postWrite(postDto);
 
         return "";
     }
