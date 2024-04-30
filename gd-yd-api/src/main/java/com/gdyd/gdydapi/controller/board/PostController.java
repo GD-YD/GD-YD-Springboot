@@ -1,28 +1,29 @@
 package com.gdyd.gdydapi.controller.board;
 
-import com.gdyd.gdydcore.dto.board.PostDto;
-import com.gdyd.gdydcore.service.board.PostService;
+import com.gdyd.gdydapi.request.board.SavePostReqeust;
+import com.gdyd.gdydapi.response.board.SavePostResponse;
+import com.gdyd.gdydapi.service.board.PostCommandService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
+@Tag(name = "Post", description = "Post 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/board")
+@RequestMapping("/api/v1/post")
 public class PostController {
 
-    @Autowired
-    private final PostService postService;
+    private final PostCommandService postCommandService;
 
-    @PostMapping("/post")
-    public String createPost(@RequestBody PostDto postDto) throws IOException {
-        postService.postWrite(postDto);
-
-        return "";
+    @Operation(summary = "Post 생성 API", description = "Post를 생성하는 API")
+    @PostMapping
+    public ResponseEntity<SavePostResponse> createPost(@RequestBody SavePostReqeust request) {
+        SavePostResponse response = postCommandService.savePost(request);
+        return ResponseEntity.ok(response);
     }
 }
