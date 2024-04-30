@@ -1,6 +1,6 @@
-package com.gdyd.gdydapi.dto.board;
+package com.gdyd.gdydcore.dto.board;
 
-import com.gdyd.gdydcore.domain.board;
+import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.Member;
 import lombok.*;
 
@@ -18,7 +18,7 @@ public class PostDto {
     public Post toDomain() {
         Post post = Post.builder()
                 .title(title)
-                .cotent(content)
+                .content(content)
                 .build();
 
         return post;
