@@ -4,7 +4,10 @@ import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
