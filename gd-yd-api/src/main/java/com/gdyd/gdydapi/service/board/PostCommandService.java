@@ -22,8 +22,8 @@ public class PostCommandService {
         return SavePostResponse.from(post);
     }
 
-    public DeletePostResponse deletePost(Long id) {
-        postService.deletePost(id);
-        return DeletePostResponse.from(id);
+    public DeletePostResponse deletePost(Long postId) {
+        postService.deletePost(postId);
+        return DeletePostResponse.from(postId);
     }
 }

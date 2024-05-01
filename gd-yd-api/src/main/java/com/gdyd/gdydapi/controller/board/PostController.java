@@ -26,9 +26,9 @@ public class PostController {
     }
 
     @Operation(summary = "Post 삭제 API", description = "Post를 삭제하는 API")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<DeletePostResponse> deletePost(@PathVariable("id") Long id) {
-        DeletePostResponse response = postCommandService.deletePost(id);
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<DeletePostResponse> deletePost(@PathVariable("postId") Long postId) {
+        DeletePostResponse response = postCommandService.deletePost(postId);
         return ResponseEntity.ok(response);
     }
 

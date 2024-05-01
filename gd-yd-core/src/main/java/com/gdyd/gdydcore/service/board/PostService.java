@@ -18,5 +18,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long id) { postRepository.deleteById(id); }
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
 }
