@@ -1,6 +1,7 @@
 package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
+import com.gdyd.gdydapi.response.board.DeletePostResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.service.board.PostService;
@@ -19,5 +20,10 @@ public class PostCommandService {
         Post post = SavePostReqeust.toPost(request);
         postService.savePost(post);
         return SavePostResponse.from(post);
+    }
+
+    public DeletePostResponse deletePost(Long id) {
+        postService.deletePost(id);
+        return DeletePostResponse.from(id);
     }
 }
