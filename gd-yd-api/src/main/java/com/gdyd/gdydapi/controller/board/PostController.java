@@ -1,8 +1,10 @@
 package com.gdyd.gdydapi.controller.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
+import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.response.board.DeletePostResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
+import com.gdyd.gdydapi.response.board.UpdatePostResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,13 @@ public class PostController {
     @PostMapping
     public ResponseEntity<SavePostResponse> createPost(@RequestBody SavePostReqeust request) {
         SavePostResponse response = postCommandService.savePost(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 수정 API", description = "Post를 수정하는 API")
+    @PutMapping("/{postId}")
+    public ResponseEntity<UpdatePostResponse> updatePost(@PathVariable("postId") Long postId, @RequestBody UpdatePostRequest request) {
+        UpdatePostResponse response = postCommandService.updatePost(postId, request);
         return ResponseEntity.ok(response);
     }
 
