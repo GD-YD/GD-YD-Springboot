@@ -13,8 +13,13 @@ public class UniversityStudentService {
 
     private final UniversityStudentRepository repository;
 
+    public boolean existsUniversityStudentByEmail(String email) {
+        return repository.findByEmail(email).isPresent();
+    }
+
     @Transactional
     public void save(UniversityStudent universityStudent) {
         repository.save(universityStudent);
     }
+
 }
