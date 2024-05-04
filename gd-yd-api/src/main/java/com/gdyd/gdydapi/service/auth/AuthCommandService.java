@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.service.auth;
 
 import com.gdyd.gdydapi.request.auth.HighSchoolSignUpRequest;
 import com.gdyd.gdydapi.request.auth.LoginRequest;
+import com.gdyd.gdydapi.request.auth.RefreshTokenRequest;
 import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
@@ -61,7 +62,7 @@ public class AuthCommandService {
     public LoginResponse login(LoginRequest request) {
         Member member = memberService.getMemberByEmailandPassword(request.email(), request.password());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(member.getId(), null, null);
         Token generatedaccessToken = jwtProvider.generateAccessToken(authentication);
         Token generatedRefreshToken = jwtProvider.generateRefreshToken(authentication);
 
@@ -73,5 +74,12 @@ public class AuthCommandService {
         refreshTokenService.save(refreshToken);
 
         return LoginResponse.of(generatedaccessToken, generatedRefreshToken);
+    }
+
+    public void logout(RefreshTokenRequest request) {
+        String refreshToken = request.refreshToken();
+        Long memberId = jwtProvider.getMemberByRefreshToken(refreshToken);
+        RefreshToken refreshTokenInDB = refreshTokenService.getBymemberId(memberId);
+        refreshTokenService.delete(refreshTokenInDB);
     }
 }
