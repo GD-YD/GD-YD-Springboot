@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.controller.auth;
 
 import com.gdyd.gdydapi.request.auth.HighSchoolSignUpRequest;
 import com.gdyd.gdydapi.request.auth.LoginRequest;
+import com.gdyd.gdydapi.request.auth.RefreshTokenRequest;
 import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
@@ -10,11 +11,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth", description = "Auth 관련 API")
 @RestController
@@ -48,5 +47,14 @@ public class AuthController {
     ) {
         LoginResponse response = authCommandService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "로그아웃 API", description = "Refresh 토큰을 통해 로그아웃을 할 수 있는 API (반드시 새로 로그인하기 전에는 사용해야 함)")
+    @DeleteMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(
+            @RequestBody @Valid RefreshTokenRequest request
+    ) {
+        authCommandService.logout(request);
+        return ResponseEntity.noContent().build();
     }
 }

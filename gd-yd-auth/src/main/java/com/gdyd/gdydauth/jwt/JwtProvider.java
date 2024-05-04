@@ -1,9 +1,8 @@
 package com.gdyd.gdydauth.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -39,6 +38,24 @@ public class JwtProvider {
         return generateToken(authentication, refreshTokenSecretKey, refreshTokenExpirationTime, JwtType.REFRESH_TOKEN);
     }
 
+    public JwtValidationType validateAccessToken(String jwt) {
+        return validateToken(jwt, accessTokenSecretKey);
+    }
+
+    public JwtValidationType validateRefreshToken(String jwt) {
+        return validateToken(jwt, refreshTokenSecretKey);
+    }
+
+    public Long getMemberByRefreshToken(String jwt) {
+        validateRefreshToken(jwt);
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getJwtSecretKey(refreshTokenSecretKey))
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+        return Long.valueOf(claims.getSubject());
+    }
+
     private Token generateToken(Authentication authentication, String secretKey, long expirationTime, JwtType jwtType) {
         Date expiredTime = getExpirationDate(expirationTime);
         Claims claims = Jwts.claims()
@@ -56,6 +73,26 @@ public class JwtProvider {
                 .value(token)
                 .expiredTime(expiredTime)
                 .build();
+    }
+
+    private JwtValidationType validateToken(String jwt, String secretKey) {
+        if (jwt == null) {
+            return JwtValidationType.EMPTY_JWT;
+        }
+        try {
+            Jwts.parserBuilder().setSigningKey(getJwtSecretKey(secretKey)).build().parseClaimsJws(jwt);
+            return JwtValidationType.VALID_JWT;
+        } catch (SignatureException e) {
+            return JwtValidationType.INVALID_JWT_SIGNATURE;
+        } catch (MalformedJwtException e) {
+            return JwtValidationType.INVALID_JWT;
+        } catch (ExpiredJwtException e) {
+            return JwtValidationType.EXPIRED_JWT;
+        } catch (UnsupportedJwtException e) {
+            return JwtValidationType.UNSUPPORTED_JWT;
+        } catch (IllegalArgumentException e) {
+            return JwtValidationType.EMPTY_JWT;
+        }
     }
 
     private SecretKey getJwtSecretKey(String secretKey) {

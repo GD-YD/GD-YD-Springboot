@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.service.auth;
 
 import com.gdyd.gdydapi.request.auth.HighSchoolSignUpRequest;
 import com.gdyd.gdydapi.request.auth.LoginRequest;
+import com.gdyd.gdydapi.request.auth.RefreshTokenRequest;
 import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
@@ -15,6 +16,8 @@ import com.gdyd.gdydcore.service.member.HighSchoolStudentService;
 import com.gdyd.gdydcore.service.member.MemberService;
 import com.gdyd.gdydcore.service.member.RefreshTokenService;
 import com.gdyd.gdydcore.service.member.UniversityStudentService;
+import com.gdyd.gdydsupport.exception.BusinessException;
+import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +39,7 @@ public class AuthCommandService {
 
     public SignUpResponse signupHighSchool(HighSchoolSignUpRequest request) {
         if (highSchoolStudentService.existsHighSchoolStudentByEmail(request.email())) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         HighSchoolStudent student = HighSchoolSignUpRequest.toHighSchoolStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
@@ -47,7 +50,7 @@ public class AuthCommandService {
 
     public SignUpResponse signupUniversity(UniversitySignUpRequest request) {
         if (universityStudentService.existsUniversityStudentByEmail(request.email())) {
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+            throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         UniversityStudent student = UniversitySignUpRequest.toUniversityStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
@@ -59,10 +62,10 @@ public class AuthCommandService {
     public LoginResponse login(LoginRequest request) {
         Member member = memberService.getMemberByEmailandPassword(request.email(), request.password());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(member.getId(), null, null);
         Token generatedaccessToken = jwtProvider.generateAccessToken(authentication);
         Token generatedRefreshToken = jwtProvider.generateRefreshToken(authentication);
-        // Refresh Token 데이터베이스에 저장
+
         RefreshToken refreshToken = RefreshToken.builder()
                 .memberId(member.getId())
                 .token(generatedRefreshToken.getValue())
@@ -70,6 +73,13 @@ public class AuthCommandService {
                 .build();
         refreshTokenService.save(refreshToken);
 
-        return LoginResponse.from(generatedaccessToken, generatedRefreshToken);
+        return LoginResponse.of(generatedaccessToken, generatedRefreshToken);
+    }
+
+    public void logout(RefreshTokenRequest request) {
+        String refreshToken = request.refreshToken();
+        Long memberId = jwtProvider.getMemberByRefreshToken(refreshToken);
+        RefreshToken refreshTokenInDB = refreshTokenService.getBymemberId(memberId);
+        refreshTokenService.delete(refreshTokenInDB);
     }
 }
