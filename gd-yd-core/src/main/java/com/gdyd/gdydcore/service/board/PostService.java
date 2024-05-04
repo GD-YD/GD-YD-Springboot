@@ -17,6 +17,12 @@ public class PostService {
         postRepository.save(post);
     }
 
+    public Post getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 게시글이 존재하지 않습니다."));
+        return post;
+    }
+
     @Transactional
     public void updatePost(Long postId, Post post) {
         Post savedPost = postRepository.findById(postId)
