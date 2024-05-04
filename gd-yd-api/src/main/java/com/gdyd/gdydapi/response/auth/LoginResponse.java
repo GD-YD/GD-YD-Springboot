@@ -13,7 +13,7 @@ public record LoginResponse(
         @Schema(description = "리프레시 토큰", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1...")
         String refreshToken
 ) {
-    public static LoginResponse from(Token accessToken, Token refreshToken) {
+    public static LoginResponse of(Token accessToken, Token refreshToken) {
         return LoginResponse.builder()
                 .accessToken(accessToken.getValue())
                 .refreshToken(refreshToken.getValue())
