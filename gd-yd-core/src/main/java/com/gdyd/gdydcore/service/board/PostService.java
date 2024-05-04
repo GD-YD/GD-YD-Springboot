@@ -18,6 +18,15 @@ public class PostService {
     }
 
     @Transactional
+    public void updatePost(Long postId, Post post) {
+        Post savedPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 게시글이 존재하지 않습니다."));
+
+        savedPost.update(post.getTitle(),
+                post.getContent());
+    }
+
+    @Transactional
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
