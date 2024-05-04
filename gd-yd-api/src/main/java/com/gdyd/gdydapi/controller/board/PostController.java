@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.controller.board;
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.response.board.DeletePostResponse;
+import com.gdyd.gdydapi.response.board.GetPostResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdatePostResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
@@ -26,6 +27,14 @@ public class PostController {
         SavePostResponse response = postCommandService.savePost(request);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Post 조회 API", description = "Post를 조회하는 API")
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostResponse> getPostById(@PathVariable("postId") Long postId) {
+        GetPostResponse response = postCommandService.getPostById(postId);
+        return ResponseEntity.ok(response);
+    }
+
 
     @Operation(summary = "Post 수정 API", description = "Post를 수정하는 API")
     @PutMapping("/{postId}")
