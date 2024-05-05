@@ -23,7 +23,10 @@ public enum ErrorCode {
     EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "EMPTY_TOKEN", "유저 인증이 올바르지 않습니다."),
     NOT_FOUND_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "NOT_FOUND_REFRESH_TOKEN", "해당 리프레시 토큰을 찾을 수 없습니다."),
     INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "INVALID_SIGNUP", "이미 가입되어 있는 회원입니다."),
-    INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다.");
+    INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다."),
+
+    INVALID_MEMBER_EMAIL(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_EMAIL", "이미 가입되어 있는 회원입니다."),
+    INVALID_MEMBER_PASSWORD(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_PASSWORD", "비밀번호가 일치하지 않습니다.");
 
     // AWS
 

@@ -1,9 +1,6 @@
 package com.gdyd.gdydapi.controller.auth;
 
-import com.gdyd.gdydapi.request.auth.HighSchoolSignUpRequest;
-import com.gdyd.gdydapi.request.auth.LoginRequest;
-import com.gdyd.gdydapi.request.auth.RefreshTokenRequest;
-import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
+import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
 import com.gdyd.gdydapi.service.auth.AuthCommandService;
@@ -70,7 +67,7 @@ public class AuthController {
     @Operation(summary = "비밀번호 변경 API", description = "비밀번호를 변경할 수 있는 API")
     @PatchMapping("/password")
     public ResponseEntity<HttpStatus> changePassword(
-            @RequestBody @Valid LoginRequest request
+            @RequestBody @Valid PasswordChangeRequest request
     ) {
         authCommandService.changePassword(request);
         return ResponseEntity.noContent().build();
