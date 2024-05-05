@@ -1,9 +1,6 @@
 package com.gdyd.gdydapi.service.auth;
 
-import com.gdyd.gdydapi.request.auth.HighSchoolSignUpRequest;
-import com.gdyd.gdydapi.request.auth.LoginRequest;
-import com.gdyd.gdydapi.request.auth.RefreshTokenRequest;
-import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
+import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
 import com.gdyd.gdydauth.jwt.JwtProvider;
@@ -113,5 +110,11 @@ public class AuthCommandService {
         Long memberId = jwtProvider.getMemberIdByRefreshToken(refreshToken);
         RefreshToken refreshTokenInDB = refreshTokenService.getBymemberId(memberId);
         refreshTokenService.delete(refreshTokenInDB);
+    }
+
+    public void changePassword(PasswordChangeRequest request) {
+        Member member = memberService.getMemberByEmailandPassword(request.email(), request.oldPassword());
+        member.updatePassword(passwordEncoder.encode(request.newPassword()));
+        memberService.save(member);
     }
 }

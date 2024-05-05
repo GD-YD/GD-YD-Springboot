@@ -25,8 +25,13 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new BusinessException(ErrorCode.INVALID_LOGIN);
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_PASSWORD);
         }
         return member;
+    }
+
+    @Transactional
+    public void save(Member member) {
+        memberRepository.save(member);
     }
 }
