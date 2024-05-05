@@ -19,4 +19,11 @@ public record LoginResponse(
                 .refreshToken(refreshToken.getValue())
                 .build();
     }
+
+    public static LoginResponse of(String accessToken, String refreshToken) {
+        return LoginResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
 }

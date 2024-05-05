@@ -49,7 +49,16 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "로그아웃 API", description = "Refresh 토큰을 통해 로그아웃을 할 수 있는 API (반드시 새로 로그인하기 전에는 사용해야 함)")
+    @Operation(summary = "Refresh 토큰을 통한 Access, Refresh 토큰 재발급 API", description = "Refresh 토큰을 통해 Access, Refresh 토큰을 재발급 할 수 있는 API")
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refreshAccessToken(
+            @RequestBody @Valid RefreshTokenRequest request
+    ) {
+        LoginResponse response = authCommandService.refreshAccessToken(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "로그아웃 API", description = "Refresh 토큰을 통해 로그아웃을 하고, DB의 Refresh 토큰을 제거하는 API (반드시 새로 로그인하기 전에는 사용해야 함)")
     @DeleteMapping("/logout")
     public ResponseEntity<HttpStatus> logout(
             @RequestBody @Valid RefreshTokenRequest request

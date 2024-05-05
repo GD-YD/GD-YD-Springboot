@@ -46,7 +46,7 @@ public class JwtProvider {
         return validateToken(jwt, refreshTokenSecretKey);
     }
 
-    public Long getMemberByRefreshToken(String jwt) {
+    public Long getMemberIdByRefreshToken(String jwt) {
         validateRefreshToken(jwt);
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getJwtSecretKey(refreshTokenSecretKey))
