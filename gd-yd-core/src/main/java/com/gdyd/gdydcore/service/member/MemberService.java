@@ -29,4 +29,9 @@ public class MemberService {
         }
         return member;
     }
+
+    @Transactional
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
 }

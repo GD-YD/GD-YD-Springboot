@@ -33,7 +33,7 @@ public class AuthController {
 
     @Operation(summary = "대학생 회원가입 API", description = "대학생 회원가입을 할 수 있는 API")
     @PostMapping("/signup/university")
-    public ResponseEntity<SignUpResponse> signup(
+    public ResponseEntity<SignUpResponse> signupUniversity(
             @RequestBody @Valid UniversitySignUpRequest request
     ) {
         SignUpResponse response = authCommandService.signupUniversity(request);
@@ -64,6 +64,15 @@ public class AuthController {
             @RequestBody @Valid RefreshTokenRequest request
     ) {
         authCommandService.logout(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "비밀번호 변경 API", description = "비밀번호를 변경할 수 있는 API")
+    @PatchMapping("/password")
+    public ResponseEntity<HttpStatus> changePassword(
+            @RequestBody @Valid LoginRequest request
+    ) {
+        authCommandService.changePassword(request);
         return ResponseEntity.noContent().build();
     }
 }

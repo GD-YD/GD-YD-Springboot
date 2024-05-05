@@ -114,4 +114,10 @@ public class AuthCommandService {
         RefreshToken refreshTokenInDB = refreshTokenService.getBymemberId(memberId);
         refreshTokenService.delete(refreshTokenInDB);
     }
+
+    public void changePassword(LoginRequest request) {
+        Member member = memberService.getMemberByEmailandPassword(request.email(), request.password());
+        member.updatePassword(passwordEncoder.encode(request.password()));
+        memberService.save(member);
+    }
 }
