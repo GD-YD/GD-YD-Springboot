@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   web:
     container_name: dev-server
@@ -7,10 +5,12 @@ services:
     networks:
       - gdyd-network
     ports:
-      - "80:8080"
+      # Host:Container
+      # Need to change the host port -> 80 if use Nginx
+      - "8080:8080"
     environment:
       - "SPRING_PROFILES_ACTIVE=dev"
 
 networks:
-  gdyd_network:
+  gdyd-network:
     driver: bridge
