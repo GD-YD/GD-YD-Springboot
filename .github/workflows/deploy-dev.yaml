@@ -55,6 +55,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Dev Server Create remote directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_DEV_EC2_PUBLIC_IP }}
+          username: ec2-user
+          key: ${{ secrets.AWS_DEV_EC2_PEM_KEY }}
+          script: mkdir -p ~/gd-yd-springboot
+
+
+      - name: copy source via ssh key
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          remote_path: ~/gd-yd-springboot
+          remote_host: ${{ secrets.AWS_DEV_EC2_PUBLIC_IP }}
+          remote_user: ec2-user
+          remote_key: ${{ secrets.AWS_DEV_EC2_PEM_KEY }}
+
+
       - name: Dev Server Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -62,10 +81,10 @@ jobs:
           username: ec2-user
           key: ${{ secrets.AWS_DEV_EC2_PEM_KEY }}
           script: |
-            cd /home/ec2-user/gd-yd-springboot
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm $(docker ps -a -q)
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_REPO }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_REPO }}:latest
-            docker-compose up -d
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm $(sudo docker ps -a -q)
+            sudo docker rmi $(sudo docker images -q)
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
             docker image prune -f
