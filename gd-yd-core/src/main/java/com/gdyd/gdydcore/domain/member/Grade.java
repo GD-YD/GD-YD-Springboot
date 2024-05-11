@@ -5,5 +5,10 @@ public enum Grade {
     SECOND,
     THIRD,
     FOURTH,
-    FIFTH
+    FIFTH,
+    SIXTH,
+    SEVENTH,
+    EIGHTH,
+    NINTH,
+    TENTH
 }
