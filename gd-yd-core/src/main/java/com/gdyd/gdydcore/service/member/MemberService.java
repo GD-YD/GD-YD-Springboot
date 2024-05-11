@@ -30,6 +30,10 @@ public class MemberService {
         return member;
     }
 
+    public boolean existingEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
     @Transactional
     public void save(Member member) {
         memberRepository.save(member);
