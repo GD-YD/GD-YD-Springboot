@@ -34,6 +34,10 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
+    public boolean existingNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
     @Transactional
     public void save(Member member) {
         memberRepository.save(member);

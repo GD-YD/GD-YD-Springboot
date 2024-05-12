@@ -16,7 +16,7 @@ public record UniversitySignUpRequest(
 
         @NotBlank(message = "닉네임은 필수 입력 값입니다.")
         @Schema(description = "닉네임", example = "차라투스트라")
-        String nickName,
+        String nickname,
 
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         @ValidEmail(message = "올바르지 않은 이메일 형식입니다.")
@@ -51,7 +51,7 @@ public record UniversitySignUpRequest(
     public static UniversityStudent toUniversityStudent(UniversitySignUpRequest request) {
         return UniversityStudent.builder()
                 .name(request.name())
-                .nickName(request.nickName())
+                .nickname(request.nickname())
                 .email(request.email())
                 .password(request.password())
                 .universityName(request.universityName())

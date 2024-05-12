@@ -42,7 +42,6 @@ public class WebSecurityConfig {
                     config.setAllowCredentials(true);
                     return config;
                 }))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req.requestMatchers(permittedWhiteList())
                         .permitAll()
                         .anyRequest()
