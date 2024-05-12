@@ -15,4 +15,8 @@ public class MemberQueryService {
     public boolean existingEmail(String email) {
         return memberService.existingEmail(email);
     }
+
+    public boolean existingNickname(String nickname) {
+        return memberService.existingNickname(nickname);
+    }
 }
