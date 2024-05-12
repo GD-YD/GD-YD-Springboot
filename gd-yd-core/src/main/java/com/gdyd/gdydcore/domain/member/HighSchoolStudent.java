@@ -31,8 +31,8 @@ public class HighSchoolStudent extends Member {
     String identificationUrl;
 
     @Builder
-    public HighSchoolStudent(String email, String password, String nickName, String name, String highSchoolName, Grade highSchoolGrade, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
-        super(email, password, nickName, name);
+    public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
+        super(email, password, nickname, name);
         this.highSchoolName = highSchoolName;
         this.highSchoolGrade = highSchoolGrade;
         this.highSchoolMajor = highSchoolMajor;

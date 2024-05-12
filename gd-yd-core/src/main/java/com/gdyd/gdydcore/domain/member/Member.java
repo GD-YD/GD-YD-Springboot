@@ -36,7 +36,7 @@ public class Member extends BaseTimeEntity {
     String password;
 
     @Column(nullable = false, unique = true)
-    String nickName;
+    String nickname;
 
     @Column(nullable = false)
     String name;
@@ -47,10 +47,10 @@ public class Member extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
     List<Comment> comments = new ArrayList<>();
 
-    public Member(String email, String password, String nickName, String name) {
+    public Member(String email, String password, String nickname, String name) {
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.name = name;
     }
 

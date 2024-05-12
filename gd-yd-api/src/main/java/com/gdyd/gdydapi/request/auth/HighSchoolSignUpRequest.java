@@ -17,7 +17,7 @@ public record HighSchoolSignUpRequest(
 
         @NotBlank(message = "닉네임은 필수 입력 값입니다.")
         @Schema(description = "닉네임", example = "인천교회출신스님")
-        String nickName,
+        String nickname,
 
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         @ValidEmail(message = "올바르지 않은 이메일 형식입니다.")
@@ -52,7 +52,7 @@ public record HighSchoolSignUpRequest(
     public static HighSchoolStudent toHighSchoolStudent(HighSchoolSignUpRequest request) {
         return HighSchoolStudent.builder()
                 .name(request.name())
-                .nickName(request.nickName())
+                .nickname(request.nickname())
                 .email(request.email())
                 .password(request.password())
                 .highSchoolName(request.highSchoolName())

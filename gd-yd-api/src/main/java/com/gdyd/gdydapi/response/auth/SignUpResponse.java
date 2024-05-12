@@ -23,7 +23,7 @@ public record SignUpResponse(
                 highSchoolStudent.getId(),
                 highSchoolStudent.getEmail(),
                 highSchoolStudent.getName(),
-                highSchoolStudent.getNickName()
+                highSchoolStudent.getNickname()
         );
     }
 
@@ -32,7 +32,7 @@ public record SignUpResponse(
                 universityStudent.getId(),
                 universityStudent.getEmail(),
                 universityStudent.getName(),
-                universityStudent.getNickName()
+                universityStudent.getNickname()
         );
     }
 }
