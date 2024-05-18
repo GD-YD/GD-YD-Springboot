@@ -27,4 +27,12 @@ public class CommentService {
         comment.setPost(commentPost);
         commentRepository.save(comment);
     }
+
+    @Transactional
+    public void updateComment(Long commentId, Comment comment) {
+        Comment savedComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 댓글이 존재하지 않습니다."));
+
+        savedComment.update(comment.getContent());
+    }
 }

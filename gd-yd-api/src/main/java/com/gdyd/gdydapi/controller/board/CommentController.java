@@ -24,7 +24,7 @@ public class CommentController {
     @Operation(summary = "Comment 생성 API", description = "Comment를 생성하는 API")
     @PostMapping
     public ResponseEntity<SaveCommentResponse> createComment(@RequestBody SaveCommentRequest request) {
-        SaveCommentResponse response = commentCommandService.savePost(request);
+        SaveCommentResponse response = commentCommandService.saveComment(request);
         return ResponseEntity.ok(response);
     }
 

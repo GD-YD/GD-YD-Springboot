@@ -7,7 +7,7 @@ public record UpdateCommentRequest(
         @Schema(description = "Comment 내용", example = "그럴땐 맛있는 걸 사 먹여 보세요!")
         String content
 ) {
-        public static Comment toComment(SaveCommentRequest request) {
+        public static Comment toComment(UpdateCommentRequest request) {
             return Comment.builder()
                     .content(request.content())
                     .build();

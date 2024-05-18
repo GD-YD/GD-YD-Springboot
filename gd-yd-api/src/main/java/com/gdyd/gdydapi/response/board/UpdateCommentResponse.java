@@ -8,15 +8,11 @@ import lombok.Builder;
 @Builder
 @Schema(description = "Comment 수정 응답")
 public record UpdateCommentResponse(
-        @Schema(description = "Comment ID", example = "1")
-        Long id,
-
-        @Schema(description = "Comment 내용", example = "그럴땐 맛있는 걸 사 먹여 보세요!")
+        @Schema(description = "Comment 수정 내용", example = "그럴땐 맛있는 걸 사 먹여 보세요!")
         String content
 ) {
         public static UpdateCommentResponse from(Comment comment) {
             return UpdateCommentResponse.builder()
-                    .id(comment.getId())
                     .content(comment.getContent())
                     .build();
         }

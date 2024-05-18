@@ -24,5 +24,10 @@ public class CommentCommandService {
         return SaveCommentResponse.from(comment);
     }
 
-    public UpdateCommentResponse updateComment
+    public UpdateCommentResponse updateComment(Long commentId, UpdateCommentRequest request) {
+        Comment comment = UpdateCommentRequest.toComment(request);
+        commentService.updateComment(commentId, comment);
+        return UpdateCommentResponse.from(comment);
+
+    }
 }
