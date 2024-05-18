@@ -14,13 +14,17 @@ public record SavePostResponse(
         String title,
 
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
-        String content
+        String content,
+
+        @Schema(description = "Member ID", example = "1")
+        Long memberId
 ) {
         public static SavePostResponse from(Post post) {
                 return SavePostResponse.builder()
                         .id(post.getId())
                         .title(post.getTitle())
                         .content(post.getContent())
+                        .memberId(post.getMember().getId())
                         .build();
         }
 }
