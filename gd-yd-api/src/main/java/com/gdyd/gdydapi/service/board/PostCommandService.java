@@ -21,7 +21,7 @@ public class PostCommandService {
 
     public SavePostResponse savePost(SavePostReqeust request) {
         Post post = SavePostReqeust.toPost(request);
-        postService.savePost(post);
+        postService.savePost(request.memberId(), post);
         return SavePostResponse.from(post);
     }
 
