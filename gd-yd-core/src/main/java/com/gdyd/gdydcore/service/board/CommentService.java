@@ -17,6 +17,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+
     @Transactional
     public void saveComment(Long memberId, Long postId, Comment comment)  {
         Member commentMember = memberRepository.findById(memberId)
@@ -34,5 +35,10 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 댓글이 존재하지 않습니다."));
 
         savedComment.update(comment.getContent());
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

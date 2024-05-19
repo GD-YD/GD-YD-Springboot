@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.controller.board;
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
+import com.gdyd.gdydapi.response.board.DeleteCommentResponse;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
@@ -32,6 +33,13 @@ public class CommentController {
     @PutMapping("/{commentId}")
     public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable("commentId") Long commentId, @RequestBody UpdateCommentRequest request) {
         UpdateCommentResponse response = commentCommandService.updateComment(commentId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Comment 삭제 API", description = "Comment를 삭제하는 API")
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<DeleteCommentResponse> deleteComment(@PathVariable("commentId") Long commentId) {
+        DeleteCommentResponse response = commentCommandService.deleteComment(commentId);
         return ResponseEntity.ok(response);
     }
 }
