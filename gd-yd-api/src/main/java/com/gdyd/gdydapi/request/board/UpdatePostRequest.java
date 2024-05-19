@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.request.board;
 import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Post 수정 요청")
 public record UpdatePostRequest (
     @Schema(description = "Post 제목", example = "제 여친이 이상해요")
     String title,

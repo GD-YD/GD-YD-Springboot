@@ -6,9 +6,8 @@ import lombok.Builder;
 @Builder
 @Schema(description = "Post 삭제 응답")
 public record DeletePostResponse (
-    @Schema(description = "Post ID", example = "1")
-    Long id
-
+        @Schema(description = "Post ID", example = "1")
+        Long id
 ) {
         public static DeletePostResponse from(Long id) {
             return DeletePostResponse.builder()

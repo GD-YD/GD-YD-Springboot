@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/post")
 public class PostController {
-
     private final PostCommandService postCommandService;
 
     @Operation(summary = "Post 생성 API", description = "Post를 생성하는 API")
