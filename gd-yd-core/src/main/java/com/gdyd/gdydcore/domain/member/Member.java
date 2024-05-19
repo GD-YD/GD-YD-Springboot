@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@DiscriminatorColumn(name = "student_type")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "member")
 @FieldDefaults(level = AccessLevel.PRIVATE)
