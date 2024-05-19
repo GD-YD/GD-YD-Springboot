@@ -46,6 +46,15 @@ public class JwtProvider {
         return validateToken(jwt, refreshTokenSecretKey);
     }
 
+    public Long getMemberIdFromAccessToken(String jwt) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getJwtSecretKey(accessTokenSecretKey))
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+        return Long.valueOf(claims.getSubject());
+    }
+
     public Long getMemberIdByRefreshToken(String jwt) {
         validateRefreshToken(jwt);
         Claims claims = Jwts.parserBuilder()
@@ -54,6 +63,15 @@ public class JwtProvider {
                 .parseClaimsJws(jwt)
                 .getBody();
         return Long.valueOf(claims.getSubject());
+    }
+
+    public boolean isAccessToken(String jwt) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getJwtSecretKey(accessTokenSecretKey))
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+        return claims.getId().equals(JwtType.ACCESS_TOKEN.name());
     }
 
     private Token generateToken(Authentication authentication, String secretKey, long expirationTime, JwtType jwtType) {
