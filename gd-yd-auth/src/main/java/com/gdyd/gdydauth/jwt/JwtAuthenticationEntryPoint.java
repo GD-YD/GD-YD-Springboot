@@ -3,7 +3,6 @@ package com.gdyd.gdydauth.jwt;
 import com.gdyd.gdydauth.utils.HttpRequestEndpointChecker;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final HttpRequestEndpointChecker endpointChecker;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_OK);
         ErrorCode errorCode = (ErrorCode) request.getAttribute(REQUEST_ATTRIBUTE);
 

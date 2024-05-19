@@ -3,7 +3,6 @@ package com.gdyd.gdydauth.jwt;
 import com.gdyd.gdydauth.utils.HttpRequestEndpointChecker;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     private final HttpRequestEndpointChecker endpointChecker;
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         if (endpointChecker.isEndpointNotExist(request)) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
         }
