@@ -19,6 +19,10 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_REFRESH_TOKEN));
     }
 
+    public boolean existsByMemberId(Long memberId) {
+        return refreshTokenRepository.existsByMemberId(memberId);
+    }
+
     @Transactional
     public void save(RefreshToken refreshToken) {
         refreshTokenRepository.save(refreshToken);

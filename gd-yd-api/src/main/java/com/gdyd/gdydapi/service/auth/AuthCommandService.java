@@ -57,8 +57,17 @@ public class AuthCommandService {
         return SignUpResponse.from(student);
     }
 
+    /**
+     * Login Logic if already have Refresh Token Then delete it and create new Refresh Token
+     * @param request LoginRequest
+     * @return LoginResponse
+     */
     public LoginResponse login(LoginRequest request) {
         Member member = memberService.getMemberByEmailandPassword(request.email(), request.password());
+        if (refreshTokenService.existsByMemberId(member.getId())) {
+            RefreshToken refreshToken = refreshTokenService.getBymemberId(member.getId());
+            refreshTokenService.delete(refreshToken);
+        }
 
         Authentication authentication = new UserAuthentication(member.getId(), null, null);
         Token generatedaccessToken = jwtProvider.generateAccessToken(authentication);
