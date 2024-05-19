@@ -27,6 +27,7 @@ public enum ErrorCode {
     INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다."),
 
     UNSUPPORTED_BEARER_FORMAT(HttpStatus.UNAUTHORIZED, "UNSUPPORTED_BEARER_FORMAT", "지원하지 않는 Bearer token 형식입니다."),
+    AUTHENTICATION_FORBIDDEN(HttpStatus.FORBIDDEN, "AUTHENTICATION_FORBIDDEN", "유효하지 않은 사용자 정보입니다."),
 
     INVALID_MEMBER_EMAIL(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_EMAIL", "이미 가입되어 있는 회원입니다."),
     INVALID_MEMBER_PASSWORD(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_PASSWORD", "비밀번호가 일치하지 않습니다.");

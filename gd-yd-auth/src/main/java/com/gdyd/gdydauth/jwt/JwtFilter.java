@@ -26,6 +26,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
 
+    private static final String[] JWT_WHITELIST = {
+            "/swagger-ui",
+            "/api-docs",
+            "/api/v1/auth/login",
+            "/api/v1/auth/signup",
+            "/api/v1/auth/refresh",
+            "/api/v1/auth/logout",
+    };
+
     /**
      * OncePerRequestFilter to check the JWT token
      * @param request request
@@ -39,6 +48,11 @@ public class JwtFilter extends OncePerRequestFilter {
             @Nonnull HttpServletResponse response,
             @Nonnull FilterChain filterChain
     ) throws ServletException, IOException {
+        if (isWhiteListRequest(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String jwt = getJwtFromRequest(request);
             JwtValidationType jwtValidationType = jwtProvider.validateAccessToken(jwt);
@@ -54,6 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
@@ -81,5 +96,20 @@ public class JwtFilter extends OncePerRequestFilter {
             case UNSUPPORTED_JWT -> request.setAttribute(EXCEPTION_PROPERTY, ErrorCode.UNSUPPORTED_JWT);
             default -> throw new IllegalArgumentException("Unknown JwtValidationType: " + jwtValidationType);
         }
+    }
+
+    /**
+     * Check if the request is a Swagger request
+     * @param request request
+     * @return true if the request is a Swagger request
+     */
+    private boolean isWhiteListRequest(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        for (String uri : JWT_WHITELIST) {
+            if (requestURI.startsWith(uri)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
