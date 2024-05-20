@@ -47,6 +47,10 @@ public class Comment extends BaseTimeEntity {
         this.likeCount++;
     }
 
+    public void update(String content) {
+        this.content = content;
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
