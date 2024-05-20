@@ -7,7 +7,6 @@ import lombok.Builder;
 @Builder
 @Schema(description = "Post 삭제 응답")
 public record UpdatePostResponse (
-
         @Schema(description = "Post ID", example = "1")
         Long id,
 
@@ -17,11 +16,11 @@ public record UpdatePostResponse (
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
         String content
 ) {
-    public static UpdatePostResponse from(Post post) {
-        return UpdatePostResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
-    }
+        public static UpdatePostResponse from(Post post) {
+            return UpdatePostResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .build();
+        }
 }
