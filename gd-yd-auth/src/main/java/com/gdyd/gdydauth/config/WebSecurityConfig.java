@@ -1,5 +1,6 @@
 package com.gdyd.gdydauth.config;
 
+import com.gdyd.gdydauth.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-ui/**",
@@ -47,18 +49,19 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     private AntPathRequestMatcher[] permittedWhiteList() {
         return Stream.of(AUTH_WHITELIST)
                 .map(AntPathRequestMatcher::new)
                 .toArray(AntPathRequestMatcher[]::new);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
