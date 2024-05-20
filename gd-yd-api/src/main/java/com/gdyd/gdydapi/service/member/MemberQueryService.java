@@ -1,6 +1,15 @@
 package com.gdyd.gdydapi.service.member;
 
+import com.gdyd.gdydapi.response.member.ProfileResponse;
+import com.gdyd.gdydauth.utils.PrincipalUtil;
+import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
+import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.member.UniversityStudent;
+import com.gdyd.gdydcore.service.member.HighSchoolStudentService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.UniversityStudentService;
+import com.gdyd.gdydsupport.exception.BusinessException;
+import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberQueryService {
-
     private final MemberService memberService;
+    private final UniversityStudentService universityStudentService;
+    private final HighSchoolStudentService highSchoolStudentService;
 
     public boolean existingEmail(String email) {
         return memberService.existingEmail(email);
@@ -18,5 +28,21 @@ public class MemberQueryService {
 
     public boolean existingNickname(String nickname) {
         return memberService.existingNickname(nickname);
+    }
+
+    public ProfileResponse getProfile() {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+        switch (member.getType()) {
+            case UNIVERSITY_STUDENT -> {
+                UniversityStudent universityStudent = universityStudentService.getUniversityStudentByMemberId(memberId);
+                return ProfileResponse.fromUniversityStudent(universityStudent);
+            }
+            case HIGH_SCHOOL_STUDENT -> {
+                HighSchoolStudent highSchoolStudent = highSchoolStudentService.getHighSchoolStudentByMemberId(memberId);
+                return ProfileResponse.fromHighSchoolStudent(highSchoolStudent);
+            }
+            default -> throw new BusinessException(ErrorCode.INVALID_MEMBER_TYPE);
+        }
     }
 }

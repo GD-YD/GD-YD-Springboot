@@ -1,5 +1,6 @@
 package com.gdyd.gdydapi.controller.member;
 
+import com.gdyd.gdydapi.response.member.ProfileResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,13 @@ public class MemberController {
             @RequestParam(value = "nickname", required = true) String nickname
     ) {
         boolean response = memberQueryService.existingNickname(nickname);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "프로필 조회 API", description = "현재 로그인한 사용자의 프로필 정보를 조회하는 API")
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponse> getProfile() {
+        ProfileResponse response = memberQueryService.getProfile();
         return ResponseEntity.ok(response);
     }
 }
