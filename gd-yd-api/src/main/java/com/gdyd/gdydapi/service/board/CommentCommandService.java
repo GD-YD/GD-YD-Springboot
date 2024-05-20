@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.service.board;
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
+import com.gdyd.gdydapi.response.board.DeleteCommentResponse;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class CommentCommandService {
-    private CommentService commentService;
+    private final CommentService commentService;
 
     public SaveCommentResponse saveComment(SaveCommentRequest request) {
         Comment comment = SaveCommentRequest.toComment(request);
@@ -28,6 +29,10 @@ public class CommentCommandService {
         Comment comment = UpdateCommentRequest.toComment(request);
         commentService.updateComment(commentId, comment);
         return UpdateCommentResponse.from(comment);
+    }
 
+    public DeleteCommentResponse deleteComment(Long commentId) {
+        commentService.deleteComment(commentId);
+        return DeleteCommentResponse.from(commentId);
     }
 }
