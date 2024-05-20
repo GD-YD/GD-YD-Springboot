@@ -35,7 +35,6 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-
     @Operation(summary = "Post 수정 API", description = "Post를 수정하는 API")
     @PutMapping("/{postId}")
     public ResponseEntity<UpdatePostResponse> updatePost(@PathVariable("postId") Long postId, @RequestBody UpdatePostRequest request) {
