@@ -28,6 +28,10 @@ public class Member extends BaseTimeEntity {
     @EqualsAndHashCode.Include
     Long id;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    MemberType type;
+
     @Column(nullable = false, unique = true)
     String email;
 
@@ -46,7 +50,8 @@ public class Member extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
     List<Comment> comments = new ArrayList<>();
 
-    public Member(String email, String password, String nickname, String name) {
+    public Member(MemberType type, String email, String password, String nickname, String name) {
+        this.type = type;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
