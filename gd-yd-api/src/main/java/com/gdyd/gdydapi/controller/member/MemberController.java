@@ -21,7 +21,7 @@ public class MemberController {
     @Operation(summary = "회원 이메일 중복 조회 API", description = "이메일 중복을 조회할 수 있는 API (true -> 중복된 이메일 존재)")
     @GetMapping("/existing-email")
     public ResponseEntity<Boolean> existingEmail(
-            @RequestParam(value = "email", required = true) String email
+            @RequestParam(value = "email") String email
     ) {
         boolean response = memberQueryService.existingEmail(email);
         return ResponseEntity.ok(response);
@@ -30,7 +30,7 @@ public class MemberController {
     @Operation(summary = "회원 닉네임 중복 조회 API", description = "닉네임 중복을 조회할 수 있는 API (true -> 중복된 닉네임 존재)")
     @GetMapping("/existing-nickname")
     public ResponseEntity<Boolean> existingNickname(
-            @RequestParam(value = "nickname", required = true) String nickname
+            @RequestParam(value = "nickname") String nickname
     ) {
         boolean response = memberQueryService.existingNickname(nickname);
         return ResponseEntity.ok(response);

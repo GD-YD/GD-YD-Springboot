@@ -28,6 +28,8 @@ public class WebSecurityConfig {
             "/api-docs/json/**",
             "/api/v1/auth/login",
             "/api/v1/auth/refresh",
+            "/api/v1/member/existing-email",
+            "/api/v1/member/existing-nickname",
             "/api/v1/**",
             "/h2-console",
             "/h2-console/**"
@@ -38,7 +40,7 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000"));
+                    config.setAllowedOrigins(List.of("*"));
                     config.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "HEAD", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
