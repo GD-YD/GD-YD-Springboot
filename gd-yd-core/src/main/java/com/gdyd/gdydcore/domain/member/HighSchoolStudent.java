@@ -21,6 +21,9 @@ public class HighSchoolStudent extends Member {
     Grade highSchoolGrade;
 
     @Column(nullable = false)
+    Long enterYearHighSchool;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     HighSchoolMajor highSchoolMajor;
 
@@ -31,10 +34,11 @@ public class HighSchoolStudent extends Member {
     String identificationUrl;
 
     @Builder
-    public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
+    public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, Long enterYearHighSchool, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
         super(MemberType.HIGH_SCHOOL_STUDENT, email, password, nickname, name);
         this.highSchoolName = highSchoolName;
         this.highSchoolGrade = highSchoolGrade;
+        this.enterYearHighSchool = enterYearHighSchool;
         this.highSchoolMajor = highSchoolMajor;
         this.highSchoolStudentId = highSchoolStudentId;
         this.identificationUrl = identificationUrl;

@@ -22,7 +22,10 @@ public record ProfileResponse(
         String schoolName,
 
         @Schema(description = "학년", example = "SECOND")
-        Grade grade
+        Grade grade,
+
+        @Schema(description = "입학년도", example = "2021")
+        Long enterYear
 ) {
     public static ProfileResponse fromUniversityStudent(UniversityStudent student) {
         return ProfileResponse.builder()
@@ -31,6 +34,7 @@ public record ProfileResponse(
                 .name(student.getName())
                 .schoolName(student.getUniversityName())
                 .grade(student.getUniversityGrade())
+                .enterYear(student.getEnterYearUniversity())
                 .build();
     }
 
@@ -41,6 +45,7 @@ public record ProfileResponse(
                 .name(student.getName())
                 .schoolName(student.getHighSchoolName())
                 .grade(student.getHighSchoolGrade())
+                .enterYear(student.getEnterYearHighSchool())
                 .build();
     }
 }

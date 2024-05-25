@@ -21,6 +21,9 @@ public class UniversityStudent extends Member {
     Grade universityGrade;
 
     @Column(nullable = false)
+    Long enterYearUniversity;
+
+    @Column(nullable = false)
     String universityMajor;
 
     @Column(nullable = false)
@@ -30,10 +33,11 @@ public class UniversityStudent extends Member {
     String identificationUrl;
 
     @Builder
-    public UniversityStudent(String email, String password, String nickname, String name, String universityName, Grade universityGrade, String universityMajor, String universityStudentId, String identificationUrl) {
+    public UniversityStudent(String email, String password, String nickname, String name, String universityName, Grade universityGrade, Long enterYearUniversity, String universityMajor, String universityStudentId, String identificationUrl) {
         super(MemberType.UNIVERSITY_STUDENT, email, password, nickname, name);
         this.universityName = universityName;
         this.universityGrade = universityGrade;
+        this.enterYearUniversity = enterYearUniversity;
         this.universityMajor = universityMajor;
         this.universityStudentId = universityStudentId;
         this.identificationUrl = identificationUrl;
