@@ -1,12 +1,16 @@
 package com.gdyd.gdydcore.domain.mentoring;
 
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
+import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -21,4 +25,18 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     @Column(name = "high_school_student_question_id")
     @EqualsAndHashCode.Include
     Long id;
+
+    @Column(nullable = false)
+    String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    String question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    HighSchoolStudent highSchoolStudent;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
+    List<UniversityStudentAnswer> universityStudentAnswers = new ArrayList<>();
+
 }

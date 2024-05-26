@@ -1,8 +1,12 @@
 package com.gdyd.gdydcore.domain.member;
 
+import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -32,6 +36,9 @@ public class HighSchoolStudent extends Member {
 
     @Column(nullable = false)
     String identificationUrl;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudent", orphanRemoval = true)
+    List<HighSchoolStudentQuestion> highSchoolStudentQuestions = new ArrayList<>();
 
     @Builder
     public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, Long enterYearHighSchool, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
