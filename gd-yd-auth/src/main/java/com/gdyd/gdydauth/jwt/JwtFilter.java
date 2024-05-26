@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 setErrorMessageInRequest(jwtProvider.validateAccessToken(jwt), request);
             }
         } catch (Exception e) {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.EMPTY_TOKEN);
         }
         filterChain.doFilter(request, response);
     }
