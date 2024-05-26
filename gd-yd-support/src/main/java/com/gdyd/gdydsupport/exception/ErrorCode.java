@@ -34,8 +34,11 @@ public enum ErrorCode {
     INVALID_MEMBER_PASSWORD(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_PASSWORD", "비밀번호가 일치하지 않습니다."),
 
     INVALID_MEMBER_PROFILE_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_PROFILE_REQUEST", "로그인이 되어있지 않고 프로필을 조회할 수 없습니다."),
-    INVALID_PRINCIPAL(HttpStatus.BAD_REQUEST, "INVALID_PRINCIPAL", "로그인 객체의 정보가 유효하지 않거나, 존재하지 않습니다.");
+    INVALID_PRINCIPAL(HttpStatus.BAD_REQUEST, "INVALID_PRINCIPAL", "로그인 객체의 정보가 유효하지 않거나, 존재하지 않습니다."),
 
+    // POST
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "NOT_FOUND_POST", "해당 id를 가진 게시글이 존재하지 않습니다."),
+    UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_MEMBER", "권한이 없는 사용자 입니다");
     // AWS
 
     private final HttpStatus status;

@@ -61,7 +61,7 @@ public class Post extends BaseTimeEntity {
         this.likeCount++;
     }
 
-    public void setMember(Member member)
+    public void UpdateMember(Member member)
     {
         this.member = member;
     }

@@ -1,8 +1,11 @@
 package com.gdyd.gdydapi.response.board;
 
+import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 @Schema(description = "Post 조회 응답")
@@ -14,13 +17,17 @@ public record GetPostResponse (
         String title,
 
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
-        String content
+        String content,
+
+        @Schema(description = "Post 댓글", example = "댓글들")
+        List<Comment> comments
 ) {
         public static GetPostResponse from(Post post) {
             return GetPostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
                     .content(post.getContent())
+                    .comments(post.getComments())
                     .build();
         }
 }
