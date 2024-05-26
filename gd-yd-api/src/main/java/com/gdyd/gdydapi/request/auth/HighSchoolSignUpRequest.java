@@ -37,6 +37,10 @@ public record HighSchoolSignUpRequest(
         @Schema(description = "고등학교 학년", example = "FIRST")
         Grade highSchoolGrade,
 
+        @NotNull(message = "고등학교 입학년도는 필수 입력 값입니다.")
+        @Schema(description = "고등학교 입학년도", example = "2021")
+        Long enterYearHighSchool,
+
         @NotNull(message = "고등학교 전공은 필수 입력 값입니다.")
         @Schema(description = "고등학교 전공", example = "NATURAL_SCIENCE")
         HighSchoolMajor highSchoolMajor,
@@ -57,6 +61,7 @@ public record HighSchoolSignUpRequest(
                 .password(request.password())
                 .highSchoolName(request.highSchoolName())
                 .highSchoolGrade(request.highSchoolGrade())
+                .enterYearHighSchool(request.enterYearHighSchool())
                 .highSchoolMajor(request.highSchoolMajor())
                 .highSchoolStudentId(request.highSchoolStudentId())
                 .identificationUrl(request.identificationUrl())

@@ -36,12 +36,16 @@ public record UniversitySignUpRequest(
         @Schema(description = "대학교 학년", example = "FIRST")
         Grade universityGrade,
 
+        @NotNull(message = "대학교 입학년도는 필수 입력 값입니다.")
+        @Schema(description = "대학교 입학년도", example = "2021")
+        Long enterYearUniversity,
+
         @NotBlank(message = "대학교 전공은 필수 입력 값입니다.")
-        @Schema(description = "대학교 전공", example = "NATURAL_SCIENCE")
+        @Schema(description = "대학교 전공", example = "COMPUTER_SCIENCE")
         String universityMajor,
 
         @NotBlank(message = "대학교 학번은 필수 입력 값입니다.")
-        @Schema(description = "대학교 학번", example = "2021-12345")
+        @Schema(description = "대학교 학번", example = "32192896")
         String universityStudentId,
 
         @NotBlank(message = "학생증 URL은 필수 입력 값입니다.")
@@ -56,6 +60,7 @@ public record UniversitySignUpRequest(
                 .password(request.password())
                 .universityName(request.universityName())
                 .universityGrade(request.universityGrade())
+                .enterYearUniversity(request.enterYearUniversity())
                 .universityMajor(request.universityMajor())
                 .universityStudentId(request.universityStudentId())
                 .identificationUrl(request.identificationUrl())
