@@ -85,6 +85,6 @@ jobs:
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -q)
-            sudo docker-compose -f ~/gd-yd-springboot/docker-compose.yaml pull
-            sudo docker-compose -f ~/gd-yd-springboot/docker-compose.yaml up --build -d
+            sudo docker-compose -f ~/gd-yd-springboot/GD-YD-BE-Config/docker-compose-dev.yaml pull
+            sudo docker-compose -f ~/gd-yd-springboot/GD-YD-BE-Config/docker-compose-dev.yaml up --build -d
             docker image prune -f
