@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.response.member;
 
 import com.gdyd.gdydcore.domain.member.Grade;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
+import com.gdyd.gdydcore.domain.member.MemberType;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -9,6 +10,9 @@ import lombok.Builder;
 @Builder
 @Schema(name = "ProfileResponse", description = "프로필 응답")
 public record ProfileResponse(
+        @Schema(description = "회원 유형", example = "UNIVERSITY_STUDENT")
+        MemberType memberType,
+
         @Schema(description = "이메일", example = "test@gmail.com")
         String email,
 
@@ -29,6 +33,7 @@ public record ProfileResponse(
 ) {
     public static ProfileResponse fromUniversityStudent(UniversityStudent student) {
         return ProfileResponse.builder()
+                .memberType(student.getType())
                 .email(student.getEmail())
                 .nickname(student.getNickname())
                 .name(student.getName())
@@ -40,6 +45,7 @@ public record ProfileResponse(
 
     public static ProfileResponse fromHighSchoolStudent(HighSchoolStudent student) {
         return ProfileResponse.builder()
+                .memberType(student.getType())
                 .email(student.getEmail())
                 .nickname(student.getNickname())
                 .name(student.getName())
