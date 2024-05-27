@@ -3,10 +3,7 @@ package com.gdyd.gdydcore.domain.mentoring;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
@@ -33,4 +30,11 @@ public class UniversityStudentAnswer extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "high_school_student_question_id", nullable = false)
     HighSchoolStudentQuestion highSchoolStudentQuestion;
+
+    @Builder
+    public UniversityStudentAnswer(String answer, UniversityStudent universityStudent, HighSchoolStudentQuestion highSchoolStudentQuestion) {
+        this.answer = answer;
+        this.universityStudent = universityStudent;
+        this.highSchoolStudentQuestion = highSchoolStudentQuestion;
+    }
 }
