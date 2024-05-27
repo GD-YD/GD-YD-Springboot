@@ -19,10 +19,15 @@ public class PostService {
         postRepository.save(post);
     }
 
-    @Transactional
     public Post getPostById(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
+        return post;
+    }
+
+    public Post getPostByIdAndMemberId(Long postId, Long memberId) {
+        Post post = postRepository.findByIdAndMemberId(postId, memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
         return post;
     }
 

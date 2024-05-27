@@ -38,7 +38,7 @@ public enum ErrorCode {
 
     // POST
     NOT_FOUND_POST(HttpStatus.NOT_FOUND, "NOT_FOUND_POST", "해당 id를 가진 게시글이 존재하지 않습니다."),
-    UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_MEMBER", "권한이 없는 사용자 입니다");
+    UNAUTHORIZED_MEMBER(HttpStatus.BAD_REQUEST, "UNAUTHORIZED_MEMBER", "권한이 없는 사용자 입니다");
     // AWS
 
     private final HttpStatus status;
