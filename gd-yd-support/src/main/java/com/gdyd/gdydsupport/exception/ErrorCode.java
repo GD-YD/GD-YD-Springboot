@@ -14,6 +14,10 @@ public enum ErrorCode {
     //MEMBER
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "NOT_FOUND_MEMBER", "해당 회원을 찾을 수 없습니다."),
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_TYPE", "유효하지 않은 회원 타입입니다."),
+    INVALID_MEMBER_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_REQUEST", "해당 회원은 요청할 수 없습니다."),
+
+    //MENTORING
+    NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION(HttpStatus.NOT_FOUND, "NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION", "해당 고등학생 질문을 찾을 수 없습니다."),
 
     //AUTH
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_REFRESH_TOKEN", "유효하지 않은 리프레시 토큰입니다."),

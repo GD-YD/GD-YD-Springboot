@@ -3,10 +3,7 @@ package com.gdyd.gdydcore.domain.mentoring;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -39,4 +36,10 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
     List<UniversityStudentAnswer> universityStudentAnswers = new ArrayList<>();
 
+    @Builder
+    public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
+        this.title = title;
+        this.question = question;
+        this.highSchoolStudent = highSchoolStudent;
+    }
 }
