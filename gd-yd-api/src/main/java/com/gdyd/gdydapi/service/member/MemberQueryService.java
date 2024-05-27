@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.response.member.ProfileResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.member.MemberType;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import com.gdyd.gdydcore.service.member.HighSchoolStudentService;
 import com.gdyd.gdydcore.service.member.MemberService;
@@ -44,5 +45,21 @@ public class MemberQueryService {
             }
             default -> throw new BusinessException(ErrorCode.INVALID_MEMBER_TYPE);
         }
+    }
+
+    public HighSchoolStudent getHighSchoolStudentByMemberId(Long memberId) {
+        MemberType memberType = memberService.getMemberById(memberId).getType();
+        if (memberType != MemberType.HIGH_SCHOOL_STUDENT) {
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_REQUEST);
+        }
+        return highSchoolStudentService.getHighSchoolStudentByMemberId(memberId);
+    }
+
+    public UniversityStudent getUniversityStudentByMemberId(Long memberId) {
+        MemberType memberType = memberService.getMemberById(memberId).getType();
+        if (memberType != MemberType.UNIVERSITY_STUDENT) {
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_REQUEST);
+        }
+        return universityStudentService.getUniversityStudentByMemberId(memberId);
     }
 }
