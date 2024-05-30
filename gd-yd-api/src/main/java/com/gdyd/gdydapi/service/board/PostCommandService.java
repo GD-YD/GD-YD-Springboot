@@ -2,10 +2,7 @@ package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
-import com.gdyd.gdydapi.response.board.DeletePostResponse;
-import com.gdyd.gdydapi.response.board.GetPostResponse;
-import com.gdyd.gdydapi.response.board.SavePostResponse;
-import com.gdyd.gdydapi.response.board.UpdatePostResponse;
+import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.Member;
@@ -14,6 +11,8 @@ import com.gdyd.gdydcore.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,11 @@ public class PostCommandService {
         post.updateMember(member);
         postService.savePost(post);
         return SavePostResponse.from(post);
+    }
+
+    public GetAllPostResponse getAllPost() {
+        List<Post> posts = postService.getAllPost();
+        return GetAllPostResponse.from(posts);
     }
 
     public GetPostResponse getPostById(Long postId) {

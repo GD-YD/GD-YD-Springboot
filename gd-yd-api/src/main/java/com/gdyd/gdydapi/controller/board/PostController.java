@@ -2,16 +2,15 @@ package com.gdyd.gdydapi.controller.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
-import com.gdyd.gdydapi.response.board.DeletePostResponse;
-import com.gdyd.gdydapi.response.board.GetPostResponse;
-import com.gdyd.gdydapi.response.board.SavePostResponse;
-import com.gdyd.gdydapi.response.board.UpdatePostResponse;
+import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Post", description = "Post 관련 API")
 @RestController
@@ -24,6 +23,13 @@ public class PostController {
     @PostMapping
     public ResponseEntity<SavePostResponse> createPost(@RequestBody SavePostReqeust request) {
         SavePostResponse response = postCommandService.savePost(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
+    @GetMapping("/list")
+    public ResponseEntity<GetAllPostResponse> getAllPost() {
+        GetAllPostResponse response = postCommandService.getAllPost();
         return ResponseEntity.ok(response);
     }
 
