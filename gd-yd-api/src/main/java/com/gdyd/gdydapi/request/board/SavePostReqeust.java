@@ -9,10 +9,7 @@ public record SavePostReqeust(
         String title,
 
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
-        String content,
-
-        @Schema(description = "Member ID", example = "1")
-        Long memberId
+        String content
 ) {
         public static Post toPost(SavePostReqeust request) {
                 return Post.builder()
