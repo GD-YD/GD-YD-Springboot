@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -17,6 +19,11 @@ public class PostService {
     @Transactional
     public void savePost(Post post)  {
         postRepository.save(post);
+    }
+
+    public List<Post> getAllPost() {
+        List<Post> posts = postRepository.findAll();
+        return posts;
     }
 
     public Post getPostById(Long postId) {
