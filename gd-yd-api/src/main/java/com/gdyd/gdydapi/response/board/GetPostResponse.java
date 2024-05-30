@@ -20,7 +20,7 @@ public record GetPostResponse (
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
         String content,
 
-        @Schema(description = "Post 댓글", example = "댓글들")
+        @Schema(description = "Post 댓글")
         List<GetCommentResponse> comments
 ) {
         public static GetPostResponse from(Post post) {

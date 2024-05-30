@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Builder
 @Schema(description = "Post 목록 조회 응답")
 public record GetAllPostResponse(
-        @Schema(description = "Post 리스트", example = "")
+        @Schema(description = "Post 리스트")
         List<GetPostResponse> posts
 ) {
         public static GetAllPostResponse from(List<Post> posts) {

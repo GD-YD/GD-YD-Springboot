@@ -31,16 +31,6 @@ public class PostCommandService {
         return SavePostResponse.from(post);
     }
 
-    public GetAllPostResponse getAllPost() {
-        List<Post> posts = postService.getAllPost();
-        return GetAllPostResponse.from(posts);
-    }
-
-    public GetPostResponse getPostById(Long postId) {
-        Post post = postService.getPostById(postId);
-        return GetPostResponse.from(post);
-    }
-
     public UpdatePostResponse updatePost(Long postId, UpdatePostRequest request) {
         Post post = UpdatePostRequest.toPost(request);
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
