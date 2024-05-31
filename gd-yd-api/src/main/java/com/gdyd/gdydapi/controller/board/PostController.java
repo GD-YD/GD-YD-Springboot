@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.service.board.PostCommandService;
+import com.gdyd.gdydapi.service.board.PostQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,10 @@ import java.util.List;
 @Tag(name = "Post", description = "Post 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1/posts")
 public class PostController {
     private final PostCommandService postCommandService;
+    private final PostQueryService postQueryService;
 
     @Operation(summary = "Post 생성 API", description = "Post를 생성하는 API")
     @PostMapping
@@ -27,16 +29,16 @@ public class PostController {
     }
 
     @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<GetAllPostResponse> getAllPost() {
-        GetAllPostResponse response = postCommandService.getAllPost();
+        GetAllPostResponse response = postQueryService.getAllPost();
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Post 조회 API", description = "Post를 조회하는 API")
     @GetMapping("/{postId}")
     public ResponseEntity<GetPostResponse> getPostById(@PathVariable("postId") Long postId) {
-        GetPostResponse response = postCommandService.getPostById(postId);
+        GetPostResponse response = postQueryService.getPostById(postId);
         return ResponseEntity.ok(response);
     }
 

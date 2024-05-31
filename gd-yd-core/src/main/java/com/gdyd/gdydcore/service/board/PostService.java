@@ -39,14 +39,6 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long postId, Post post) {
-        Post savedPost = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
-        savedPost.update(post.getTitle(),
-                post.getContent());
-    }
-
-    @Transactional
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }

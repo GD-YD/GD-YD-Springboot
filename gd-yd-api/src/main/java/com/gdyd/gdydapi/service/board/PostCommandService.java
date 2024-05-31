@@ -31,21 +31,12 @@ public class PostCommandService {
         return SavePostResponse.from(post);
     }
 
-    public GetAllPostResponse getAllPost() {
-        List<Post> posts = postService.getAllPost();
-        return GetAllPostResponse.from(posts);
-    }
-
-    public GetPostResponse getPostById(Long postId) {
-        Post post = postService.getPostById(postId);
-        return GetPostResponse.from(post);
-    }
-
     public UpdatePostResponse updatePost(Long postId, UpdatePostRequest request) {
         Post post = UpdatePostRequest.toPost(request);
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
-        postService.getPostByIdAndMemberId(postId, memberId);
-        postService.updatePost(postId, post);
+        Post savedPost = postService.getPostByIdAndMemberId(postId, memberId);
+        savedPost.update(post.getTitle(),
+                post.getContent());
         return UpdatePostResponse.from(post);
     }
 
