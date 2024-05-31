@@ -34,8 +34,9 @@ public class PostCommandService {
     public UpdatePostResponse updatePost(Long postId, UpdatePostRequest request) {
         Post post = UpdatePostRequest.toPost(request);
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
-        postService.getPostByIdAndMemberId(postId, memberId);
-        postService.updatePost(postId, post);
+        Post savedPost = postService.getPostByIdAndMemberId(postId, memberId);
+        savedPost.update(post.getTitle(),
+                post.getContent());
         return UpdatePostResponse.from(post);
     }
 

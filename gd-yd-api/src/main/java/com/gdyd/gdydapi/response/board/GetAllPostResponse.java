@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 @Schema(description = "Post 목록 조회 응답")
 public record GetAllPostResponse(
         @Schema(description = "Post 리스트")
-        List<GetPostResponse> posts
+        List<GetSummaryPostResponse> posts
 ) {
         public static GetAllPostResponse from(List<Post> posts) {
             return GetAllPostResponse.builder()
                     .posts(posts.stream()
-                            .map(GetPostResponse::from)
+                            .map(GetSummaryPostResponse::from)
                             .collect(Collectors.toList()))
                     .build();
         }
