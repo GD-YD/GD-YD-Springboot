@@ -4,12 +4,9 @@ import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Builder
 @Schema(description = "Post 리스트용 요약 정보")
-public record GetSummaryPostResponse(
+public record GetPostSummaryResponse(
         @Schema(description = "Post ID", example = "1")
         Long postId,
 
@@ -28,8 +25,8 @@ public record GetSummaryPostResponse(
         @Schema(description = "Post 댓글 수")
         Long comments
 ) {
-        public static GetSummaryPostResponse from(Post post) {
-                return GetSummaryPostResponse.builder()
+        public static GetPostSummaryResponse from(Post post) {
+                return GetPostSummaryResponse.builder()
                         .postId(post.getId())
                         .memberNickname(post.getMember().getNickname())
                         .title(post.getTitle())
