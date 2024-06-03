@@ -34,10 +34,10 @@ public record GetPostResponse (
         @Schema(description = "Post 댓글")
         List<GetCommentResponse> comments
 ) {
-        public static GetPostResponse of(Post post) {
+        public static GetPostResponse from(Post post) {
                 BoardMemberResponse memberResponse = BoardMemberResponse.from(post.getMember());
                 List<GetCommentResponse> commentResponses = post.getComments().stream()
-                        .map(GetCommentResponse::of)
+                        .map(GetCommentResponse::from)
                         .toList();
 
                 return GetPostResponse.builder()

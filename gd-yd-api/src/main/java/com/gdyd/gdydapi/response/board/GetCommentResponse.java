@@ -17,7 +17,7 @@ public record GetCommentResponse(
         @Schema(description = "댓글 작성자")
         BoardMemberResponse member
 ) {
-        public static GetCommentResponse of(Comment comment) {
+        public static GetCommentResponse from(Comment comment) {
                 BoardMemberResponse memberResponse = BoardMemberResponse.from(comment.getMember());
 
                 return GetCommentResponse.builder()
