@@ -2,7 +2,9 @@ package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
-import com.gdyd.gdydapi.response.board.*;
+import com.gdyd.gdydapi.response.board.DeletePostResponse;
+import com.gdyd.gdydapi.response.board.SavePostResponse;
+import com.gdyd.gdydapi.response.board.UpdatePostResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.Member;

@@ -1,7 +1,6 @@
 package com.gdyd.gdydapi.response.board;
 
 import com.gdyd.gdydcore.domain.board.Comment;
-import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

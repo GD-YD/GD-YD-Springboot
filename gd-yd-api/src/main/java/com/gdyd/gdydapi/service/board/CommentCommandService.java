@@ -1,11 +1,9 @@
 package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
-import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
 import com.gdyd.gdydapi.response.board.DeleteCommentResponse;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
-import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
 import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.service.board.CommentService;
