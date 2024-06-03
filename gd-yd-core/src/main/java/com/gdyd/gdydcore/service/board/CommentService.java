@@ -15,17 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
 
     @Transactional
-    public void saveComment(Long memberId, Long postId, Comment comment)  {
-        Member commentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 멤버가 존재하지 않습니다."));
-        Post commentPost = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 id를 가진 게시글이 존재하지 않습니다."));
-        comment.setMember(commentMember);
-        comment.setPost(commentPost);
+    public void saveComment(Comment comment)  {
         commentRepository.save(comment);
     }
 
