@@ -8,6 +8,9 @@ import lombok.Builder;
 @Builder
 @Schema(description = "Comment 조회 응답")
 public record GetCommentResponse(
+        @Schema(description = "Comment ID", example = "1")
+        Long commentId,
+
         @Schema(description = "Comment Content", example = "안녕하세요 반갑습니다")
         String content,
 
@@ -21,6 +24,7 @@ public record GetCommentResponse(
                 BoardMemberResponse memberResponse = BoardMemberResponse.from(comment.getMember());
 
                 return GetCommentResponse.builder()
+                        .commentId(comment.getId())
                         .content(comment.getContent())
                         .likeCount(comment.getLikeCount())
                         .member(memberResponse)
