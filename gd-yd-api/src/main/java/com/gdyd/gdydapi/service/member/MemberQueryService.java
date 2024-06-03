@@ -34,17 +34,7 @@ public class MemberQueryService {
     public ProfileResponse getProfile() {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         Member member = memberService.getMemberById(memberId);
-        switch (member.getType()) {
-            case UNIVERSITY_STUDENT -> {
-                UniversityStudent universityStudent = universityStudentService.getUniversityStudentByMemberId(memberId);
-                return ProfileResponse.fromUniversityStudent(universityStudent);
-            }
-            case HIGH_SCHOOL_STUDENT -> {
-                HighSchoolStudent highSchoolStudent = highSchoolStudentService.getHighSchoolStudentByMemberId(memberId);
-                return ProfileResponse.fromHighSchoolStudent(highSchoolStudent);
-            }
-            default -> throw new BusinessException(ErrorCode.INVALID_MEMBER_TYPE);
-        }
+        return ProfileResponse.from(member);
     }
 
     public HighSchoolStudent getHighSchoolStudentByMemberId(Long memberId) {
