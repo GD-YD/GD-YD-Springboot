@@ -1,6 +1,5 @@
 package com.gdyd.gdydapi.response.member;
 
-import com.gdyd.gdydapi.response.common.BoardMemberResponse;
 import com.gdyd.gdydcore.domain.member.*;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
