@@ -2,13 +2,13 @@ package com.gdyd.gdydapi.controller.board;
 
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
-import com.gdyd.gdydapi.response.board.DeleteCommentResponse;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
 import com.gdyd.gdydapi.service.board.CommentCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +35,8 @@ public class CommentController {
 
     @Operation(summary = "Comment 삭제 API", description = "Comment를 삭제하는 API")
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<DeleteCommentResponse> deleteComment(@PathVariable("commentId") Long commentId) {
-        DeleteCommentResponse response = commentCommandService.deleteComment(commentId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<HttpStatus> deleteComment(@PathVariable("commentId") Long commentId) {
+        commentCommandService.deleteComment(commentId);
+        return ResponseEntity.noContent().build();
     }
 }

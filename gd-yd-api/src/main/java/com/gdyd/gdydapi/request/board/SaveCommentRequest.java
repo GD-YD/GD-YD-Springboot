@@ -8,9 +8,6 @@ public record SaveCommentRequest(
         @Schema(description = "Comment 내용", example = "그럴땐 맛있는 걸 사 먹여 보세요!")
         String content,
 
-        @Schema(description = "Member ID", example = "1")
-        Long memberId,
-
         @Schema(description = "Post ID", example = "1")
         Long postId
 ) {
