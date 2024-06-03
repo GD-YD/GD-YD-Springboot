@@ -1,7 +1,6 @@
 package com.gdyd.gdydapi.request.board;
 
 import com.gdyd.gdydcore.domain.board.Comment;
-import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Comment 생성 요청")

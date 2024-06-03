@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Tag(name = "Post", description = "Post 관련 API")
 @RestController
 @RequiredArgsConstructor
@@ -35,10 +33,10 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Post 조회 API", description = "Post를 조회하는 API")
+    @Operation(summary = "Post 상세 조회 API", description = "Post와 Comments를 PostId로 불러오는 API")
     @GetMapping("/{postId}")
     public ResponseEntity<GetPostResponse> getPostById(@PathVariable("postId") Long postId) {
-        GetPostResponse response = postQueryService.getPostById(postId);
+        GetPostResponse response = postQueryService.getPostAndCommentsByPostId(postId);
         return ResponseEntity.ok(response);
     }
 

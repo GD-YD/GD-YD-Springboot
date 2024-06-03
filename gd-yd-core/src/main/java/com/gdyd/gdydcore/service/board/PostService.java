@@ -22,20 +22,17 @@ public class PostService {
     }
 
     public List<Post> getAllPost() {
-        List<Post> posts = postRepository.findAll();
-        return posts;
+        return postRepository.findAll();
     }
 
     public Post getPostById(Long postId) {
-        Post post = postRepository.findById(postId)
+        return postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
-        return post;
     }
 
     public Post getPostByIdAndMemberId(Long postId, Long memberId) {
-        Post post = postRepository.findByIdAndMemberId(postId, memberId)
+        return postRepository.findByIdAndMemberId(postId, memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
-        return post;
     }
 
     @Transactional

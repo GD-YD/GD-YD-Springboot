@@ -15,12 +15,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostQueryService {
     private final PostService postService;
+
     public GetAllPostResponse getAllPost() {
         List<Post> posts = postService.getAllPost();
         return GetAllPostResponse.from(posts);
     }
 
-    public GetPostResponse getPostById(Long postId) {
+    public GetPostResponse getPostAndCommentsByPostId(Long postId) {
         Post post = postService.getPostById(postId);
         return GetPostResponse.from(post);
     }

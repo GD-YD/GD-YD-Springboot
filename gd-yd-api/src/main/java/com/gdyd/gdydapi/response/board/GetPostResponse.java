@@ -1,22 +1,20 @@
 package com.gdyd.gdydapi.response.board;
 
-import com.gdyd.gdydcore.domain.board.Comment;
+import com.gdyd.gdydapi.response.common.BoardMemberResponse;
 import com.gdyd.gdydcore.domain.board.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
-@Schema(description = "Post 조회 응답")
+@Schema(description = "Post 상세 조회 응답 (댓글, 작성자 정보 포함)")
 public record GetPostResponse (
         @Schema(description = "Post ID", example = "1")
         Long postId,
 
-        @Schema(description = "Member ID", example = "1")
-        Long memberId,
+        @Schema(description = "작성자 정보")
+        BoardMemberResponse member,
 
         @Schema(description = "Post 제목", example = "제 여친이 이상해요")
         String title,
@@ -24,7 +22,7 @@ public record GetPostResponse (
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
         String content,
 
-        @Schema(description = "종아요 수", example = "4")
+        @Schema(description = "좋아요 수", example = "4")
         Long likeCount,
 
         @Schema(description = "생성 시간", example = "2024-05-30 15:27:38.999973")
@@ -37,17 +35,20 @@ public record GetPostResponse (
         List<GetCommentResponse> comments
 ) {
         public static GetPostResponse from(Post post) {
-            return GetPostResponse.builder()
+                BoardMemberResponse memberResponse = BoardMemberResponse.from(post.getMember());
+                List<GetCommentResponse> commentResponses = post.getComments().stream()
+                        .map(GetCommentResponse::from)
+                        .toList();
+
+                return GetPostResponse.builder()
                     .postId(post.getId())
-                    .memberId(post.getMember().getId())
+                    .member(memberResponse)
                     .title(post.getTitle())
                     .content(post.getContent())
                     .likeCount(post.getLikeCount())
                     .createdAt(post.getCreatedAt().toString())
                     .updatedAt(post.getUpdatedAt().toString())
-                    .comments(post.getComments().stream()
-                            .map(GetCommentResponse::from)
-                            .collect(Collectors.toList()))
+                    .comments(commentResponses)
                     .build();
         }
 }
