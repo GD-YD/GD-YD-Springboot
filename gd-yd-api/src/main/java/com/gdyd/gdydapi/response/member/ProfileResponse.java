@@ -55,7 +55,7 @@ public record ProfileResponse(
                 .build();
     }
 
-    public static ProfileResponse fromHighSchoolStudent(HighSchoolStudent student) {
+    public static ProfileResponse from(HighSchoolStudent student) {
         return ProfileResponse.builder()
                 .memberType(student.getType())
                 .email(student.getEmail())
