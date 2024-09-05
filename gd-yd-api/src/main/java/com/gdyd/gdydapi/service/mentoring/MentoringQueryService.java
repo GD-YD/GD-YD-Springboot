@@ -18,7 +18,7 @@ public class MentoringQueryService {
 
     /**
      * 고등학생 질문 목록 조회 (페이지네이션)
-     * @param pageable
+     * @param pageable 페이지 네이션 정보
      */
     public PageResponse<HighSchoolStudentQuestionResponse> getHighSchoolStudentQuestions(Pageable pageable) {
         Page<HighSchoolStudentQuestion> pages = highSchoolStudentQuestionService.findHighSchoolStudentQuestionByPagination(pageable);
