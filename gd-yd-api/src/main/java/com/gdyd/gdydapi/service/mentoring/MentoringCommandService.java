@@ -26,7 +26,7 @@ public class MentoringCommandService {
 
     /**
      * 고등학생 질문 생성
-     * @param request - 고등학생 질문 생성 요청
+     * @param request 고등학생 질문 생성 요청
      */
     public CreateHighSchoolStudentQuestionResponse createHighSchoolStudentQuestion(CreateHighSchoolStudentQuestionRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
