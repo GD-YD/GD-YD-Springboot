@@ -36,7 +36,7 @@ public class AuthCommandService {
     private final JwtProvider jwtProvider;
 
     public SignUpResponse signupHighSchool(HighSchoolSignUpRequest request) {
-        if (highSchoolStudentService.existsHighSchoolStudentByEmail(request.email())) {
+        if (memberService.existingEmail(request.email())) {
             throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         HighSchoolStudent student = HighSchoolSignUpRequest.toHighSchoolStudent(request);
@@ -47,7 +47,7 @@ public class AuthCommandService {
     }
 
     public SignUpResponse signupUniversity(UniversitySignUpRequest request) {
-        if (universityStudentService.existsUniversityStudentByEmail(request.email())) {
+        if (memberService.existingEmail(request.email())) {
             throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         UniversityStudent student = UniversitySignUpRequest.toUniversityStudent(request);
