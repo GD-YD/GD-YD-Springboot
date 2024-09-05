@@ -5,6 +5,7 @@ import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
+import com.gdyd.gdydapi.response.mentoring.DetailHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.HighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.service.mentoring.MentoringCommandService;
 import com.gdyd.gdydapi.service.mentoring.MentoringQueryService;
@@ -56,6 +57,16 @@ public class MentoringController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getHighSchoolStudentQuestions(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 상세 조회 API", description = "고등학생 질문 상세 정보(대학생 답변 내용 등)를 조회하는 API")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @GetMapping("/high-school-student-question/{highSchoolStudentQuestionId}")
+    public ResponseEntity<DetailHighSchoolStudentQuestionResponse> getDetailHighShcoolStudentQuestion(
+            @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
+    ) {
+        DetailHighSchoolStudentQuestionResponse response = mentoringQueryService.getHighSchoolStudentQuestionDetail(highSchoolStudentQuestionId);
         return ResponseEntity.ok(response);
     }
 }
