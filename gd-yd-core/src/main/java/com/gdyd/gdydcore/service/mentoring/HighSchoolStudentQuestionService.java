@@ -5,6 +5,8 @@ import com.gdyd.gdydcore.repository.mentoring.HighSchoolStudentQuestionRepositor
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,11 @@ public class HighSchoolStudentQuestionService {
     public HighSchoolStudentQuestion getHighSchoolStudentQuestionById(Long highSchoolStudentQuestionId) {
         return highSchoolStudentQuestionRepository.findById(highSchoolStudentQuestionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION));
+    }
+
+    public Page<HighSchoolStudentQuestion> findHighSchoolStudentQuestionByPagination(Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findAll(pageable);
+
     }
 
     @Transactional
