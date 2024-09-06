@@ -40,14 +40,15 @@ public class MentoringCommandService {
      * 대학생 답변 생성
      * @param highSchoolStudentQuestionId 고등학생 질문글 ID
      * @param request 대학생 답변 생성 요청
-     * @return 대학생 답변 생성 응답
      */
     public CreateUniversityStudentAnswerResponse createUniversityStudentAnswer(Long highSchoolStudentQuestionId, CreateUniversityStudentAnswerRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         UniversityStudent universityStudent = memberQueryService.getUniversityStudentByMemberId(memberId);
         HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
         UniversityStudentAnswer answer = CreateUniversityStudentAnswerRequest.toUniversityStudentAnswer(request, universityStudent, question);
+
         universityStudentAnswerService.save(answer);
+        question.increaseAnswerCount();
         return CreateUniversityStudentAnswerResponse.from(answer);
     }
 }
