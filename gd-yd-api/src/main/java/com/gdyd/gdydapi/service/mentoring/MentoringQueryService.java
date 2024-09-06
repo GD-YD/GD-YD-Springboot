@@ -36,6 +36,6 @@ public class MentoringQueryService {
     public DetailHighSchoolStudentQuestionResponse getHighSchoolStudentQuestionDetail(Long highSchoolStudentQuestionId) {
         HighSchoolStudentQuestion highSchoolStudentQuestion = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
         List<UniversityStudentAnswer> universityStudentAnswers = highSchoolStudentQuestion.getUniversityStudentAnswers();
-        return DetailHighSchoolStudentQuestionResponse.from(highSchoolStudentQuestion, universityStudentAnswers);
+        return DetailHighSchoolStudentQuestionResponse.of(highSchoolStudentQuestion, universityStudentAnswers);
     }
 }
