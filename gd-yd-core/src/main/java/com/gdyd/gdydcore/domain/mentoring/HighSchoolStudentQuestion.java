@@ -29,6 +29,9 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     String question;
 
+    @Column(nullable = false)
+    Long answerCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     HighSchoolStudent highSchoolStudent;
@@ -38,8 +41,13 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
 
     @Builder
     public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
+        this.answerCount = 0L;
         this.title = title;
         this.question = question;
         this.highSchoolStudent = highSchoolStudent;
+    }
+
+    public void increaseAnswerCount() {
+        this.answerCount++;
     }
 }
