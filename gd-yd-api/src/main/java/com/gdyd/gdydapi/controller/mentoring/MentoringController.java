@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.controller.mentoring;
 
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
+import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
@@ -67,6 +68,26 @@ public class MentoringController {
             @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
     ) {
         DetailHighSchoolStudentQuestionResponse response = mentoringQueryService.getHighSchoolStudentQuestionDetail(highSchoolStudentQuestionId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 좋아요 API", description = "고등학생 질문글에 좋아요를 증가하는 API (이미 해당 회원이 좋아요를 한 경우 예외 처리)")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @PostMapping("/high-school-student-question/{highSchoolStudentQuestionId}/like")
+    public ResponseEntity<LikeListResponse> likeHighSchoolStudentQuestionLike(
+            @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
+    ) {
+        LikeListResponse response = mentoringCommandService.likeHighSchoolStudentQuestion(highSchoolStudentQuestionId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 좋아요 취소 API", description = "고등학생 질문글에 좋아요를 감소하는 API (이미 해당 회원이 좋아요를 취소한 경우 예외 처리)")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @DeleteMapping("/high-school-student-question/{highSchoolStudentQuestionId}/like")
+    public ResponseEntity<LikeListResponse> dislikeHighSchoolStudentQuestion(
+            @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
+    ) {
+        LikeListResponse response = mentoringCommandService.dislikeHighSchoolStudentQuestion(highSchoolStudentQuestionId);
         return ResponseEntity.ok(response);
     }
 }

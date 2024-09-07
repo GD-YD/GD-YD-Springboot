@@ -16,6 +16,10 @@ public enum ErrorCode {
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_TYPE", "유효하지 않은 회원 타입입니다."),
     INVALID_MEMBER_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_REQUEST", "해당 회원은 요청할 수 없습니다."),
 
+    // LIKELIST
+    AREADY_LIKED(HttpStatus.BAD_REQUEST, "AREADY_LIKED", "이미 좋아요를 누른 질문입니다."),
+    AREADY_UNLIKED(HttpStatus.BAD_REQUEST, "AREADY_UNLIKED", "이미 좋아요를 취소한 질문입니다."),
+
     //MENTORING
     NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION(HttpStatus.NOT_FOUND, "NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION", "해당 고등학생 질문을 찾을 수 없습니다."),
 
