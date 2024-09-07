@@ -102,4 +102,46 @@ public class MentoringCommandService {
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
     }
+
+    /**
+     * 대학생 답변 좋아요 증가
+     */
+    public LikeListResponse likeUniversityStudentAnswer(Long universityStudentAnswerId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+        UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
+
+        if (likeListService.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId)) {
+            throw new BusinessException(ErrorCode.AREADY_LIKED);
+        }
+
+        answer.increaseLikeCount();
+        LikeList likeList = LikeList.universityStudentAnswerLikeBuilder()
+                .member(member)
+                .universityStudentAnswer(answer)
+                .build();
+        likeListService.save(likeList);
+        return LikeListResponse.from(likeList);
+    }
+
+    /**
+     * 대학생 답변 좋아요 감소
+     */
+    public LikeListResponse dislikeUniversityStudentAnswer(Long universityStudentAnswerId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+        UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
+
+        if (!likeListService.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId)) {
+            throw new BusinessException(ErrorCode.AREADY_UNLIKED);
+        }
+
+        answer.decreaseLikeCount();
+        LikeList likeList = member.getLikeLists().stream()
+                .filter(like -> like.getUniversityStudentAnswer().getId().equals(universityStudentAnswerId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
+        likeListService.delete(likeList);
+        return LikeListResponse.from(likeList);
+    }
 }

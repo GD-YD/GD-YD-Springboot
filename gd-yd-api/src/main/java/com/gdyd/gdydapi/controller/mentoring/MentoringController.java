@@ -90,4 +90,24 @@ public class MentoringController {
         LikeListResponse response = mentoringCommandService.dislikeHighSchoolStudentQuestion(highSchoolStudentQuestionId);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "대학생 답변 좋아요 API", description = "대학생 답변에 좋아요를 증가하는 API (이미 해당 회원이 좋아요를 한 경우 예외 처리)")
+    @Parameter(name = "universityStudentAnswerId", description = "대학생 답변글 ID", required = true)
+    @PostMapping("/university-student-answer/{universityStudentAnswerId}/like")
+    public ResponseEntity<LikeListResponse> likeUniversityStudentAnswer(
+            @PathVariable("universityStudentAnswerId") Long universityStudentAnswerId
+    ) {
+        LikeListResponse response = mentoringCommandService.likeUniversityStudentAnswer(universityStudentAnswerId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "대학생 답변 좋아요 취소 API", description = "대학생 답변에 좋아요를 감소하는 API (이미 해당 회원이 좋아요를 취소한 경우 예외 처리)")
+    @Parameter(name = "universityStudentAnswerId", description = "대학생 답변글 ID", required = true)
+    @DeleteMapping("/university-student-answer/{universityStudentAnswerId}/like")
+    public ResponseEntity<LikeListResponse> dislikeUniversityStudentAnswer(
+            @PathVariable("universityStudentAnswerId") Long universityStudentAnswerId
+    ) {
+        LikeListResponse response = mentoringCommandService.dislikeUniversityStudentAnswer(universityStudentAnswerId);
+        return ResponseEntity.ok(response);
+    }
 }
