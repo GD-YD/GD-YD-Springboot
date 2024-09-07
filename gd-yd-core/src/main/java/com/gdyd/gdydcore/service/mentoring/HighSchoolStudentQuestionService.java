@@ -23,7 +23,6 @@ public class HighSchoolStudentQuestionService {
 
     public Page<HighSchoolStudentQuestion> findHighSchoolStudentQuestionByPagination(Pageable pageable) {
         return highSchoolStudentQuestionRepository.findAll(pageable);
-
     }
 
     @Transactional

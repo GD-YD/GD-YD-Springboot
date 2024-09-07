@@ -22,6 +22,9 @@ public record DetailHighSchoolStudentQuestionResponse(
         @Schema(description = "고등학생 질문 내용", example = "이번에 모의고사 성적이 나왔는데, 이 성적으로 어떤 대학을 갈수 있을까요?")
         String question,
 
+        @Schema(description = "고등학생 질문에 대한 좋아요 수", example = "3")
+        Long likeCount,
+
         @Schema(description = "고등학생 질문에 대한 대학생 답변 수", example = "7")
         Long awnserCount,
 
@@ -40,6 +43,7 @@ public record DetailHighSchoolStudentQuestionResponse(
                 .highSchoolStudentNickname(highSchoolStudentQuestion.getHighSchoolStudent().getNickname())
                 .title(highSchoolStudentQuestion.getTitle())
                 .question(highSchoolStudentQuestion.getQuestion())
+                .likeCount(highSchoolStudentQuestion.getLikeCount())
                 .awnserCount(highSchoolStudentQuestion.getAnswerCount())
                 .answers(universityStudentAnswers.stream().map(UniversityStudentAnswerResponse::from).toList())
                 .createdAt(highSchoolStudentQuestion.getCreatedAt().toString())
