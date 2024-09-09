@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.controller.auth;
 
 import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
+import com.gdyd.gdydapi.response.auth.SendMailResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
 import com.gdyd.gdydapi.service.auth.AuthCommandService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,15 @@ public class AuthController {
             @RequestBody @Valid UniversitySignUpRequest request
     ) {
         SignUpResponse response = authCommandService.signupUniversity(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "이메일 인증 API", description = "이메일 인증을 요청하는 API")
+    @PostMapping("/signup/send-verification-email")
+    public ResponseEntity<SendMailResponse> sendVerificationMail(
+            @RequestBody @Valid SendMailRequest request
+    ) {
+        SendMailResponse response = authCommandService.sendMail(request);
         return ResponseEntity.ok(response);
     }
 

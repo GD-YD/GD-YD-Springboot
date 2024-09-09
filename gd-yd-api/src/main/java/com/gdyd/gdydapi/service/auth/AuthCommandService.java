@@ -2,26 +2,24 @@ package com.gdyd.gdydapi.service.auth;
 
 import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
+import com.gdyd.gdydapi.response.auth.SendMailResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
 import com.gdyd.gdydauth.jwt.JwtProvider;
 import com.gdyd.gdydauth.jwt.JwtValidationType;
 import com.gdyd.gdydauth.jwt.Token;
 import com.gdyd.gdydauth.jwt.UserAuthentication;
-import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
-import com.gdyd.gdydcore.domain.member.Member;
-import com.gdyd.gdydcore.domain.member.RefreshToken;
-import com.gdyd.gdydcore.domain.member.UniversityStudent;
-import com.gdyd.gdydcore.service.member.HighSchoolStudentService;
-import com.gdyd.gdydcore.service.member.MemberService;
-import com.gdyd.gdydcore.service.member.RefreshTokenService;
-import com.gdyd.gdydcore.service.member.UniversityStudentService;
+import com.gdyd.gdydcore.domain.member.*;
+import com.gdyd.gdydcore.service.member.*;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
+import com.gdyd.gdydsupport.generator.EmailGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,8 @@ public class AuthCommandService {
     private final HighSchoolStudentService highSchoolStudentService;
     private final UniversityStudentService universityStudentService;
     private final MemberService memberService;
-
+    private final VerificationCodeService verificationCodeService;
+    private final EmailGenerator emailGenerator;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final JwtProvider jwtProvider;
@@ -55,6 +54,21 @@ public class AuthCommandService {
 
         universityStudentService.save(student);
         return SignUpResponse.from(student);
+    }
+
+    public SendMailResponse sendMail(SendMailRequest request) {
+        String code = emailGenerator.sendMail(request.email());
+        LocalDateTime currentTime = emailGenerator.calculateExpireTime();
+        VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
+        if (verificationCode == null) {
+            verificationCode = new VerificationCode(request.email(), code, currentTime);
+            verificationCodeService.save(verificationCode);
+        }
+        else {
+            verificationCode.updateCode(code);
+            verificationCode.updateExpireTime(currentTime);
+        }
+        return SendMailResponse.of(code);
     }
 
     /**
