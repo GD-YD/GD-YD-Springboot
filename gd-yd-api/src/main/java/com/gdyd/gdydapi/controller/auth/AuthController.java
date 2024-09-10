@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @Operation(summary = "이메일 인증 API", description = "이메일 인증을 요청하는 API")
-    @PostMapping("/signup/send-verification-email")
+    @PostMapping("/send-verification-email")
     public ResponseEntity<SendMailResponse> sendVerificationMail(
             @RequestBody @Valid SendMailRequest request
     ) {
