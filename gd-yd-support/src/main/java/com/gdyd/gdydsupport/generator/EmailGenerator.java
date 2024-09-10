@@ -27,13 +27,13 @@ public class EmailGenerator {
 
             switch (index) {
                 case 0:
-                    code.append((char) (random.nextInt(26) + 97)); // 소문자
+                    code.append((char) (random.nextInt(26) + 97));
                     break;
                 case 1:
-                    code.append((char) (random.nextInt(26) + 65)); // 대문자
+                    code.append((char) (random.nextInt(26) + 65));
                     break;
                 default:
-                    code.append(random.nextInt(10)); // 숫자 0-9
+                    code.append(random.nextInt(10));
                     break;
             }
         }
