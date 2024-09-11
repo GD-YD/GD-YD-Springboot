@@ -32,6 +32,9 @@ public enum ErrorCode {
     UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "UNSUPPORTED_JWT_TOKEN", "지원하지 않는 토큰입니다."),
     EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "EMPTY_TOKEN", "유저 인증이 올바르지 않습니다."),
     NOT_FOUND_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "NOT_FOUND_REFRESH_TOKEN", "해당 리프레시 토큰을 찾을 수 없습니다."),
+    EMAIL_SEND_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "EMAIL_SEND_FAILURE", "이메일 전송 중 오류가 발생했습니다."),
+    INVALID_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "INVALID_VERIFICATION_CODE", "잘못된 인증코드입니다."),
+    NOT_FOUND_CODE(HttpStatus.NOT_FOUND, "NOT_FOUND_CODE", "해당 이메일로 생성 된 인증코드가 존재하지 않습니다."),
 
     INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "INVALID_SIGNUP", "이미 가입되어 있는 회원입니다."),
     INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다."),
