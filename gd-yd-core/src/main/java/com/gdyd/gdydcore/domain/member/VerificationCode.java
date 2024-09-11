@@ -42,7 +42,11 @@ public class VerificationCode {
         this.expireTime = expireTime;
     }
 
-    public boolean isExpired(LocalDateTime currentTime) {
-        return expireTime.isBefore(currentTime);
+    public boolean isMatch(String email, String code) {
+        return this.email.equals(email) && this.code.equals(code);
+    }
+
+    public boolean isExpired() {
+        return expireTime.isBefore(LocalDateTime.now());
     }
 }

@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SendMailResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
+import com.gdyd.gdydapi.response.auth.VerifyCodeResponse;
 import com.gdyd.gdydapi.service.auth.AuthCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +45,15 @@ public class AuthController {
             @RequestBody @Valid SendMailRequest request
     ) {
         SendMailResponse response = authCommandService.sendMail(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "코드 인증 API", description = "이메일로 받은 코드에 대한 인증을 요청하는 API")
+    @PostMapping("/verify-code")
+    public ResponseEntity<VerifyCodeResponse> verifyCode(
+            @RequestBody @Valid VerifyCodeRequest request
+    ) {
+        VerifyCodeResponse response = authCommandService.verifyCode(request);
         return ResponseEntity.ok(response);
     }
 

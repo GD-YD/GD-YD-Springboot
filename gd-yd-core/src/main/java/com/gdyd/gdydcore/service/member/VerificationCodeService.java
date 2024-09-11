@@ -20,4 +20,8 @@ public class VerificationCodeService {
     public void save(VerificationCode verificationCode) {
         verificationCodeRepository.save(verificationCode);
     }
+
+    public void delete(String email) {
+        verificationCodeRepository.deleteById(email);
+    }
 }

@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.request.auth.*;
 import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SendMailResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
+import com.gdyd.gdydapi.response.auth.VerifyCodeResponse;
 import com.gdyd.gdydauth.jwt.JwtProvider;
 import com.gdyd.gdydauth.jwt.JwtValidationType;
 import com.gdyd.gdydauth.jwt.Token;
@@ -58,17 +59,31 @@ public class AuthCommandService {
 
     public SendMailResponse sendMail(SendMailRequest request) {
         String code = emailGenerator.sendMail(request.email());
-        LocalDateTime currentTime = emailGenerator.calculateExpireTime();
+        LocalDateTime expireTime = emailGenerator.calculateExpireTime();
         VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
         if (verificationCode == null) {
-            verificationCode = new VerificationCode(request.email(), code, currentTime);
+            verificationCode = new VerificationCode(request.email(), code, expireTime);
             verificationCodeService.save(verificationCode);
         }
         else {
             verificationCode.updateCode(code);
-            verificationCode.updateExpireTime(currentTime);
+            verificationCode.updateExpireTime(expireTime);
         }
         return SendMailResponse.of(code);
+    }
+
+    public VerifyCodeResponse verifyCode(VerifyCodeRequest request) {
+        VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
+        if (verificationCode == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_VERIFICATION_CODE);
+        }
+
+        Boolean isMatch = verificationCode.isMatch(request.email(), request.code());
+        Boolean isExpired = verificationCode.isExpired();
+        if (isExpired) {
+            verificationCodeService.delete(request.email());
+        }
+        return VerifyCodeResponse.of(isMatch, isExpired);
     }
 
     /**
