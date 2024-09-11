@@ -10,7 +10,7 @@ public record SendMailResponse(
         @Schema(description = "인증 코드", example = "1a2B3c")
         String code
 ) {
-    public static SendMailResponse of(String code) {
+    public static SendMailResponse from(String code) {
         return SendMailResponse.builder()
                 .code(code)
                 .build();

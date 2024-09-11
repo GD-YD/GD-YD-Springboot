@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "verificaton_code")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)

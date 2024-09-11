@@ -60,22 +60,23 @@ public class AuthCommandService {
     public SendMailResponse sendMail(SendMailRequest request) {
         String code = emailGenerator.sendMail(request.email());
         LocalDateTime expireTime = emailGenerator.calculateExpireTime();
-        VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
-        if (verificationCode == null) {
+        VerificationCode verificationCode;
+        if (verificationCodeService.existsByEmail(request.email())) {
             verificationCode = new VerificationCode(request.email(), code, expireTime);
             verificationCodeService.save(verificationCode);
         }
         else {
+            verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
             verificationCode.updateCode(code);
             verificationCode.updateExpireTime(expireTime);
         }
-        return SendMailResponse.of(code);
+        return SendMailResponse.from(code);
     }
 
     public VerifyCodeResponse verifyCode(VerifyCodeRequest request) {
         VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
         if (verificationCode == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_VERIFICATION_CODE);
+            throw new BusinessException(ErrorCode.INVALID_VERIFICATION_CODE);
         }
 
         Boolean isMatch = verificationCode.isMatch(request.email(), request.code());
