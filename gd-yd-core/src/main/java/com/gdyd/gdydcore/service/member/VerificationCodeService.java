@@ -16,7 +16,7 @@ public class VerificationCodeService {
 
     public VerificationCode getVerificationCodeByEmail(String email) {
         return verificationCodeRepository.findById(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CODE));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_VERIFICATION_CODE));
     }
 
     public boolean existsByEmail(String email) {

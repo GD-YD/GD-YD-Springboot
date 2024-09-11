@@ -75,10 +75,6 @@ public class AuthCommandService {
 
     public VerifyCodeResponse verifyCode(VerifyCodeRequest request) {
         VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
-        if (verificationCode == null) {
-            throw new BusinessException(ErrorCode.INVALID_VERIFICATION_CODE);
-        }
-
         Boolean isMatch = verificationCode.isMatch(request.email(), request.code());
         Boolean isExpired = verificationCode.isExpired();
         if (isExpired) {
