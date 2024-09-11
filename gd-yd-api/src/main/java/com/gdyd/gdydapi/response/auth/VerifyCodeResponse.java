@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
-@Schema(description = "코드 인증 응답")
+@Schema(description = "인증코드 검증 응답")
 public record VerifyCodeResponse(
         @Schema(description = "코드 일치 여부", example = "true")
         Boolean isMatch,

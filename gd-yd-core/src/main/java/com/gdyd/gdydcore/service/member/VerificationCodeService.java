@@ -28,6 +28,7 @@ public class VerificationCodeService {
         verificationCodeRepository.save(verificationCode);
     }
 
+    @Transactional
     public void delete(String email) {
         verificationCodeRepository.deleteById(email);
     }

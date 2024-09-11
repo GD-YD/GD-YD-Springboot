@@ -4,6 +4,7 @@ import com.gdyd.gdydsupport.annotation.ValidEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+@Schema(description = "인증코드 검증 요청")
 public record VerifyCodeRequest(
 
         @NotBlank(message = "이메일은 필수 입력 값입니다.")

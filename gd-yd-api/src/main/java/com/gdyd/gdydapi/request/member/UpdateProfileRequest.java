@@ -1,6 +1,5 @@
 package com.gdyd.gdydapi.request.member;
 
-import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydsupport.annotation.ValidEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
