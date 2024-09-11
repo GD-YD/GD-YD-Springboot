@@ -77,7 +77,7 @@ public class AuthCommandService {
         VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
         Boolean isMatch = verificationCode.isMatch(request.email(), request.code());
         Boolean isExpired = verificationCode.isExpired();
-        if (isExpired) {
+        if (isMatch || isExpired) {
             verificationCodeService.delete(request.email());
         }
         return VerifyCodeResponse.of(isMatch, isExpired);
