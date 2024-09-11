@@ -59,16 +59,17 @@ public class AuthCommandService {
     public SendMailResponse sendMail(SendMailRequest request) {
         String code = emailGenerator.sendMail(request.email());
         LocalDateTime currentTime = emailGenerator.calculateExpireTime();
-        VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
-        if (verificationCode == null) {
+        VerificationCode verificationCode;
+        if (verificationCodeService.existsByEmail(request.email())) {
             verificationCode = new VerificationCode(request.email(), code, currentTime);
             verificationCodeService.save(verificationCode);
         }
         else {
+            verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
             verificationCode.updateCode(code);
             verificationCode.updateExpireTime(currentTime);
         }
-        return SendMailResponse.of(code);
+        return SendMailResponse.from(code);
     }
 
     /**
