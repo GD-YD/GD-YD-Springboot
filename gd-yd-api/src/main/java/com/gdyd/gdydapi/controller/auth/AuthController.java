@@ -92,4 +92,22 @@ public class AuthController {
         authCommandService.changePassword(request);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "비밀번호 찾기를 위한 인증 이메일 전송 API", description = "비밀번호 찾기(초기화)시 본인 인증을 위한 이메일 전송 요청")
+    @PostMapping("/forgot-password/send-verification-email")
+    public ResponseEntity<SendMailResponse> sendMailForPassword(
+            @RequestBody @Valid SendMailRequest request
+    ) {
+        SendMailResponse response = authCommandService.sendMailForPassword(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "비밀번호 리셋 API", description = "이메일 인증 후 비밀번호 초기화 요청 API")
+    @PostMapping("/forgot-password")
+    public ResponseEntity<HttpStatus> resetPassword(
+            @RequestBody @Valid ResetPasswordRequest request
+    ) {
+        authCommandService.resetPassword(request);
+        return ResponseEntity.noContent().build();
+    }
 }
