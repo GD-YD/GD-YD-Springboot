@@ -41,6 +41,7 @@ public class AuthCommandService {
         }
         HighSchoolStudent student = HighSchoolSignUpRequest.toHighSchoolStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
+        verificationCodeService.delete(request.email());
 
         highSchoolStudentService.save(student);
         return SignUpResponse.from(student);
@@ -52,6 +53,7 @@ public class AuthCommandService {
         }
         UniversityStudent student = UniversitySignUpRequest.toUniversityStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
+        verificationCodeService.delete(request.email());
 
         universityStudentService.save(student);
         return SignUpResponse.from(student);
