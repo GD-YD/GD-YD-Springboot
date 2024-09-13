@@ -30,6 +30,12 @@ public class MemberService {
         return member;
     }
 
+    public Member getMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+        return member;
+    }
+
     public boolean existingEmail(String email) {
         return memberRepository.existsByEmail(email);
     }
