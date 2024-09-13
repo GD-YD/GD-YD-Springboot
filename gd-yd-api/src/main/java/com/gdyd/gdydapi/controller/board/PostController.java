@@ -3,9 +3,11 @@ package com.gdyd.gdydapi.controller.board;
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.response.board.*;
+import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import com.gdyd.gdydapi.service.board.PostQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,4 +56,19 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Post 좋아요 API", description = "Post에 좋아요를 누르는 API")
+    @Parameter(name = "postId", description = "Post ID", required = true)
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<LikeListResponse> likePost(@PathVariable("postId") Long postId) {
+        LikeListResponse response = postCommandService.likePost(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 좋아요 취소 API", description = "Post에 좋아요를 취소하는 API")
+    @Parameter(name = "postId", description = "Post ID", required = true)
+    @DeleteMapping("/{postId}/like")
+    public ResponseEntity<LikeListResponse> unlikePost(@PathVariable("postId") Long postId) {
+        LikeListResponse response = postCommandService.dislikePost(postId);
+        return ResponseEntity.ok(response);
+    }
 }
