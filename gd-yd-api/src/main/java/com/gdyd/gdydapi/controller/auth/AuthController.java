@@ -108,6 +108,6 @@ public class AuthController {
             @RequestBody @Valid ResetPasswordRequest request
     ) {
         authCommandService.resetPassword(request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
