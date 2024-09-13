@@ -8,4 +8,8 @@ public interface LikeListRepository extends JpaRepository<LikeList, Long> {
     boolean existsByMemberIdAndHighSchoolStudentQuestionId(Long memberId, Long highSchoolStudentQuestionId);
 
     boolean existsByMemberIdAndUniversityStudentAnswerId(Long memberId, Long universityStudentAnswerId);
+
+    boolean existsByMemberIdAndPostId(Long memberId, Long postId);
+
+    boolean existsByMemberIdAndCommentId(Long memberId, Long commentId);
 }

@@ -1,11 +1,9 @@
 package com.gdyd.gdydcore.service.board;
 
 import com.gdyd.gdydcore.domain.board.Comment;
-import com.gdyd.gdydcore.domain.board.Post;
-import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydcore.repository.board.CommentRepository;
-import com.gdyd.gdydcore.repository.board.PostRepository;
-import com.gdyd.gdydcore.repository.member.MemberRepository;
+import com.gdyd.gdydsupport.exception.BusinessException;
+import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CommentService {
     private final CommentRepository commentRepository;
+
+    public Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COMMENT));
+    }
 
     @Transactional
     public void saveComment(Comment comment)  {

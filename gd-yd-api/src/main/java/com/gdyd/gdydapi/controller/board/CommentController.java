@@ -4,8 +4,10 @@ import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
+import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.service.board.CommentCommandService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,5 +40,21 @@ public class CommentController {
     public ResponseEntity<HttpStatus> deleteComment(@PathVariable("commentId") Long commentId) {
         commentCommandService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Comment 좋아요 API", description = "Comment에 좋아요를 누르는 API")
+    @Parameter(name = "commentId", description = "Comment ID", required = true)
+    @PostMapping("/{commentId}/like")
+    public ResponseEntity<LikeListResponse> likeComment(@PathVariable("commentId") Long commentId) {
+        LikeListResponse response = commentCommandService.likeComment(commentId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Comment 좋아요 취소 API", description = "Comment에 좋아요를 취소하는 API")
+    @Parameter(name = "commentId", description = "Comment ID", required = true)
+    @DeleteMapping("/{commentId}/like")
+    public ResponseEntity<LikeListResponse> unlikeComment(@PathVariable("commentId") Long commentId) {
+        LikeListResponse response = commentCommandService.dislikeComment(commentId);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,12 +1,16 @@
 package com.gdyd.gdydcore.domain.board;
 
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
+import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -38,6 +42,9 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "post_id", nullable = false)
     Post post;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", orphanRemoval = true)
+    List<LikeList> likeLists = new ArrayList<>();
+
     @Builder
     public Comment(String content) {
         this.content = content;
@@ -45,6 +52,10 @@ public class Comment extends BaseTimeEntity {
 
     public void increaseLikeCount() {
         this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
     }
 
     public void update(String content) {
@@ -56,10 +67,6 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void updatePost(Post post) {
-        this.post = post;
-    }
-
-    public void setPost(Post post) {
         this.post = post;
     }
 }

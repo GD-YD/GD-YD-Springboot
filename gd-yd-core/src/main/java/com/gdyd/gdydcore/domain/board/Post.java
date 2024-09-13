@@ -1,6 +1,7 @@
 package com.gdyd.gdydcore.domain.board;
 
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
+import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,6 +48,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
+    List<LikeList> likeLists = new ArrayList<>();
+
     @Builder
     public Post(String title, String content) {
         this.title = title;
@@ -59,6 +63,10 @@ public class Post extends BaseTimeEntity {
 
     public void increaseLikeCount() {
         this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
     }
 
     public void updateMember(Member member) {
