@@ -41,6 +41,7 @@ public class AuthCommandService {
         }
         HighSchoolStudent student = HighSchoolSignUpRequest.toHighSchoolStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
+        verificationCodeService.delete(request.email());
 
         highSchoolStudentService.save(student);
         return SignUpResponse.from(student);
@@ -52,6 +53,7 @@ public class AuthCommandService {
         }
         UniversityStudent student = UniversitySignUpRequest.toUniversityStudent(request);
         student.updatePassword(passwordEncoder.encode(request.password()));
+        verificationCodeService.delete(request.email());
 
         universityStudentService.save(student);
         return SignUpResponse.from(student);
@@ -62,13 +64,13 @@ public class AuthCommandService {
         LocalDateTime expireTime = emailGenerator.calculateExpireTime();
         VerificationCode verificationCode;
         if (verificationCodeService.existsByEmail(request.email())) {
-            verificationCode = new VerificationCode(request.email(), code, expireTime);
-            verificationCodeService.save(verificationCode);
-        }
-        else {
             verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
             verificationCode.updateCode(code);
             verificationCode.updateExpireTime(expireTime);
+        }
+        else {
+            verificationCode = new VerificationCode(request.email(), code, expireTime);
+            verificationCodeService.save(verificationCode);
         }
         return SendMailResponse.from(code);
     }
@@ -77,7 +79,7 @@ public class AuthCommandService {
         VerificationCode verificationCode = verificationCodeService.getVerificationCodeByEmail(request.email());
         Boolean isMatch = verificationCode.isMatch(request.email(), request.code());
         Boolean isExpired = verificationCode.isExpired();
-        if (isMatch || isExpired) {
+        if (Boolean.TRUE.equals(isExpired)) {
             verificationCodeService.delete(request.email());
         }
         return VerifyCodeResponse.of(isMatch, isExpired);
@@ -151,5 +153,21 @@ public class AuthCommandService {
         Member member = memberService.getMemberByEmailandPassword(request.email(), request.oldPassword());
         member.updatePassword(passwordEncoder.encode(request.newPassword()));
         memberService.save(member);
+    }
+
+    public SendMailResponse sendMailForPassword(SendMailRequest request) {
+        if (!memberService.existingEmail(request.email())) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_MEMBER);
+        }
+        return sendMail(request);
+    }
+
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!verificationCodeService.existsByEmail(request.email())) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_VERIFICATION_CODE);
+        }
+        Member member = memberService.getMemberByEmail(request.email());
+        member.updatePassword(passwordEncoder.encode(request.newPassword()));
+        verificationCodeService.delete(request.email());
     }
 }
