@@ -20,6 +20,14 @@ public class LikeListService {
         return likeListRepository.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId);
     }
 
+    public boolean existsByMemberIdAndPostId(Long memberId, Long postId) {
+        return likeListRepository.existsByMemberIdAndPostId(memberId, postId);
+    }
+
+    public boolean existsByMemberIdAndCommentId(Long memberId, Long commentId) {
+        return likeListRepository.existsByMemberIdAndCommentId(memberId, commentId);
+    }
+
     @Transactional
     public void save(LikeList likeList) {
         likeListRepository.save(likeList);
