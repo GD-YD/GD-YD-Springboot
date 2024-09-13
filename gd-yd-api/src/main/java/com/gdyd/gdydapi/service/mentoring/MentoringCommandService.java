@@ -77,7 +77,7 @@ public class MentoringCommandService {
         LikeList likeList = LikeList.highSchoolStudentQuestionLikeBuilder()
                 .member(member)
                 .highSchoolStudentQuestion(question)
-                .build();
+                .highSchoolStudentQuestionLikeBuild();
         likeListService.save(likeList);
         return LikeListResponse.from(likeList);
     }
@@ -119,7 +119,7 @@ public class MentoringCommandService {
         LikeList likeList = LikeList.universityStudentAnswerLikeBuilder()
                 .member(member)
                 .universityStudentAnswer(answer)
-                .build();
+                .universityStudentAnswerLikeBuild();
         likeListService.save(likeList);
         return LikeListResponse.from(likeList);
     }
