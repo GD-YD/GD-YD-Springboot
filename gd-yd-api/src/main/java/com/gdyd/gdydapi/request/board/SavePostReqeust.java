@@ -1,7 +1,10 @@
 package com.gdyd.gdydapi.request.board;
 
 import com.gdyd.gdydcore.domain.board.Post;
+import com.gdyd.gdydcore.domain.board.PostMedia;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
 
 @Schema(description = "Post 생성 요청")
 public record SavePostReqeust(
@@ -9,12 +12,24 @@ public record SavePostReqeust(
         String title,
 
         @Schema(description = "Post 내용", example = "자꾸 저를 무시해요")
-        String content
+        String content,
+
+        @Schema(description = "Post 미디어 URL")
+        List<String> postMediaUrls
 ) {
         public static Post toPost(SavePostReqeust request) {
                 return Post.builder()
                         .title(request.title())
                         .content(request.content())
                         .build();
+        }
+
+        public static List<PostMedia> toPostMedia(SavePostReqeust request, Post post) {
+                return request.postMediaUrls().stream()
+                        .map(url -> PostMedia.builder()
+                                .url(url)
+                                .post(post)
+                                .build())
+                        .toList();
         }
 }

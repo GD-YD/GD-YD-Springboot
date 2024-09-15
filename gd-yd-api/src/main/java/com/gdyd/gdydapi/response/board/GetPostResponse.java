@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.response.board;
 
 import com.gdyd.gdydapi.response.common.BoardMemberResponse;
 import com.gdyd.gdydcore.domain.board.Post;
+import com.gdyd.gdydcore.domain.board.PostMedia;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -32,23 +33,30 @@ public record GetPostResponse (
         String updatedAt,
 
         @Schema(description = "Post 댓글")
-        List<GetCommentResponse> comments
-) {
-        public static GetPostResponse from(Post post) {
-                BoardMemberResponse memberResponse = BoardMemberResponse.from(post.getMember());
-                List<GetCommentResponse> commentResponses = post.getComments().stream()
-                        .map(GetCommentResponse::from)
-                        .toList();
+        List<GetCommentResponse> comments,
 
-                return GetPostResponse.builder()
-                    .postId(post.getId())
-                    .member(memberResponse)
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .likeCount(post.getLikeCount())
-                    .createdAt(post.getCreatedAt().toString())
-                    .updatedAt(post.getUpdatedAt().toString())
-                    .comments(commentResponses)
-                    .build();
-        }
+        @Schema(description = "Post 미디어 URL")
+        List<String> postMediaUrls
+) {
+public static GetPostResponse from(Post post) {
+        BoardMemberResponse memberResponse = BoardMemberResponse.from(post.getMember());
+        List<GetCommentResponse> commentResponses = post.getComments().stream()
+                .map(GetCommentResponse::from)
+                .toList();
+        List<String> postMediaUrls = post.getPostMedias().stream()
+                .map(PostMedia::getUrl)
+                .toList();
+
+        return GetPostResponse.builder()
+            .postId(post.getId())
+            .member(memberResponse)
+            .title(post.getTitle())
+            .content(post.getContent())
+            .likeCount(post.getLikeCount())
+            .createdAt(post.getCreatedAt().toString())
+            .updatedAt(post.getUpdatedAt().toString())
+            .comments(commentResponses)
+            .postMediaUrls(postMediaUrls)
+            .build();
+}
 }
