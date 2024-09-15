@@ -2,23 +2,29 @@ package com.gdyd.gdydapi.service.mentoring;
 
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
+import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
 import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
+import com.gdyd.gdydcore.domain.report.Report;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.ReportService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
+import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +38,8 @@ public class MentoringCommandService {
     private final MemberQueryService memberQueryService;
     private final MemberService memberService;
     private final LikeListService likeListService;
+    private final ReportService reportService;
+    private final DiscordMessageGenerator discordMessageGenerator;
 
     /**
      * 고등학생 질문 생성
@@ -143,5 +151,26 @@ public class MentoringCommandService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
+    }
+
+    public ReportResponse reportHighSchoolStudentQuestion(Long highSchoolStudentQuestionId, ReportRequest request) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member reporter = memberService.getMemberById(memberId);
+        HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
+
+        if (reportService.existsByMemberIdAndHighSchoolStudentQuestionId(memberId, highSchoolStudentQuestionId)) {
+            throw new BusinessException(ErrorCode.ALREADY_REPORTED);
+        }
+
+        question.increaseReportCount();
+        Report report = Report.questionReportBuilder()
+                .reporter(reporter)
+                .highSchoolStudentQuestion(question)
+                .content(request.content())
+                .questionReportBuild();
+        reportService.save(report);
+        String message = discordMessageGenerator.questionReportMessage(reporter.getEmail(), highSchoolStudentQuestionId, question.getTitle(), question.getQuestion(), request.content());
+        discordMessageGenerator.sendReportMessage(message);
+        return ReportResponse.from(report);
     }
 }
