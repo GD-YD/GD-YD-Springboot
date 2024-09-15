@@ -2,20 +2,25 @@ package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.report.Report;
 import com.gdyd.gdydcore.service.board.CommentService;
 import com.gdyd.gdydcore.service.board.PostService;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.ReportService;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
+import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +33,8 @@ public class CommentCommandService {
     private final MemberService memberService;
     private final PostService postService;
     private final LikeListService likeListService;
+    private final ReportService reportService;
+    private final DiscordMessageGenerator discordMessageGenerator;
 
     public SaveCommentResponse saveComment(SaveCommentRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
@@ -85,5 +92,26 @@ public class CommentCommandService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
+    }
+
+    public ReportResponse reportComment(Long commentId, ReportRequest request) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member reporter = memberService.getMemberById(memberId);
+        Comment comment = commentService.getCommentById(commentId);
+
+        if (reportService.existsByMemberIdAndCommentId(memberId, commentId)) {
+            throw new BusinessException(ErrorCode.ALREADY_REPORTED);
+        }
+
+        comment.increaseReportCount();
+        Report report = Report.commentReportBuilder()
+                .reporter(reporter)
+                .comment(comment)
+                .content(request.content())
+                .commentReportBuild();
+        reportService.save(report);
+        String message = discordMessageGenerator.commentReportMessage(reporter.getEmail(), commentId, comment.getContent(), request.content());
+        discordMessageGenerator.sendReportMessage(message);
+        return ReportResponse.from(report);
     }
 }

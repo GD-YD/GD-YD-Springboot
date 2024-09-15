@@ -2,9 +2,11 @@ package com.gdyd.gdydapi.controller.board;
 
 import com.gdyd.gdydapi.request.board.SaveCommentRequest;
 import com.gdyd.gdydapi.request.board.UpdateCommentRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.SaveCommentResponse;
 import com.gdyd.gdydapi.response.board.UpdateCommentResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.service.board.CommentCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,6 +57,14 @@ public class CommentController {
     @DeleteMapping("/{commentId}/like")
     public ResponseEntity<LikeListResponse> unlikeComment(@PathVariable("commentId") Long commentId) {
         LikeListResponse response = commentCommandService.dislikeComment(commentId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Comment 신고 API", description = "Comment를 신고하는 API")
+    @Parameter(name = "commentId", description = "Comment ID", required = true)
+    @PostMapping("/{commentId}/report")
+    public ResponseEntity<ReportResponse> reportComment(@PathVariable("commentId") Long commentId, @RequestBody ReportRequest request) {
+        ReportResponse response = commentCommandService.reportComment(commentId, request);
         return ResponseEntity.ok(response);
     }
 }

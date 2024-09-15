@@ -35,4 +35,19 @@ public class DiscordMessageGenerator {
 
         return formattedMessage;
     }
+
+    public String commentReportMessage(String reporterEmail, Long targetId, String content, String reason) {
+        String formattedMessage = String.format(
+                "## 신고 알림\n" +
+                        "> **신고자**: %s\n" +
+                        "> \n" +
+                        "> **신고 대상**: 댓글    `ID: %d`\n" +
+                        ">    내용: %s\n" +
+                        "> \n" +
+                        "> **신고 사유**: %s",
+                reporterEmail, targetId, content, reason
+        );
+
+        return formattedMessage;
+    }
 }

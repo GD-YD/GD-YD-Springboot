@@ -111,7 +111,7 @@ public class PostCommandService {
             throw new BusinessException(ErrorCode.ALREADY_REPORTED);
         }
 
-        post.increaseLikeCount();
+        post.increaseReportCount();
         Report report = Report.postReportBuilder()
                 .reporter(reporter)
                 .post(post)
