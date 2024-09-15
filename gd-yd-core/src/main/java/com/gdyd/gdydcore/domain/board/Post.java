@@ -78,7 +78,7 @@ public class Post extends BaseTimeEntity {
         this.content = content;
     }
 
-    public void updatePostMedia(List<PostMedia> postMedia) {
-        this.postMedias = postMedia;
+    public void updatePostMedias(List<PostMedia> postMedias) {
+        this.postMedias = postMedias;
     }
 }
