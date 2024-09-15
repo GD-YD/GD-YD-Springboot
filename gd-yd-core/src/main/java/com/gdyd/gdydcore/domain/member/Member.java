@@ -51,7 +51,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reporter", orphanRemoval = true)
     List<Report> reportedList = new ArrayList<>();
 
     public Member(MemberType type, String email, String password, String nickname, String name) {

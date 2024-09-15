@@ -70,7 +70,7 @@ public class MentoringCommandService {
         HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
 
         if (likeListService.existsByMemberIdAndHighSchoolStudentQuestionId(memberId, highSchoolStudentQuestionId)) {
-            throw new BusinessException(ErrorCode.AREADY_LIKED);
+            throw new BusinessException(ErrorCode.ALREADY_LIKED);
         }
 
         question.increaseLikeCount();
@@ -91,14 +91,14 @@ public class MentoringCommandService {
         HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
 
         if (!likeListService.existsByMemberIdAndHighSchoolStudentQuestionId(memberId, highSchoolStudentQuestionId)) {
-            throw new BusinessException(ErrorCode.AREADY_UNLIKED);
+            throw new BusinessException(ErrorCode.ALREADY_UNLIKED);
         }
 
         question.decreaseLikeCount();
         LikeList likeList = member.getLikeLists().stream()
                 .filter(like -> like.getHighSchoolStudentQuestion().getId().equals(highSchoolStudentQuestionId))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
     }
@@ -112,7 +112,7 @@ public class MentoringCommandService {
         UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
 
         if (likeListService.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId)) {
-            throw new BusinessException(ErrorCode.AREADY_LIKED);
+            throw new BusinessException(ErrorCode.ALREADY_LIKED);
         }
 
         answer.increaseLikeCount();
@@ -133,14 +133,14 @@ public class MentoringCommandService {
         UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
 
         if (!likeListService.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId)) {
-            throw new BusinessException(ErrorCode.AREADY_UNLIKED);
+            throw new BusinessException(ErrorCode.ALREADY_UNLIKED);
         }
 
         answer.decreaseLikeCount();
         LikeList likeList = member.getLikeLists().stream()
                 .filter(like -> like.getUniversityStudentAnswer().getId().equals(universityStudentAnswerId))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
     }

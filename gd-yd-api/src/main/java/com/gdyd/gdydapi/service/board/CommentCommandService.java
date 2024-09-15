@@ -59,7 +59,7 @@ public class CommentCommandService {
         Member member = memberService.getMemberById(memberId);
         Comment comment = commentService.getCommentById(commentId);
         if (likeListService.existsByMemberIdAndCommentId(memberId, commentId)) {
-            throw new BusinessException(ErrorCode.AREADY_LIKED);
+            throw new BusinessException(ErrorCode.ALREADY_LIKED);
         }
         LikeList likeList = LikeList.commentLikeBuilder()
                 .member(member)
@@ -75,14 +75,14 @@ public class CommentCommandService {
         Member member = memberService.getMemberById(memberId);
         Comment comment = commentService.getCommentById(commentId);
         if (!likeListService.existsByMemberIdAndCommentId(memberId, commentId)) {
-            throw new BusinessException(ErrorCode.AREADY_UNLIKED);
+            throw new BusinessException(ErrorCode.ALREADY_UNLIKED);
         }
 
         comment.decreaseLikeCount();
         LikeList likeList = member.getLikeLists().stream()
                 .filter(like -> like.getComment().getId().equals(commentId))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
     }

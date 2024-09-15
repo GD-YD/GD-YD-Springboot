@@ -2,14 +2,12 @@ package com.gdyd.gdydcore.domain.report;
 
 import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.domain.board.Post;
-import com.gdyd.gdydcore.domain.member.LikeType;
 import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
 import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Component;
 
 @Getter
 @Entity
@@ -33,7 +31,7 @@ public class Report {
     String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "reporter_id", nullable = false)
     Member reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
