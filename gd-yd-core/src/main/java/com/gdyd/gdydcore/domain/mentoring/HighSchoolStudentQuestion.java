@@ -3,6 +3,7 @@ package com.gdyd.gdydcore.domain.mentoring;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import com.gdyd.gdydcore.domain.member.LikeList;
+import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -41,6 +42,10 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     @ColumnDefault("0")
     Long likeCount;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    Long reportCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     HighSchoolStudent highSchoolStudent;
@@ -50,6 +55,9 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
+    List<Report> reports = new ArrayList<>();
 
     @Builder
     public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
@@ -68,5 +76,9 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
 
     public void decreaseLikeCount() {
         this.likeCount--;
+    }
+
+    public void increaseReportCount() {
+        this.reportCount++;
     }
 }

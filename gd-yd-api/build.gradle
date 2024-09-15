@@ -3,6 +3,7 @@ dependencies {
     implementation project(':gd-yd-auth')
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     runtimeOnly 'com.h2database:h2'
     runtimeOnly("com.mysql:mysql-connector-j")
