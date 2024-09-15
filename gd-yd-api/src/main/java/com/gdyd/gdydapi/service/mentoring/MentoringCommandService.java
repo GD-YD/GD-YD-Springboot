@@ -173,4 +173,25 @@ public class MentoringCommandService {
         discordMessageGenerator.sendReportMessage(message);
         return ReportResponse.from(report);
     }
+
+    public ReportResponse reportUniversityStudentAnswer(Long universityStudentAnswerId, ReportRequest request) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member reporter = memberService.getMemberById(memberId);
+        UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
+
+        if (reportService.existsByMemberIdAndUniversityStudentAnswerId(memberId, universityStudentAnswerId)) {
+            throw new BusinessException(ErrorCode.ALREADY_REPORTED);
+        }
+
+        answer.increaseReportCount();
+        Report report = Report.answerReportBuilder()
+                .reporter(reporter)
+                .universityStudentAnswer(answer)
+                .content(request.content())
+                .answerReportBuild();
+        reportService.save(report);
+        String message = discordMessageGenerator.answerReportMessage(reporter.getEmail(), universityStudentAnswerId, answer.getAnswer(), request.content());
+        discordMessageGenerator.sendReportMessage(message);
+        return ReportResponse.from(report);
+    }
 }
