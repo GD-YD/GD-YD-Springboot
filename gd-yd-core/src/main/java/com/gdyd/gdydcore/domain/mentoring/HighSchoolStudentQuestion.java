@@ -6,15 +6,12 @@ import com.gdyd.gdydcore.domain.member.LikeList;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
-@DynamicInsert
 @Table(name = "high_school_student_question")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -34,11 +31,9 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     String question;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long answerCount;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,13 +44,22 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     List<UniversityStudentAnswer> universityStudentAnswers = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
+    List<HighSchoolStudentQuestionMedia> highSchoolStudentQuestionMedias = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudentQuestion", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
 
     @Builder
     public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
+        this.answerCount = 0L;
+        this.likeCount = 0L;
         this.title = title;
         this.question = question;
         this.highSchoolStudent = highSchoolStudent;
+    }
+
+    public void updateHighSchoolStudentQuestionMedias(List<HighSchoolStudentQuestionMedia> highSchoolStudentQuestionMedias) {
+        this.highSchoolStudentQuestionMedias = highSchoolStudentQuestionMedias;
     }
 
     public void increaseAnswerCount() {
