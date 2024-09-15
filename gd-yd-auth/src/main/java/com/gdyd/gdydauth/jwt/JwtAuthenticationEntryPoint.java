@@ -25,14 +25,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        response.setStatus(HttpServletResponse.SC_OK);
-        ErrorCode errorCode = (ErrorCode) request.getAttribute(REQUEST_ATTRIBUTE);
-
-        if (endpointChecker.isEndpointNotExist(request)) {
+        if (endpointChecker.isEndpointExist(request)) {
+            ErrorCode errorCode = (ErrorCode) request.getAttribute(REQUEST_ATTRIBUTE);
+            if (errorCode != null) {
+                defineExceptionResponse(errorCode, response);
+            }
+        } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
-        }
-        if (errorCode != null) {
-            defineExceptionResponse(errorCode, response);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.gdyd.gdydauth.jwt;
 
+import com.gdyd.gdydauth.utils.HttpRequestEndpointChecker;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import jakarta.annotation.Nonnull;
@@ -8,15 +9,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private static final String EXCEPTION_PROPERTY = "exception";
@@ -24,21 +29,37 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String PREFIX_AUTHORIZATION = "Authorization";
     private static final String PREFIX_UN_AUTHORIZATION = "UnAuthorization";
 
+    private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
+    private static final String RESPONSE_CODE_KEY = "code";
+    private static final String RESPONSE_MESSAGE_KEY = "message";
+
     private final JwtProvider jwtProvider;
+    private final HttpRequestEndpointChecker endpointChecker;
 
     private static final String[] JWT_WHITELIST = {
-            "/swagger-ui",
-            "/api-docs",
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/api-docs/json/**",
+
             "/api/v1/auth/login",
-            "/api/v1/auth/signup",
+            "/api/v1/auth/signup/**",
             "/api/v1/auth/refresh",
-            "/api/v1/auth/logout",
             "/api/v1/auth/send-verification-email",
             "/api/v1/auth/verify-code",
             "/api/v1/auth/forgot-password",
             "/api/v1/auth/forgot-password/**",
             "/api/v1/member/existing-email",
             "/api/v1/member/existing-nickname",
+
+            "/h2-console",
+            "/h2-console/**"
     };
 
     /**
@@ -54,7 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @Nonnull HttpServletResponse response,
             @Nonnull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (isWhiteListRequest(request)) {
+        if (isWhiteListRequest(request) || endpointChecker.isEndpointNotExist(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -67,14 +88,16 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserAuthentication authentication = new UserAuthentication(userId, null, null);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                filterChain.doFilter(request, response);
             } else {
                 request.setAttribute(PREFIX_UN_AUTHORIZATION, jwtProvider.validateAccessToken(jwt));
                 setErrorMessageInRequest(jwtProvider.validateAccessToken(jwt), request);
             }
+        } catch (BusinessException e) {
+            setExceptionResponse(e.getErrorCode(), response);
         } catch (Exception e) {
-            throw new BusinessException(ErrorCode.EMPTY_TOKEN);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 인증 정보입니다.");
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
@@ -104,18 +127,25 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    /**
-     * Check if the request is a Swagger request
-     * @param request request
-     * @return true if the request is a Swagger request
-     */
-    private boolean isWhiteListRequest(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        for (String uri : JWT_WHITELIST) {
-            if (requestURI.startsWith(uri)) {
-                return true;
-            }
-        }
-        return false;
+    private List<RequestMatcher> permittedWhiteList() {
+        return Stream.of(JWT_WHITELIST)
+                .map(AntPathRequestMatcher::new)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isWhiteListRequest(HttpServletRequest request) {
+        return permittedWhiteList().stream()
+                .anyMatch(matcher -> matcher.matches(request));
+    }
+
+    private void setExceptionResponse(ErrorCode errorCode, HttpServletResponse response) throws IOException {
+        response.setContentType(CONTENT_TYPE);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        JSONObject responseBody = new JSONObject();
+        responseBody.put(RESPONSE_CODE_KEY, errorCode.getCode());
+        responseBody.put(RESPONSE_MESSAGE_KEY, errorCode.getMessage());
+
+        response.getWriter().print(responseBody);
     }
 }
