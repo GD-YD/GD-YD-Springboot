@@ -1,6 +1,7 @@
 package com.gdyd.gdydapi.response.mentoring;
 
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
+import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestionMedia;
 import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -28,6 +29,9 @@ public record DetailHighSchoolStudentQuestionResponse(
         @Schema(description = "고등학생 질문에 대한 대학생 답변 수", example = "7")
         Long awnserCount,
 
+        @Schema(description = "고등학생 질문 미디어 URL")
+        List<String> highSchoolStudentQuestionMediaUrls,
+
         @Schema(description = "대학생 답변 목록")
         List<UniversityStudentAnswerResponse> answers,
 
@@ -38,6 +42,10 @@ public record DetailHighSchoolStudentQuestionResponse(
             HighSchoolStudentQuestion highSchoolStudentQuestion,
             List<UniversityStudentAnswer> universityStudentAnswers
     ) {
+        List<String> highSchoolStudentQuestionMediaUrls = highSchoolStudentQuestion.getHighSchoolStudentQuestionMedias().stream()
+                .map(HighSchoolStudentQuestionMedia::getUrl)
+                .toList();
+
         return DetailHighSchoolStudentQuestionResponse.builder()
                 .id(highSchoolStudentQuestion.getId())
                 .highSchoolStudentNickname(highSchoolStudentQuestion.getHighSchoolStudent().getNickname())
@@ -45,6 +53,7 @@ public record DetailHighSchoolStudentQuestionResponse(
                 .question(highSchoolStudentQuestion.getQuestion())
                 .likeCount(highSchoolStudentQuestion.getLikeCount())
                 .awnserCount(highSchoolStudentQuestion.getAnswerCount())
+                .highSchoolStudentQuestionMediaUrls(highSchoolStudentQuestionMediaUrls)
                 .answers(universityStudentAnswers.stream().map(UniversityStudentAnswerResponse::from).toList())
                 .createdAt(highSchoolStudentQuestion.getCreatedAt().toString())
                 .build();

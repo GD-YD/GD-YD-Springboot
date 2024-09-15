@@ -41,9 +41,11 @@ public class PostCommandService {
         post.updateMember(member);
         postService.savePost(post);
 
-        List<PostMedia> postMedias = SavePostReqeust.toPostMedia(request, post);
-        postMediaService.saveAllPostMedia(postMedias);
-        post.updatePostMedia(postMedias);
+        if (request.postMediaUrls() != null) {
+            List<PostMedia> postMedias = SavePostReqeust.toPostMedia(request, post);
+            postMediaService.saveAllPostMedia(postMedias);
+            post.updatePostMedias(postMedias);
+        }
         return SavePostResponse.from(post);
     }
 
