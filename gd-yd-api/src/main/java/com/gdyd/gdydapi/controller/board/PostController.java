@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import com.gdyd.gdydapi.service.board.PostQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,6 +70,22 @@ public class PostController {
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<LikeListResponse> unlikePost(@PathVariable("postId") Long postId) {
         LikeListResponse response = postCommandService.dislikePost(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 스크랩 API", description = "Post를 스크랩하는 API")
+    @Parameter(name = "postId", description = "Post ID", required = true)
+    @PostMapping("/{postId}/scrap")
+    public ResponseEntity<ScrapListResponse> scrapPost(@PathVariable("postId") Long postId) {
+        ScrapListResponse response = postCommandService.scrapPost(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 스크랩 취소 API", description = "Post를 스크랩 취소하는 API")
+    @Parameter(name = "postId", description = "Post ID", required = true)
+    @DeleteMapping("/{postId}/scrap")
+    public ResponseEntity<ScrapListResponse> unscrapPost(@PathVariable("postId") Long postId) {
+        ScrapListResponse response = postCommandService.unscrapPost(postId);
         return ResponseEntity.ok(response);
     }
 }

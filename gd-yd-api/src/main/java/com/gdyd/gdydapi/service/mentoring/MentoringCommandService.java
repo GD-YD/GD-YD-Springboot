@@ -3,19 +3,18 @@ package com.gdyd.gdydapi.service.mentoring;
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
-import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
-import com.gdyd.gdydcore.domain.member.LikeList;
-import com.gdyd.gdydcore.domain.member.Member;
-import com.gdyd.gdydcore.domain.member.UniversityStudent;
+import com.gdyd.gdydcore.domain.member.*;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestionMedia;
 import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.ScrapListService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionMediaService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
@@ -37,6 +36,7 @@ public class MentoringCommandService {
     private final MemberQueryService memberQueryService;
     private final MemberService memberService;
     private final LikeListService likeListService;
+    private final ScrapListService scrapListService;
 
     /**
      * 고등학생 질문 생성
@@ -154,5 +154,44 @@ public class MentoringCommandService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
+    }
+
+    /**
+     * 고등학생 질문 스크랩
+     */
+    public ScrapListResponse scrapHighSchoolStudentQuestion(Long highSchoolStudentQuestionId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+        HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
+
+        if (scrapListService.existsByMemberIdAndHighSchoolStudentQuestionId(memberId, highSchoolStudentQuestionId)) {
+            throw new BusinessException(ErrorCode.ALREADY_SCRAPED);
+        }
+
+        ScrapList scrapList = ScrapList.highSchoolStudentQuestionScrapBuilder()
+                .member(member)
+                .highSchoolStudentQuestion(question)
+                .highSchoolStudentQuestionScrapBuild();
+        scrapListService.save(scrapList);
+        return ScrapListResponse.from(scrapList);
+    }
+
+    /**
+     * 고등학생 질문 스크랩 취소
+     */
+    public ScrapListResponse unscrapHighSchoolStudentQuestion(Long highSchoolStudentQuestionId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+
+        if (!scrapListService.existsByMemberIdAndHighSchoolStudentQuestionId(memberId, highSchoolStudentQuestionId)) {
+            throw new BusinessException(ErrorCode.ALREADY_UNSCRAPED);
+        }
+
+        ScrapList scrapList = member.getScrapLists().stream()
+                .filter(scrap -> scrap.getHighSchoolStudentQuestion().getId().equals(highSchoolStudentQuestionId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNSCRAPED));
+        scrapListService.delete(scrapList);
+        return ScrapListResponse.from(scrapList);
     }
 }

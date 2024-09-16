@@ -4,6 +4,7 @@ import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.response.mentoring.DetailHighSchoolStudentQuestionResponse;
@@ -108,6 +109,26 @@ public class MentoringController {
             @PathVariable("universityStudentAnswerId") Long universityStudentAnswerId
     ) {
         LikeListResponse response = mentoringCommandService.dislikeUniversityStudentAnswer(universityStudentAnswerId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 스크랩 API", description = "고등학생 질문을 스크랩하는 API")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @PostMapping("/high-school-student-question/{highSchoolStudentQuestionId}/scrap")
+    public ResponseEntity<ScrapListResponse> scrapHighSchoolStudentQuestion(
+            @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
+    ) {
+        ScrapListResponse response = mentoringCommandService.scrapHighSchoolStudentQuestion(highSchoolStudentQuestionId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 스크랩 취소 API", description = "고등학생 질문을 스크랩 취소하는 API")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @DeleteMapping("/high-school-student-question/{highSchoolStudentQuestionId}/scrap")
+    public ResponseEntity<ScrapListResponse> unscrapHighSchoolStudentQuestion(
+            @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
+    ) {
+        ScrapListResponse response = mentoringCommandService.unscrapHighSchoolStudentQuestion(highSchoolStudentQuestionId);
         return ResponseEntity.ok(response);
     }
 }

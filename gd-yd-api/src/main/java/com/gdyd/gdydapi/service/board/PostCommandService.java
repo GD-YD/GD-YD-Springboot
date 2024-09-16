@@ -6,15 +6,18 @@ import com.gdyd.gdydapi.response.board.DeletePostResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdatePostResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.board.PostMedia;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.member.ScrapList;
 import com.gdyd.gdydcore.service.board.PostMediaService;
 import com.gdyd.gdydcore.service.board.PostService;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.ScrapListService;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,7 @@ public class PostCommandService {
     private final MemberService memberService;
     private final LikeListService likeListService;
     private final PostMediaService postMediaService;
+    private final ScrapListService scrapListService;
 
     public SavePostResponse savePost(SavePostReqeust request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
@@ -108,5 +112,44 @@ public class PostCommandService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
+    }
+
+    /**
+     * 게시글 스크랩
+     */
+    public ScrapListResponse scrapPost(Long postId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+        Post post = postService.getPostById(postId);
+
+        if (scrapListService.existsByMemberIdAndPostId(memberId, postId)) {
+            throw new BusinessException(ErrorCode.ALREADY_SCRAPED);
+        }
+
+        ScrapList scrapList = ScrapList.postScrapBuilder()
+                .member(member)
+                .post(post)
+                .postScrapBuild();
+        scrapListService.save(scrapList);
+        return ScrapListResponse.from(scrapList);
+    }
+
+    /**
+     * 게시글 스크랩 취소
+     */
+    public ScrapListResponse unscrapPost(Long postId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member member = memberService.getMemberById(memberId);
+
+        if (!scrapListService.existsByMemberIdAndPostId(memberId, postId)) {
+            throw new BusinessException(ErrorCode.ALREADY_UNSCRAPED);
+        }
+
+        ScrapList scrapList = member.getScrapLists().stream()
+                .filter(scrap -> scrap.getPost().getId().equals(postId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNSCRAPED));
+        scrapListService.delete(scrapList);
+        return ScrapListResponse.from(scrapList);
     }
 }
