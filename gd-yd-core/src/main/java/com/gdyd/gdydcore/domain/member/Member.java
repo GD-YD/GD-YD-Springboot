@@ -4,7 +4,10 @@ import com.gdyd.gdydcore.domain.board.Comment;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -49,6 +52,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
+    List<ScrapList> scrapLists = new ArrayList<>();
 
     public Member(MemberType type, String email, String password, String nickname, String name) {
         this.type = type;
