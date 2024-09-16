@@ -94,7 +94,7 @@ public class JwtProvider {
     }
 
     private JwtValidationType validateToken(String jwt, String secretKey) {
-        if (jwt == null) {
+        if (jwt == null || jwt.isEmpty()) {
             return JwtValidationType.EMPTY_JWT;
         }
         try {

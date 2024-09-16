@@ -15,11 +15,13 @@ import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
+import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestionMedia;
 import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
 import com.gdyd.gdydcore.domain.report.Report;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
 import com.gdyd.gdydcore.service.member.ReportService;
+import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionMediaService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
 import com.gdyd.gdydsupport.exception.BusinessException;
@@ -29,12 +31,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MentoringCommandService {
     private final HighSchoolStudentQuestionService highSchoolStudentQuestionService;
     private final UniversityStudentAnswerService universityStudentAnswerService;
+    private final HighSchoolStudentQuestionMediaService highSchoolStudentQuestionMediaService;
     private final MemberQueryService memberQueryService;
     private final MemberService memberService;
     private final LikeListService likeListService;
@@ -50,6 +55,12 @@ public class MentoringCommandService {
         HighSchoolStudent highSchoolStudent = memberQueryService.getHighSchoolStudentByMemberId(memberId);
         HighSchoolStudentQuestion question = CreateHighSchoolStudentQuestionRequest.toHighSchoolStudentQuestion(request, highSchoolStudent);
         highSchoolStudentQuestionService.save(question);
+
+        if (request.highSchoolStudentQuestionMediaUrls() != null) {
+            List<HighSchoolStudentQuestionMedia> medias = CreateHighSchoolStudentQuestionRequest.toHighSchoolStudentQuestionMedia(request, question);
+            highSchoolStudentQuestionMediaService.saveAllHighSchoolStudentQuestionMedia(medias);
+            question.updateHighSchoolStudentQuestionMedias(medias);
+        }
         return CreateHighSchoolStudentQuestionResponse.from(question);
     }
 

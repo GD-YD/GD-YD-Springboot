@@ -10,9 +10,11 @@ import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Post;
+import com.gdyd.gdydcore.domain.board.PostMedia;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
 import com.gdyd.gdydcore.domain.report.Report;
+import com.gdyd.gdydcore.service.board.PostMediaService;
 import com.gdyd.gdydcore.service.board.PostService;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
@@ -24,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -34,13 +38,21 @@ public class PostCommandService {
     private final LikeListService likeListService;
     private final ReportService reportService;
     private final DiscordMessageGenerator discordMessageGenerator;
+    private final PostMediaService postMediaService;
 
     public SavePostResponse savePost(SavePostReqeust request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         Member member = memberService.getMemberById(memberId);
+
         Post post = SavePostReqeust.toPost(request);
         post.updateMember(member);
         postService.savePost(post);
+
+        if (request.postMediaUrls() != null) {
+            List<PostMedia> postMedias = SavePostReqeust.toPostMedia(request, post);
+            postMediaService.saveAllPostMedia(postMedias);
+            post.updatePostMedias(postMedias);
+        }
         return SavePostResponse.from(post);
     }
 
@@ -48,9 +60,12 @@ public class PostCommandService {
         Post post = UpdatePostRequest.toPost(request);
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         Post savedPost = postService.getPostByIdAndMemberId(postId, memberId);
-        savedPost.update(post.getTitle(),
-                post.getContent());
-        return UpdatePostResponse.from(post);
+        savedPost.update(post.getTitle(), post.getContent());
+
+        List<PostMedia> savedPostMedias = UpdatePostRequest.toPostMedia(request, savedPost);
+        postMediaService.deleteAllPostMedia(savedPost.getPostMedias());
+        postMediaService.saveAllPostMedia(savedPostMedias);
+        return UpdatePostResponse.from(savedPost);
     }
 
     public DeletePostResponse deletePost(Long postId) {

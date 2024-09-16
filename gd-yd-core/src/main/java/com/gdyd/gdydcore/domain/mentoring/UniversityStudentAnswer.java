@@ -7,15 +7,12 @@ import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
-@DynamicInsert
 @Table(name = "university_student_answer")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -32,7 +29,6 @@ public class UniversityStudentAnswer extends BaseTimeEntity {
     String answer;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long likeCount;
 
     @Column(nullable = false)
@@ -55,6 +51,7 @@ public class UniversityStudentAnswer extends BaseTimeEntity {
 
     @Builder
     public UniversityStudentAnswer(String answer, UniversityStudent universityStudent, HighSchoolStudentQuestion highSchoolStudentQuestion) {
+        this.likeCount = 0L;
         this.answer = answer;
         this.universityStudent = universityStudent;
         this.highSchoolStudentQuestion = highSchoolStudentQuestion;

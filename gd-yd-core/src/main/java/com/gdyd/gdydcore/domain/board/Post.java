@@ -7,15 +7,12 @@ import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
-@DynamicInsert
 @Table(name = "post")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -35,11 +32,9 @@ public class Post extends BaseTimeEntity {
     String content;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long viewCount;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long likeCount;
 
     @Column(nullable = false)
@@ -54,6 +49,9 @@ public class Post extends BaseTimeEntity {
     List<Comment> comments = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
+    List<PostMedia> postMedias = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
@@ -61,6 +59,8 @@ public class Post extends BaseTimeEntity {
 
     @Builder
     public Post(String title, String content) {
+        this.likeCount = 0L;
+        this.viewCount = 0L;
         this.title = title;
         this.content = content;
     }
@@ -88,5 +88,9 @@ public class Post extends BaseTimeEntity {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void updatePostMedias(List<PostMedia> postMedias) {
+        this.postMedias = postMedias;
     }
 }
