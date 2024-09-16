@@ -38,7 +38,6 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     Long likeCount;
 
     @Column(nullable = false)
-    @ColumnDefault("0")
     Long reportCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
