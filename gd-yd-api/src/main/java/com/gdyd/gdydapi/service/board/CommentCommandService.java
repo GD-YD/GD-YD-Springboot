@@ -110,7 +110,11 @@ public class CommentCommandService {
                 .content(request.content())
                 .commentReportBuild();
         reportService.save(report);
-        String message = discordMessageGenerator.commentReportMessage(reporter.getEmail(), commentId, comment.getContent(), request.content());
+        String message = discordMessageGenerator.commentReportMessage(
+                reporter.getEmail(),
+                commentId,
+                comment.getContent(),
+                request.content());
         discordMessageGenerator.sendReportMessage(message);
         return ReportResponse.from(report);
     }

@@ -9,7 +9,6 @@ import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionRespon
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
-import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
@@ -180,7 +179,12 @@ public class MentoringCommandService {
                 .content(request.content())
                 .questionReportBuild();
         reportService.save(report);
-        String message = discordMessageGenerator.questionReportMessage(reporter.getEmail(), highSchoolStudentQuestionId, question.getTitle(), question.getQuestion(), request.content());
+        String message = discordMessageGenerator.questionReportMessage(
+                reporter.getEmail(),
+                highSchoolStudentQuestionId,
+                question.getTitle(),
+                question.getQuestion(),
+                request.content());
         discordMessageGenerator.sendReportMessage(message);
         return ReportResponse.from(report);
     }
@@ -201,7 +205,11 @@ public class MentoringCommandService {
                 .content(request.content())
                 .answerReportBuild();
         reportService.save(report);
-        String message = discordMessageGenerator.answerReportMessage(reporter.getEmail(), universityStudentAnswerId, answer.getAnswer(), request.content());
+        String message = discordMessageGenerator.answerReportMessage(
+                reporter.getEmail(),
+                universityStudentAnswerId,
+                answer.getAnswer(),
+                request.content());
         discordMessageGenerator.sendReportMessage(message);
         return ReportResponse.from(report);
     }

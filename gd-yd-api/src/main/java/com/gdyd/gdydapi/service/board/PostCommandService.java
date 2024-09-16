@@ -133,7 +133,12 @@ public class PostCommandService {
                 .content(request.content())
                 .postReportBuild();
         reportService.save(report);
-        String message = discordMessageGenerator.postReportMessage(reporter.getEmail(), postId, post.getTitle(), post.getContent(), request.content());
+        String message = discordMessageGenerator.postReportMessage(
+                reporter.getEmail(),
+                postId,
+                post.getTitle(),
+                post.getContent(),
+                request.content());
         discordMessageGenerator.sendReportMessage(message);
         return ReportResponse.from(report);
     }
