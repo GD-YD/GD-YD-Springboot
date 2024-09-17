@@ -2,9 +2,11 @@ package com.gdyd.gdydapi.controller.mentoring;
 
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.response.mentoring.DetailHighSchoolStudentQuestionResponse;
@@ -129,6 +131,22 @@ public class MentoringController {
             @PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId
     ) {
         ScrapListResponse response = mentoringCommandService.unscrapHighSchoolStudentQuestion(highSchoolStudentQuestionId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 신고 API", description = "고등학생이 작성한 질문을 신고하는 API")
+    @Parameter(name = "highSchoolStudentQuestionId", description = "고등학생 질문글 ID", required = true)
+    @PostMapping("/high-school-student-question/{highSchoolStudentQuestionId}/report")
+    public ResponseEntity<ReportResponse> reportHighSchoolStudentQuestion(@PathVariable("highSchoolStudentQuestionId") Long highSchoolStudentQuestionId, @RequestBody ReportRequest request) {
+        ReportResponse response = mentoringCommandService.reportHighSchoolStudentQuestion(highSchoolStudentQuestionId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "대학생 답변 신고 API", description = "대학생이 작성한 답변을 신고하는 API")
+    @Parameter(name = "universityStudentAnswerId", description = "대학생 답변글 ID", required = true)
+    @PostMapping("/university-student-answer/{universityStudentAnswerId}/report")
+    public ResponseEntity<ReportResponse> reportUniversityStudentAnswer(@PathVariable("universityStudentAnswerId") Long universityStudentAnswerId, @RequestBody ReportRequest request) {
+        ReportResponse response = mentoringCommandService.reportUniversityStudentAnswer(universityStudentAnswerId, request);
         return ResponseEntity.ok(response);
     }
 }

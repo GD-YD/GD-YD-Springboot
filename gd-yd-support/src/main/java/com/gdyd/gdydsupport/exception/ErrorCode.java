@@ -17,8 +17,8 @@ public enum ErrorCode {
     INVALID_MEMBER_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_REQUEST", "해당 회원은 요청할 수 없습니다."),
 
     // LIKELIST
-    AREADY_LIKED(HttpStatus.BAD_REQUEST, "AREADY_LIKED", "이미 좋아요를 누른 글입니다."),
-    AREADY_UNLIKED(HttpStatus.BAD_REQUEST, "AREADY_UNLIKED", "이미 좋아요를 취소한 글입니다."),
+    ALREADY_LIKED(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 좋아요를 누른 글입니다."),
+    ALREADY_UNLIKED(HttpStatus.BAD_REQUEST, "ALREADY_UNLIKED", "이미 좋아요를 취소한 글입니다."),
 
     // SCRAPLIST
     ALREADY_SCRAPED(HttpStatus.BAD_REQUEST, "ALREADY_SCRAPED", "이미 스크랩을 누른 글입니다."),
@@ -27,6 +27,9 @@ public enum ErrorCode {
     //MENTORING
     NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION(HttpStatus.NOT_FOUND, "NOT_FOUND_HIGH_SCHOOL_STUDENT_QUESTION", "해당 고등학생 질문을 찾을 수 없습니다."),
     NOT_FOUND_UNIVERSITY_STUDENT_ANSWER(HttpStatus.NOT_FOUND, "NOT_FOUND_UNIVERSITY_STUDENT_ANSWER", "해당 대학생 답변을 찾을 수 없습니다."),
+
+    //REPORT
+    ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "ALREADY_REPORTED", "이미 신고한 대상입니다."),
 
     //AUTH
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_REFRESH_TOKEN", "유효하지 않은 리프레시 토큰입니다."),

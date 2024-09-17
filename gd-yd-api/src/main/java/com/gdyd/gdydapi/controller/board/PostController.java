@@ -2,9 +2,11 @@ package com.gdyd.gdydapi.controller.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import com.gdyd.gdydapi.service.board.PostQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,6 +88,14 @@ public class PostController {
     @DeleteMapping("/{postId}/scrap")
     public ResponseEntity<ScrapListResponse> unscrapPost(@PathVariable("postId") Long postId) {
         ScrapListResponse response = postCommandService.unscrapPost(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Post 신고 API", description = "Post를 신고하는 API")
+    @Parameter(name = "postId", description = "Post ID", required = true)
+    @PostMapping("/{postId}/report")
+    public ResponseEntity<ReportResponse> reportPost(@PathVariable("postId") Long postId, @RequestBody ReportRequest request) {
+        ReportResponse response = postCommandService.reportPost(postId, request);
         return ResponseEntity.ok(response);
     }
 }
