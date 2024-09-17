@@ -2,21 +2,26 @@ package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.request.board.SavePostReqeust;
 import com.gdyd.gdydapi.request.board.UpdatePostRequest;
+import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.DeletePostResponse;
 import com.gdyd.gdydapi.response.board.SavePostResponse;
 import com.gdyd.gdydapi.response.board.UpdatePostResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.board.PostMedia;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.report.Report;
 import com.gdyd.gdydcore.service.board.PostMediaService;
 import com.gdyd.gdydcore.service.board.PostService;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
+import com.gdyd.gdydcore.service.member.ReportService;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
+import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +36,8 @@ public class PostCommandService {
     private final PostService postService;
     private final MemberService memberService;
     private final LikeListService likeListService;
+    private final ReportService reportService;
+    private final DiscordMessageGenerator discordMessageGenerator;
     private final PostMediaService postMediaService;
 
     public SavePostResponse savePost(SavePostReqeust request) {
@@ -77,7 +84,7 @@ public class PostCommandService {
         Post post = postService.getPostById(postId);
 
         if (likeListService.existsByMemberIdAndPostId(memberId, postId)) {
-            throw new BusinessException(ErrorCode.AREADY_LIKED);
+            throw new BusinessException(ErrorCode.ALREADY_LIKED);
         }
 
         post.increaseLikeCount();
@@ -98,15 +105,41 @@ public class PostCommandService {
         Post post = postService.getPostById(postId);
 
         if (!likeListService.existsByMemberIdAndPostId(memberId, postId)) {
-            throw new BusinessException(ErrorCode.AREADY_UNLIKED);
+            throw new BusinessException(ErrorCode.ALREADY_UNLIKED);
         }
 
         post.decreaseLikeCount();
         LikeList likeList = member.getLikeLists().stream()
                 .filter(like -> like.getPost().getId().equals(postId))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.AREADY_UNLIKED));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ALREADY_UNLIKED));
         likeListService.delete(likeList);
         return LikeListResponse.from(likeList);
+    }
+
+    public ReportResponse reportPost(Long postId, ReportRequest request) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        Member reporter = memberService.getMemberById(memberId);
+        Post post = postService.getPostById(postId);
+
+        if (reportService.existsByMemberIdAndPostId(memberId, postId)) {
+            throw new BusinessException(ErrorCode.ALREADY_REPORTED);
+        }
+
+        post.increaseReportCount();
+        Report report = Report.postReportBuilder()
+                .reporter(reporter)
+                .post(post)
+                .content(request.content())
+                .postReportBuild();
+        reportService.save(report);
+        String message = discordMessageGenerator.postReportMessage(
+                reporter.getEmail(),
+                postId,
+                post.getTitle(),
+                post.getContent(),
+                request.content());
+        discordMessageGenerator.sendReportMessage(message);
+        return ReportResponse.from(report);
     }
 }
