@@ -5,10 +5,10 @@ import com.gdyd.gdydcore.repository.board.PostRepository;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +21,8 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<Post> getAllPost() {
-        return postRepository.findAll();
+    public Page<Post> getPostListByPagination(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
     public Post getPostById(Long postId) {
