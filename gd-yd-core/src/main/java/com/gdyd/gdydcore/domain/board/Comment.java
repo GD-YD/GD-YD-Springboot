@@ -51,6 +51,7 @@ public class Comment extends BaseTimeEntity {
     @Builder
     public Comment(String content) {
         this.likeCount = 0L;
+        this.reportCount = 0L;
         this.content = content;
     }
 

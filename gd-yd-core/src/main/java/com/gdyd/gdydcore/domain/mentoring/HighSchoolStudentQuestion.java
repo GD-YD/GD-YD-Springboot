@@ -60,6 +60,7 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
         this.answerCount = 0L;
         this.likeCount = 0L;
+        this.reportCount = 0L;
         this.title = title;
         this.question = question;
         this.highSchoolStudent = highSchoolStudent;
