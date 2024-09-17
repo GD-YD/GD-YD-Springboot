@@ -51,6 +51,7 @@ public class UniversityStudentAnswer extends BaseTimeEntity {
     @Builder
     public UniversityStudentAnswer(String answer, UniversityStudent universityStudent, HighSchoolStudentQuestion highSchoolStudentQuestion) {
         this.likeCount = 0L;
+        this.reportCount = 0L;
         this.answer = answer;
         this.universityStudent = universityStudent;
         this.highSchoolStudentQuestion = highSchoolStudentQuestion;
