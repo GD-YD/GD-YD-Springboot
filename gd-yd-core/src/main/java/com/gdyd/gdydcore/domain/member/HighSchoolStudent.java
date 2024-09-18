@@ -34,21 +34,17 @@ public class HighSchoolStudent extends Member {
     @Column(nullable = false)
     String highSchoolStudentId;
 
-    @Column(nullable = false)
-    String identificationUrl;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "highSchoolStudent", orphanRemoval = true)
     List<HighSchoolStudentQuestion> highSchoolStudentQuestions = new ArrayList<>();
 
     @Builder
-    public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, Long enterYearHighSchool, HighSchoolMajor highSchoolMajor, String highSchoolStudentId, String identificationUrl) {
+    public HighSchoolStudent(String email, String password, String nickname, String name, String highSchoolName, Grade highSchoolGrade, Long enterYearHighSchool, HighSchoolMajor highSchoolMajor, String highSchoolStudentId) {
         super(MemberType.HIGH_SCHOOL_STUDENT, email, password, nickname, name);
         this.highSchoolName = highSchoolName;
         this.highSchoolGrade = highSchoolGrade;
         this.enterYearHighSchool = enterYearHighSchool;
         this.highSchoolMajor = highSchoolMajor;
         this.highSchoolStudentId = highSchoolStudentId;
-        this.identificationUrl = identificationUrl;
     }
 
 }
