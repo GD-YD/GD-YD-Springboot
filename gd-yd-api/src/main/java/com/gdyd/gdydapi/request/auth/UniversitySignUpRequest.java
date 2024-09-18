@@ -46,11 +46,7 @@ public record UniversitySignUpRequest(
 
         @NotBlank(message = "대학교 학번은 필수 입력 값입니다.")
         @Schema(description = "대학교 학번", example = "32192896")
-        String universityStudentId,
-
-        @NotBlank(message = "학생증 URL은 필수 입력 값입니다.")
-        @Schema(description = "학생증 URL", example = "https://test.com/identification")
-        String identificationUrl
+        String universityStudentId
 ) {
     public static UniversityStudent toUniversityStudent(UniversitySignUpRequest request) {
         return UniversityStudent.builder()
@@ -63,7 +59,6 @@ public record UniversitySignUpRequest(
                 .enterYearUniversity(request.enterYearUniversity())
                 .universityMajor(request.universityMajor())
                 .universityStudentId(request.universityStudentId())
-                .identificationUrl(request.identificationUrl())
                 .build();
     }
 }

@@ -47,11 +47,7 @@ public record HighSchoolSignUpRequest(
 
         @NotBlank(message = "고등학교 학번은 필수 입력 값입니다.")
         @Schema(description = "고등학교 학번", example = "2021-12345")
-        String highSchoolStudentId,
-
-        @NotBlank(message = "학생증 URL은 필수 입력 값입니다.")
-        @Schema(description = "학생증 URL", example = "https://test.com/identification")
-        String identificationUrl
+        String highSchoolStudentId
 ) {
     public static HighSchoolStudent toHighSchoolStudent(HighSchoolSignUpRequest request) {
         return HighSchoolStudent.builder()
@@ -64,7 +60,6 @@ public record HighSchoolSignUpRequest(
                 .enterYearHighSchool(request.enterYearHighSchool())
                 .highSchoolMajor(request.highSchoolMajor())
                 .highSchoolStudentId(request.highSchoolStudentId())
-                .identificationUrl(request.identificationUrl())
                 .build();
     }
 }
