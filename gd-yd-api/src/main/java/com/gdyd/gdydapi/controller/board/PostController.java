@@ -5,6 +5,7 @@ import com.gdyd.gdydapi.request.board.UpdatePostRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
+import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
@@ -13,6 +14,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +35,15 @@ public class PostController {
     }
 
     @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 크기")
     @GetMapping
-    public ResponseEntity<GetAllPostResponse> getAllPost() {
-        GetAllPostResponse response = postQueryService.getAllPost();
+    public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
     }
 
