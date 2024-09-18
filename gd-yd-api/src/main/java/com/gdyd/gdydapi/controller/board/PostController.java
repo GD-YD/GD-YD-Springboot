@@ -38,12 +38,12 @@ public class PostController {
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
     @GetMapping
-    public ResponseEntity<PageResponse<GetPostResponse>> getPostList(
+    public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        PageResponse<GetPostResponse> response = postQueryService.getPostList(pageable);
+        PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
     }
 

@@ -1,6 +1,7 @@
 package com.gdyd.gdydapi.service.board;
 
 import com.gdyd.gdydapi.response.board.GetPostResponse;
+import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.service.board.PostService;
@@ -18,9 +19,9 @@ import java.util.List;
 public class PostQueryService {
     private final PostService postService;
 
-    public PageResponse<GetPostResponse> getPostList(Pageable pageble) {
-        Page<Post> pages = postService.getPostListByPagination(pageble);
-        return PageResponse.of(pages.getContent().stream().map(GetPostResponse::from).toList());
+    public PageResponse<GetPostSummaryResponse> getPostList(Pageable Pageable) {
+        Page<Post> pages = postService.getPostListByPagination(Pageable);
+        return PageResponse.of(pages.getContent().stream().map(GetPostSummaryResponse::from).toList());
     }
 
     public GetPostResponse getPostAndCommentsByPostId(Long postId) {
