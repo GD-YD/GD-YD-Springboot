@@ -9,6 +9,9 @@ import com.gdyd.gdydapi.response.common.ReportResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
+import com.gdyd.gdydauth.jwt.JwtProvider;
+import com.gdyd.gdydauth.jwt.Token;
+import com.gdyd.gdydauth.jwt.UserAuthentication;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.member.*;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
@@ -22,10 +25,13 @@ import com.gdyd.gdydcore.service.member.ReportService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionMediaService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
+import com.gdyd.gdydsupport.aibot.AIBotRequestGenerator;
+import com.gdyd.gdydsupport.aibot.AutoAnswerRequest;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +50,8 @@ public class MentoringCommandService {
     private final ScrapListService scrapListService;
     private final ReportService reportService;
     private final DiscordMessageGenerator discordMessageGenerator;
+    private final AIBotRequestGenerator aiBotRequestGenerator;
+    private final JwtProvider jwtProvider;
 
     /**
      * 고등학생 질문 생성
@@ -60,6 +68,10 @@ public class MentoringCommandService {
             highSchoolStudentQuestionMediaService.saveAllHighSchoolStudentQuestionMedia(medias);
             question.updateHighSchoolStudentQuestionMedias(medias);
         }
+        Authentication authentication = new UserAuthentication(memberId, null, null);
+        Token generatedAccessToken = jwtProvider.generateAccessToken(authentication);
+        AutoAnswerRequest autoAnswerRequest = AutoAnswerRequest.of(generatedAccessToken.getValue(), question.getId(), question.getQuestion());
+        aiBotRequestGenerator.sendAutoAnswerRequest(autoAnswerRequest);
         return CreateHighSchoolStudentQuestionResponse.from(question);
     }
 
