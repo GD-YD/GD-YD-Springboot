@@ -71,7 +71,7 @@ public class MentoringCommandService {
         Authentication authentication = new UserAuthentication(memberId, null, null);
         Token generatedAccessToken = jwtProvider.generateAccessToken(authentication);
         AutoAnswerRequest autoAnswerRequest = AutoAnswerRequest.of(generatedAccessToken.getValue(), question.getId(), question.getQuestion());
-        ㅎ
+        aiBotRequestGenerator.sendAutoAnswerRequest(autoAnswerRequest);
         return CreateHighSchoolStudentQuestionResponse.from(question);
     }
 
