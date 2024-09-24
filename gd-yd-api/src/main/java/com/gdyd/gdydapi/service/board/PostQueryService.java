@@ -11,16 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostQueryService {
     private final PostService postService;
 
-    public PageResponse<GetPostSummaryResponse> getPostList(Pageable Pageable) {
-        Page<Post> pages = postService.getPostListByPagination(Pageable);
+    public PageResponse<GetPostSummaryResponse> getPostList(Pageable pageable) {
+        Page<Post> pages = postService.getPostListByPagination(pageable);
         return PageResponse.of(pages.getContent().stream().map(GetPostSummaryResponse::from).toList());
     }
 
