@@ -20,6 +20,11 @@ public class UniversityStudentService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
+    public UniversityStudent getUniversityStudentByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+    }
+
     public boolean existsUniversityStudentByEmail(String email) {
         return repository.findByEmail(email).isPresent();
     }

@@ -68,7 +68,8 @@ public class MentoringCommandService {
             highSchoolStudentQuestionMediaService.saveAllHighSchoolStudentQuestionMedia(medias);
             question.updateHighSchoolStudentQuestionMedias(medias);
         }
-        Authentication authentication = new UserAuthentication(memberId, null, null);
+        Member aiBot = memberQueryService.getUniversityStudentByMemberEmail(aiBotRequestGenerator.getAiBotEmail());
+        Authentication authentication = new UserAuthentication(aiBot.getId(), null, null);
         Token generatedAccessToken = jwtProvider.generateAccessToken(authentication);
         AutoAnswerRequest autoAnswerRequest = AutoAnswerRequest.of(generatedAccessToken.getValue(), question.getId(), question.getQuestion());
         aiBotRequestGenerator.sendAutoAnswerRequest(autoAnswerRequest);
