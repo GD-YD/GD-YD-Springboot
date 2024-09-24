@@ -1,12 +1,19 @@
 package com.gdyd.gdydapi.controller.member;
 
 import com.gdyd.gdydapi.request.member.UpdateProfileRequest;
+import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
+import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.member.ProfileResponse;
+import com.gdyd.gdydapi.response.mentoring.HighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.service.member.MemberCommandService;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,4 +57,29 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "스크랩한 게시글 목록 조회 API", description = "스크랩한 게시글 목록을 페이지네이션으로 조회하는 API")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 크기")
+    @GetMapping("/scrap-posts")
+    public ResponseEntity<PageResponse<GetPostSummaryResponse>> getScrapPosts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        PageResponse<GetPostSummaryResponse> response = memberQueryService.getScrapPosts(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "스크랩한 고등학생 질문 목록 조회 API", description = "스크랩한 고등학생 질문 목록을 페이지네이션으로 조회하는 API")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 크기")
+    @GetMapping("/scrap-high-school-student-questions")
+    public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getScrapHighSchoolStudentQuestions(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        PageResponse<HighSchoolStudentQuestionResponse> response = memberQueryService.getScrapHighSchoolStudentQuestions(pageable);
+        return ResponseEntity.ok(response);
+    }
 }
