@@ -73,4 +73,12 @@ public class MemberQueryService {
         }
         return universityStudentService.getUniversityStudentByMemberId(memberId);
     }
+
+    public UniversityStudent getUniversityStudentByMemberEmail(String email) {
+        MemberType memberType = memberService.getMemberByEmail(email).getType();
+        if (memberType != MemberType.UNIVERSITY_STUDENT) {
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_REQUEST);
+        }
+        return universityStudentService.getUniversityStudentByEmail(email);
+    }
 }
