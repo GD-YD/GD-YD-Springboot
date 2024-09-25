@@ -1,7 +1,5 @@
 package com.gdyd.gdydsupport.ai;
 
-import com.gdyd.gdydsupport.exception.BusinessException;
-import com.gdyd.gdydsupport.exception.ErrorCode;
 import feign.FeignException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,6 @@ public class AIRequestGenerator {
         try {
             aiBotClient.sendAutoAnswerRequest(request);
         } catch (FeignException e) {
-            throw new BusinessException(ErrorCode.AI_REQUEST_FAILURE);
         }
     }
 
@@ -31,7 +28,7 @@ public class AIRequestGenerator {
         try {
             return aiFilteringClient.sendAbuseFilteringRequest(request);
         } catch (FeignException e) {
-            throw new BusinessException(ErrorCode.AI_REQUEST_FAILURE);
+            return ProfanityFilteringResponse.from(Boolean.FALSE);
         }
     }
 }
