@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AIRequestGenerator {
-    @Value("${ai-bot.email}")
+    @Value("${ai.bot.email}")
     private String aiBotEmail;
-    @Value("${ai-bot.password}")
+    @Value("${ai.bot.password}")
     private String aiBotPassword;
     private final AIBotClient aiBotClient;
     private final AIFilteringClient aiFilteringClient;
@@ -23,7 +23,7 @@ public class AIRequestGenerator {
         try {
             aiBotClient.sendAutoAnswerRequest(request);
         } catch (FeignException e) {
-            throw new BusinessException(ErrorCode.REQUEST_FAILURE);
+            throw new BusinessException(ErrorCode.AI_REQUEST_FAILURE);
         }
     }
 
@@ -31,7 +31,7 @@ public class AIRequestGenerator {
         try {
             return aiFilteringClient.sendAbuseFilteringRequest(request);
         } catch (FeignException e) {
-            throw new BusinessException(ErrorCode.REQUEST_FAILURE);
+            throw new BusinessException(ErrorCode.AI_REQUEST_FAILURE);
         }
     }
 }

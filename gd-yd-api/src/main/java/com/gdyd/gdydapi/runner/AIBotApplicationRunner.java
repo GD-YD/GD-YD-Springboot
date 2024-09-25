@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AIBotApplicationRunner implements ApplicationRunner {
-    @Value("${ai-bot.email}")
+    @Value("${ai.bot.email}")
     private String aiBotEmail;
-    @Value("${ai-bot.password}")
+    @Value("${ai.bot.password}")
     private String aiBotPassword;
     private final MemberService memberService;
     private final UniversityStudentService universityStudentService;

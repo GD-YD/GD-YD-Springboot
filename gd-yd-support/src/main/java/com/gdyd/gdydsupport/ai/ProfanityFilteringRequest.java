@@ -7,7 +7,7 @@ import lombok.Builder;
 @Schema(description = "AI 서버 욕설 필터링 요청")
 public record ProfanityFilteringRequest(
 
-        @Schema(description = "질문글 내용", example = "여자친구가 절 무시해요")
+        @Schema(description = "필터링 대상 글 내용", example = "여자친구가 절 무시해요")
         String content
 ) {
         public static ProfanityFilteringRequest from(String content) {

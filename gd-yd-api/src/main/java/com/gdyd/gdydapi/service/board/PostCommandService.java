@@ -54,7 +54,7 @@ public class PostCommandService {
 
         ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.content());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
-        if (aiFilteringResponse.getIsProfanityDetected()) {
+        if (aiFilteringResponse.isProfanityDetected()) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
         }
 
