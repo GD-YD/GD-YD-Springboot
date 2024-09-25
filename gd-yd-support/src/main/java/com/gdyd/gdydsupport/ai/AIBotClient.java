@@ -1,4 +1,4 @@
-package com.gdyd.gdydsupport.aibot;
+package com.gdyd.gdydsupport.ai;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

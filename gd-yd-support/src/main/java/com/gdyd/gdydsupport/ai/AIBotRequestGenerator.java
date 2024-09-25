@@ -1,4 +1,4 @@
-package com.gdyd.gdydsupport.aibot;
+package com.gdyd.gdydsupport.ai;
 
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
