@@ -5,13 +5,13 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "AI 서버 욕설 필터링 요청")
-public record AbuseFilteringRequest(
+public record ProfanityFilteringRequest(
 
         @Schema(description = "질문글 내용", example = "여자친구가 절 무시해요")
         String content
 ) {
-        public static AbuseFilteringRequest from(String content) {
-                return AbuseFilteringRequest.builder()
+        public static ProfanityFilteringRequest from(String content) {
+                return ProfanityFilteringRequest.builder()
                         .content(content)
                         .build();
         }

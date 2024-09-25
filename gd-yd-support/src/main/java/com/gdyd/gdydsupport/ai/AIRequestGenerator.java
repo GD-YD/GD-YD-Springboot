@@ -27,9 +27,9 @@ public class AIRequestGenerator {
         }
     }
 
-    public void sendAbuseFilteringRequest(AbuseFilteringRequest request) {
+    public ProfanityFilteringResponse sendAbuseFilteringRequest(ProfanityFilteringRequest request) {
         try {
-            aiFilteringClient.sendAbuseFilteringRequest(request);
+            return aiFilteringClient.sendAbuseFilteringRequest(request);
         } catch (FeignException e) {
             throw new BusinessException(ErrorCode.REQUEST_FAILURE);
         }
