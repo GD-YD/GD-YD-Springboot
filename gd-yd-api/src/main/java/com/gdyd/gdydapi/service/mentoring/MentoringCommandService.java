@@ -25,7 +25,7 @@ import com.gdyd.gdydcore.service.member.ReportService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionMediaService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
-import com.gdyd.gdydsupport.ai.AIBotRequestGenerator;
+import com.gdyd.gdydsupport.ai.AIRequestGenerator;
 import com.gdyd.gdydsupport.ai.AutoAnswerRequest;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
@@ -50,7 +50,7 @@ public class MentoringCommandService {
     private final ScrapListService scrapListService;
     private final ReportService reportService;
     private final DiscordMessageGenerator discordMessageGenerator;
-    private final AIBotRequestGenerator aiBotRequestGenerator;
+    private final AIRequestGenerator aiBotRequestGenerator;
     private final JwtProvider jwtProvider;
 
     /**
