@@ -27,6 +27,8 @@ import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
 import com.gdyd.gdydsupport.ai.AIRequestGenerator;
 import com.gdyd.gdydsupport.ai.AutoAnswerRequest;
+import com.gdyd.gdydsupport.ai.ProfanityFilteringRequest;
+import com.gdyd.gdydsupport.ai.ProfanityFilteringResponse;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
@@ -53,6 +55,8 @@ public class MentoringCommandService {
     private final AIRequestGenerator aiBotRequestGenerator;
     private final JwtProvider jwtProvider;
 
+    private final AIRequestGenerator aiRequestGenerator;
+
     /**
      * 고등학생 질문 생성
      * @param request 고등학생 질문 생성 요청
@@ -60,6 +64,13 @@ public class MentoringCommandService {
     public CreateHighSchoolStudentQuestionResponse createHighSchoolStudentQuestion(CreateHighSchoolStudentQuestionRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         HighSchoolStudent highSchoolStudent = memberQueryService.getHighSchoolStudentByMemberId(memberId);
+
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.question());
+        ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
+        if (aiFilteringResponse.isProfanityDetected()) {
+            throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
+        }
+
         HighSchoolStudentQuestion question = CreateHighSchoolStudentQuestionRequest.toHighSchoolStudentQuestion(request, highSchoolStudent);
         highSchoolStudentQuestionService.save(question);
 
