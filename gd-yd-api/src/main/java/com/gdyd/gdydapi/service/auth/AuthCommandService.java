@@ -5,6 +5,8 @@ import com.gdyd.gdydapi.response.auth.LoginResponse;
 import com.gdyd.gdydapi.response.auth.SendMailResponse;
 import com.gdyd.gdydapi.response.auth.SignUpResponse;
 import com.gdyd.gdydapi.response.auth.VerifyCodeResponse;
+import com.gdyd.gdydapi.runner.HighSchoolNameCache;
+import com.gdyd.gdydapi.runner.UniversityNameCache;
 import com.gdyd.gdydauth.jwt.JwtProvider;
 import com.gdyd.gdydauth.jwt.JwtValidationType;
 import com.gdyd.gdydauth.jwt.Token;
@@ -35,11 +37,17 @@ public class AuthCommandService {
     private final RefreshTokenService refreshTokenService;
     private final JwtProvider jwtProvider;
 
+    private final UniversityNameCache universityNameCache;
+    private final HighSchoolNameCache highSchoolNameCache;
+
     public SignUpResponse signupHighSchool(HighSchoolSignUpRequest request) {
-        if (memberService.existingEmail(request.email())) {
+        if (memberService.existingEmail(request.email()) || memberService.existingNickname(request.nickname())) {
             throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         HighSchoolStudent student = HighSchoolSignUpRequest.toHighSchoolStudent(request);
+        if (highSchoolNameCache.isValidHighSchool(student.getHighSchoolName())) {
+            throw new BusinessException(ErrorCode.INVALID_HIGH_SCHOOL_NAME, student.getHighSchoolName());
+        }
         student.updatePassword(passwordEncoder.encode(request.password()));
         verificationCodeService.delete(request.email());
 
@@ -48,10 +56,13 @@ public class AuthCommandService {
     }
 
     public SignUpResponse signupUniversity(UniversitySignUpRequest request) {
-        if (memberService.existingEmail(request.email())) {
+        if (memberService.existingEmail(request.email()) || memberService.existingNickname(request.nickname())) {
             throw new BusinessException(ErrorCode.INVALID_SIGNUP);
         }
         UniversityStudent student = UniversitySignUpRequest.toUniversityStudent(request);
+        if (universityNameCache.isValidUniversity(student.getUniversityName())) {
+            throw new BusinessException(ErrorCode.INVALID_UNIVERSITY_NAME, student.getUniversityName());
+        }
         student.updatePassword(passwordEncoder.encode(request.password()));
         verificationCodeService.delete(request.email());
 

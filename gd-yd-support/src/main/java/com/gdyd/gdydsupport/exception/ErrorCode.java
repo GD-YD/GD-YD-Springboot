@@ -45,7 +45,7 @@ public enum ErrorCode {
 
     REQUEST_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "REQUEST_FAILURE", "AI 서버로의 자동 답변 생성 요청이 실패했습니다."),
 
-    INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "INVALID_SIGNUP", "이미 가입되어 있는 회원입니다."),
+    INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "INVALID_SIGNUP", "이미 가입되어 있는 회원입니다. (이메일 또는 닉네임 중복)"),
     INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다."),
 
     UNSUPPORTED_BEARER_FORMAT(HttpStatus.UNAUTHORIZED, "UNSUPPORTED_BEARER_FORMAT", "지원하지 않는 Bearer token 형식입니다."),
@@ -56,6 +56,9 @@ public enum ErrorCode {
 
     INVALID_MEMBER_PROFILE_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_PROFILE_REQUEST", "로그인이 되어있지 않고 프로필을 조회할 수 없습니다."),
     INVALID_PRINCIPAL(HttpStatus.BAD_REQUEST, "INVALID_PRINCIPAL", "로그인 객체의 정보가 유효하지 않거나, 존재하지 않습니다."),
+
+    INVALID_HIGH_SCHOOL_NAME(HttpStatus.BAD_REQUEST, "INVALID_HIGH_SCHOOL_NAME", "유효하지 않은 고등학교 이름입니다. (%s)"),
+    INVALID_UNIVERSITY_NAME(HttpStatus.BAD_REQUEST, "INVALID_UNIVERSITY_NAME", "유효하지 않은 대학교 이름입니다. (%s)"),
 
     // POST
     NOT_FOUND_POST(HttpStatus.NOT_FOUND, "NOT_FOUND_POST", "해당 id를 가진 게시글이 존재하지 않습니다."),
