@@ -1,7 +1,6 @@
 package com.gdyd.gdydapi.service.member;
 
 import com.gdyd.gdydapi.request.member.UpdateProfileRequest;
-import com.gdyd.gdydapi.response.member.MemberResponse;
 import com.gdyd.gdydapi.response.member.ProfileResponse;
 import com.gdyd.gdydauth.utils.PrincipalUtil;
 import com.gdyd.gdydcore.domain.member.Member;
