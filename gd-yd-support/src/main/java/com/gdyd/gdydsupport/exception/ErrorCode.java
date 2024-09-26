@@ -43,7 +43,7 @@ public enum ErrorCode {
     INVALID_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "INVALID_VERIFICATION_CODE", "잘못된 인증코드입니다."),
     NOT_FOUND_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "NOT_FOUND_VERIFICATION_CODE", "해당 이메일로 생성 된 인증코드가 존재하지 않습니다."),
 
-    REQUEST_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "REQUEST_FAILURE", "AI 서버로의 자동 답변 생성 요청이 실패했습니다."),
+    CONTAINS_PROFANITY(HttpStatus.BAD_REQUEST, "CONTAINS_PROFANITY", "게시글에 욕설 또는 부적절한 언어가 포함되어 있습니다."),
 
     INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "INVALID_SIGNUP", "이미 가입되어 있는 회원입니다. (이메일 또는 닉네임 중복)"),
     INVALID_LOGIN(HttpStatus.BAD_REQUEST, "INVALID_LOGIN", "아이디 또는 비밀번호가 일치하지 않습니다."),

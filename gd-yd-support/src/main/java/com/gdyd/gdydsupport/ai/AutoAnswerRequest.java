@@ -1,4 +1,4 @@
-package com.gdyd.gdydsupport.aibot;
+package com.gdyd.gdydsupport.ai;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
