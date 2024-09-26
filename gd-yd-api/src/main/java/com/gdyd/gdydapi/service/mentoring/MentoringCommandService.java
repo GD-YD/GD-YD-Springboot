@@ -54,7 +54,6 @@ public class MentoringCommandService {
     private final DiscordMessageGenerator discordMessageGenerator;
     private final AIRequestGenerator aiBotRequestGenerator;
     private final JwtProvider jwtProvider;
-
     private final AIRequestGenerator aiRequestGenerator;
 
     /**
@@ -95,6 +94,13 @@ public class MentoringCommandService {
     public CreateUniversityStudentAnswerResponse createUniversityStudentAnswer(Long highSchoolStudentQuestionId, CreateUniversityStudentAnswerRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         UniversityStudent universityStudent = memberQueryService.getUniversityStudentByMemberId(memberId);
+
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.answer());
+        ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
+        if (aiFilteringResponse.isProfanityDetected()) {
+            throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
+        }
+
         HighSchoolStudentQuestion question = highSchoolStudentQuestionService.getHighSchoolStudentQuestionById(highSchoolStudentQuestionId);
         UniversityStudentAnswer answer = CreateUniversityStudentAnswerRequest.toUniversityStudentAnswer(request, universityStudent, question);
 
