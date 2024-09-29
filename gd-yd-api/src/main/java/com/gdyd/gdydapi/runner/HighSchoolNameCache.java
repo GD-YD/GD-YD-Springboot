@@ -16,7 +16,7 @@ public class HighSchoolNameCache {
 
     @PostConstruct
     public void loadHighSchoolNames() throws IOException {
-        ClassPathResource resource = new ClassPathResource("data/highSchoolName.csv");
+        ClassPathResource resource = new ClassPathResource("data/highschoolName.csv");
         try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             String line;
             while ((line = br.readLine()) != null) {
