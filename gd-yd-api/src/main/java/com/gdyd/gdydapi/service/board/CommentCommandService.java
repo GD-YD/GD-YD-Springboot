@@ -18,6 +18,9 @@ import com.gdyd.gdydcore.service.board.PostService;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
 import com.gdyd.gdydcore.service.member.ReportService;
+import com.gdyd.gdydsupport.ai.AIRequestGenerator;
+import com.gdyd.gdydsupport.ai.ProfanityFilteringRequest;
+import com.gdyd.gdydsupport.ai.ProfanityFilteringResponse;
 import com.gdyd.gdydsupport.exception.BusinessException;
 import com.gdyd.gdydsupport.exception.ErrorCode;
 import com.gdyd.gdydsupport.webhook.DiscordMessageGenerator;
@@ -35,11 +38,18 @@ public class CommentCommandService {
     private final LikeListService likeListService;
     private final ReportService reportService;
     private final DiscordMessageGenerator discordMessageGenerator;
+    private final AIRequestGenerator aiRequestGenerator;
 
     public SaveCommentResponse saveComment(SaveCommentRequest request) {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         Member member = memberService.getMemberById(memberId);
         Post post = postService.getPostById(request.postId());
+
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.content());
+        ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
+        if (Boolean.TRUE.equals(aiFilteringResponse.isProfanityDetected())) {
+            throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
+        }
 
         Comment comment = SaveCommentRequest.toComment(request);
         comment.updateMember(member);

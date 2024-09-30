@@ -66,7 +66,7 @@ public class MentoringCommandService {
 
         ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.of(request.title(), request.question());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
-        if (aiFilteringResponse.isProfanityDetected()) {
+        if (Boolean.TRUE.equals(aiFilteringResponse.isProfanityDetected())) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
         }
 
@@ -97,7 +97,7 @@ public class MentoringCommandService {
 
         ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.answer());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
-        if (aiFilteringResponse.isProfanityDetected()) {
+        if (Boolean.TRUE.equals(aiFilteringResponse.isProfanityDetected())) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
         }
 
