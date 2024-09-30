@@ -14,8 +14,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +42,13 @@ public class PostController {
     @GetMapping
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "20") int size
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = switch (criteria) {
+            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria).descending());
+            default -> PageRequest.of(page, size, Sort.by(criteria));
+        };
         PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
     }
