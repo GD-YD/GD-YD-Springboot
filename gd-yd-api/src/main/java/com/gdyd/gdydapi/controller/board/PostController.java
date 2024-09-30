@@ -57,13 +57,13 @@ public class PostController {
 
     @Operation(summary = "인기 Post 조회 API", description = "특정 기간 내 인기 게시글 n개를 불러오는 API")
     @GetMapping("/best")
-    public ResponseEntity<GetBestPostResponse> getBestPost(
+    public ResponseEntity<PageResponse<GetPostSummaryResponse>> getBestPost(
             @RequestParam(value = "size", defaultValue = "20") int size,
             @RequestParam(value = "period", defaultValue = "1") int period
     ) {
         LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
         Pageable pageable = PageRequest.of(0, size, Sort.by("likeCount", "createdAt").descending());
-        GetBestPostResponse response = postQueryService.getBestPost(weeksAgo, pageable);
+        PageResponse<GetPostSummaryResponse> response = postQueryService.getBestPost(weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
 

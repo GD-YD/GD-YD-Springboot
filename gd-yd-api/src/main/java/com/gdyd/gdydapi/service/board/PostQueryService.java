@@ -1,6 +1,5 @@
 package com.gdyd.gdydapi.service.board;
 
-import com.gdyd.gdydapi.response.board.GetBestPostResponse;
 import com.gdyd.gdydapi.response.board.GetPostResponse;
 import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
@@ -31,8 +30,8 @@ public class PostQueryService {
         return GetPostResponse.from(post);
     }
 
-    public GetBestPostResponse getBestPost(LocalDateTime weeksAgo, Pageable pageable) {
+    public PageResponse<GetPostSummaryResponse> getBestPost(LocalDateTime weeksAgo, Pageable pageable) {
         List<Post> posts = postService.findAllByCreatedAtIsAfter(weeksAgo, pageable);
-        return GetBestPostResponse.from(posts);
+        return PageResponse.of(posts.stream().map(GetPostSummaryResponse::from).toList());
     }
 }
