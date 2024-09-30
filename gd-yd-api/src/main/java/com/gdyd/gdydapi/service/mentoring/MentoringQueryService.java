@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +28,11 @@ public class MentoringQueryService {
     public PageResponse<HighSchoolStudentQuestionResponse> getHighSchoolStudentQuestions(Pageable pageable) {
         Page<HighSchoolStudentQuestion> pages = highSchoolStudentQuestionService.findHighSchoolStudentQuestionByPagination(pageable);
         return PageResponse.of(pages.getContent().stream().map(HighSchoolStudentQuestionResponse::from).toList());
+    }
+
+    public PageResponse<HighSchoolStudentQuestionResponse> getBestHighSchoolStudentQuestions(LocalDateTime weeksAgo, Pageable pageable) {
+        List<HighSchoolStudentQuestion> questions = highSchoolStudentQuestionService.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+        return PageResponse.of(questions.stream().map(HighSchoolStudentQuestionResponse::from).toList());
     }
 
     /**

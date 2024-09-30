@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.controller.mentoring;
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
+import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Tag(name = "Mentoring", description = "Mentoring 관련 API")
 @RestController
@@ -67,6 +70,18 @@ public class MentoringController {
             default -> PageRequest.of(page, size, Sort.by("createdAt"));
         };
         PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getHighSchoolStudentQuestions(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "인기 질문글 조회 API", description = "특정 기간 내 인기 질문글 n개를 불러오는 API")
+    @GetMapping("/high-school-student-questions/best")
+    public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getBestHighSchoolStudentQuestionList(
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "period", defaultValue = "1") int period
+    ) {
+        LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
+        Pageable pageable = PageRequest.of(0, size, Sort.by("likeCount", "createdAt").descending());
+        PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getBestHighSchoolStudentQuestions(weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
 
