@@ -39,6 +39,7 @@ public class PostController {
     @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
+    @Parameter(name = "criteria", description = "정렬 기준")
     @GetMapping
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
