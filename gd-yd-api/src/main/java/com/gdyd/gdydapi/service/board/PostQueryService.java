@@ -31,8 +31,8 @@ public class PostQueryService {
         return GetPostResponse.from(post);
     }
 
-    public GetBestPostResponse getBestPost(LocalDateTime weekAgo) {
-        List<Post> posts = postService.findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(weekAgo);
+    public GetBestPostResponse getBestPost(LocalDateTime weeksAgo, Pageable pageable) {
+        List<Post> posts = postService.findAllByCreatedAtIsAfter(weeksAgo, pageable);
         return GetBestPostResponse.from(posts);
     }
 }

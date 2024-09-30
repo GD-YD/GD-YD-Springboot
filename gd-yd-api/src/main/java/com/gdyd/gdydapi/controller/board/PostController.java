@@ -55,11 +55,15 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "인기 Post 조회 API", description = "일주일내 인기 게시글 20개를 불러오는 API")
+    @Operation(summary = "인기 Post 조회 API", description = "특정 기간 내 인기 게시글 n개를 불러오는 API")
     @GetMapping("/best")
-    public ResponseEntity<GetBestPostResponse> getBestPost() {
-        LocalDateTime weekAgo = LocalDateTime.now().minusWeeks(1);
-        GetBestPostResponse response = postQueryService.getBestPost(weekAgo);
+    public ResponseEntity<GetBestPostResponse> getBestPost(
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "period", defaultValue = "1") int period
+    ) {
+        LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
+        Pageable pageable = PageRequest.of(0, size, Sort.by("likeCount", "createdAt").descending());
+        GetBestPostResponse response = postQueryService.getBestPost(weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
 

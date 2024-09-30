@@ -38,9 +38,8 @@ public class PostService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
     }
 
-    public List<Post> findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(LocalDateTime weekAgo) {
-        return postRepository.findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(weekAgo)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
+    public List<Post> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable) {
+        return postRepository.findAllByCreatedAtIsAfter(weeksAgo, pageable);
     }
 
     @Transactional
