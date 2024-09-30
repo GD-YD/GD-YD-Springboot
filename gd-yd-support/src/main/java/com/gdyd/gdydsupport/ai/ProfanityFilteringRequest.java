@@ -19,4 +19,11 @@ public record ProfanityFilteringRequest(
                         .content(content)
                         .build();
         }
+
+        public static ProfanityFilteringRequest from(String content) {
+                return ProfanityFilteringRequest.builder()
+                        .title("")
+                        .content(content)
+                        .build();
+        }
 }

@@ -95,7 +95,7 @@ public class MentoringCommandService {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         UniversityStudent universityStudent = memberQueryService.getUniversityStudentByMemberId(memberId);
 
-        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.of("", request.answer());
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.answer());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
         if (aiFilteringResponse.isProfanityDetected()) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
