@@ -64,7 +64,7 @@ public class MentoringCommandService {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         HighSchoolStudent highSchoolStudent = memberQueryService.getHighSchoolStudentByMemberId(memberId);
 
-        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.question());
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.of(request.title(), request.question());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
         if (aiFilteringResponse.isProfanityDetected()) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
@@ -95,7 +95,7 @@ public class MentoringCommandService {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         UniversityStudent universityStudent = memberQueryService.getUniversityStudentByMemberId(memberId);
 
-        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.from(request.answer());
+        ProfanityFilteringRequest aiFilteringRequest = ProfanityFilteringRequest.of("", request.answer());
         ProfanityFilteringResponse aiFilteringResponse = aiRequestGenerator.sendAbuseFilteringRequest(aiFilteringRequest);
         if (aiFilteringResponse.isProfanityDetected()) {
             throw new BusinessException(ErrorCode.CONTAINS_PROFANITY);
