@@ -1,6 +1,7 @@
 package com.gdyd.gdydapi.request.auth;
 
 import com.gdyd.gdydcore.domain.member.Grade;
+import com.gdyd.gdydcore.domain.member.UniversityMajorCategory;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import com.gdyd.gdydsupport.annotation.ValidEmail;
 import com.gdyd.gdydsupport.annotation.ValidPassword;
@@ -40,8 +41,12 @@ public record UniversitySignUpRequest(
         @Schema(description = "대학교 입학년도", example = "2021")
         Long enterYearUniversity,
 
+        @NotNull(message = "대학교 전공 분류는 필수 입력 값입니다.")
+        @Schema(description = "대학교 전공 분류", example = "COMPUTER_SW")
+        UniversityMajorCategory universityMajorCategory,
+
         @NotBlank(message = "대학교 전공은 필수 입력 값입니다.")
-        @Schema(description = "대학교 전공", example = "COMPUTER_SCIENCE")
+        @Schema(description = "대학교 전공", example = "컴퓨터공학과")
         String universityMajor,
 
         @NotBlank(message = "대학교 학번은 필수 입력 값입니다.")
@@ -57,6 +62,7 @@ public record UniversitySignUpRequest(
                 .universityName(request.universityName())
                 .universityGrade(request.universityGrade())
                 .enterYearUniversity(request.enterYearUniversity())
+                .universityMajorCategory(request.universityMajorCategory())
                 .universityMajor(request.universityMajor())
                 .universityStudentId(request.universityStudentId())
                 .build();

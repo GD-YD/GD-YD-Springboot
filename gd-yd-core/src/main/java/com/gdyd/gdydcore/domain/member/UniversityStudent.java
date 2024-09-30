@@ -28,6 +28,10 @@ public class UniversityStudent extends Member {
     Long enterYearUniversity;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    UniversityMajorCategory universityMajorCategory;
+
+    @Column(nullable = false)
     String universityMajor;
 
     @Column(nullable = false)
@@ -37,11 +41,22 @@ public class UniversityStudent extends Member {
     List<UniversityStudentAnswer> universityStudentAnswers = new ArrayList<>();
 
     @Builder
-    public UniversityStudent(String email, String password, String nickname, String name, String universityName, Grade universityGrade, Long enterYearUniversity, String universityMajor, String universityStudentId) {
+    public UniversityStudent(
+            String email,
+            String password,
+            String nickname,
+            String name,
+            String universityName,
+            Grade universityGrade,
+            Long enterYearUniversity,
+            String universityMajor,
+            UniversityMajorCategory universityMajorCategory,
+            String universityStudentId) {
         super(MemberType.UNIVERSITY_STUDENT, email, password, nickname, name);
         this.universityName = universityName;
         this.universityGrade = universityGrade;
         this.enterYearUniversity = enterYearUniversity;
+        this.universityMajorCategory = universityMajorCategory;
         this.universityMajor = universityMajor;
         this.universityStudentId = universityStudentId;
     }
