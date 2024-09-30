@@ -20,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Tag(name = "Post", description = "Post 관련 API")
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class PostController {
     @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
-    @Parameter(name = "criteria", description = "정렬 기준 (createAt | likeCount)")
+    @Parameter(name = "criteria", description = "정렬 기준 (createdAt | likeCount)")
     @GetMapping
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -46,10 +48,18 @@ public class PostController {
             @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
         Pageable pageable = switch (criteria) {
-            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria).descending());
-            default -> PageRequest.of(page, size, Sort.by(criteria));
+            case "likeCount" -> PageRequest.of(page, size, Sort.by("likeCount", "createdAt").descending());
+            default -> PageRequest.of(page, size, Sort.by("createdAt"));
         };
         PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "인기 Post 조회 API", description = "일주일내 인기 게시글 20개를 불러오는 API")
+    @GetMapping("/best")
+    public ResponseEntity<GetBestPostResponse> getBestPost() {
+        LocalDateTime weekAgo = LocalDateTime.now().minusWeeks(1);
+        GetBestPostResponse response = postQueryService.getBestPost(weekAgo);
         return ResponseEntity.ok(response);
     }
 

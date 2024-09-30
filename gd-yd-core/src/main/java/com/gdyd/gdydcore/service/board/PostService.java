@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,6 +36,11 @@ public class PostService {
     public Post getPostByIdAndMemberId(Long postId, Long memberId) {
         return postRepository.findByIdAndMemberId(postId, memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
+    }
+
+    public List<Post> findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(LocalDateTime weekAgo) {
+        return postRepository.findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(weekAgo)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
     }
 
     @Transactional

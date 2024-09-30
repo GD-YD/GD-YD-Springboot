@@ -1,5 +1,6 @@
 package com.gdyd.gdydapi.service.board;
 
+import com.gdyd.gdydapi.response.board.GetBestPostResponse;
 import com.gdyd.gdydapi.response.board.GetPostResponse;
 import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
@@ -10,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +29,10 @@ public class PostQueryService {
     public GetPostResponse getPostAndCommentsByPostId(Long postId) {
         Post post = postService.getPostById(postId);
         return GetPostResponse.from(post);
+    }
+
+    public GetBestPostResponse getBestPost(LocalDateTime weekAgo) {
+        List<Post> posts = postService.findTop20ByCreatedAtIsAfterOrderByLikeCountDesc(weekAgo);
+        return GetBestPostResponse.from(posts);
     }
 }
