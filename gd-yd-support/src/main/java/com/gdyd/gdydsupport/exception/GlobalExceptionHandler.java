@@ -1,5 +1,7 @@
 package com.gdyd.gdydsupport.exception;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -36,6 +38,16 @@ public class GlobalExceptionHandler {
 
         ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, fieldErrors);
         log.debug("Argument validation has failed: {}", ex.getMessage());
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        Map<String, String> fieldErrors = ex.getConstraintViolations().stream()
+                .collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage));
+
+        ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, fieldErrors);
+        log.error("Constraint violation has occurred: {}", ex.getMessage());
         return new ResponseEntity<>(response, response.getStatus());
     }
 

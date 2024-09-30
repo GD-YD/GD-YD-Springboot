@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.runner;
 
 import com.gdyd.gdydapi.request.auth.UniversitySignUpRequest;
 import com.gdyd.gdydcore.domain.member.Grade;
+import com.gdyd.gdydcore.domain.member.UniversityMajorCategory;
 import com.gdyd.gdydcore.domain.member.UniversityStudent;
 import com.gdyd.gdydcore.service.member.MemberService;
 import com.gdyd.gdydcore.service.member.UniversityStudentService;
@@ -24,7 +25,7 @@ public class AIBotApplicationRunner implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         if (memberService.existingEmail(aiBotEmail)) {
             return ;
         }
@@ -36,6 +37,7 @@ public class AIBotApplicationRunner implements ApplicationRunner {
                 "단국대학교",
                 Grade.FIRST,
                 2024L,
+                UniversityMajorCategory.COMPUTER_SW,
                 "COMPUTER_SCIENCE",
                 "00000000"
         );
