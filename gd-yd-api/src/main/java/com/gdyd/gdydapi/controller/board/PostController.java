@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +38,7 @@ public class PostController {
     @Operation(summary = "Post 목록 조회 API", description = "Post의 목록을 조회하는 API")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
-    @Parameter(name = "criteria", description = "정렬 기준")
+    @Parameter(name = "criteria", description = "정렬 기준 (createAt | likeCount)")
     @GetMapping
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,

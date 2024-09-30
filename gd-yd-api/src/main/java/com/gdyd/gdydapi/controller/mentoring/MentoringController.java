@@ -55,7 +55,7 @@ public class MentoringController {
     @Operation(summary = "고등학생 질문 목록 조회 API", description = "고등학생 질문 목록을 페이지네이션으로 조회하는 API")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
-    @Parameter(name = "criteria", description = "정렬 기준")
+    @Parameter(name = "criteria", description = "정렬 기준 (createAt | likeCount)")
     @GetMapping("/high-school-student-questions")
     public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getHighSchoolStudentQuestionList(
             @RequestParam(value = "page", defaultValue = "0") int page,
