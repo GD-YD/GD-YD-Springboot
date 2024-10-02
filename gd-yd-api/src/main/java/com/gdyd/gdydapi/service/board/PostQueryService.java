@@ -11,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -25,5 +28,10 @@ public class PostQueryService {
     public GetPostResponse getPostAndCommentsByPostId(Long postId) {
         Post post = postService.getPostById(postId);
         return GetPostResponse.from(post);
+    }
+
+    public PageResponse<GetPostSummaryResponse> getBestPostList(LocalDateTime weeksAgo, Pageable pageable) {
+        List<Post> posts = postService.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+        return PageResponse.of(posts.stream().map(GetPostSummaryResponse::from).toList());
     }
 }

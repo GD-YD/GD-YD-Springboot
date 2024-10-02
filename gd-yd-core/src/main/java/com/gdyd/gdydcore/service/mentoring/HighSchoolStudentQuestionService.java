@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,6 +26,10 @@ public class HighSchoolStudentQuestionService {
 
     public Page<HighSchoolStudentQuestion> findHighSchoolStudentQuestionByPagination(Pageable pageable) {
         return highSchoolStudentQuestionRepository.findAll(pageable);
+    }
+
+    public List<HighSchoolStudentQuestion> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findAllByCreatedAtIsAfter(weeksAgo, pageable);
     }
 
     @Transactional

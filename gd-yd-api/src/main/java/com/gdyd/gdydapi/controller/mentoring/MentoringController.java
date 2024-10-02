@@ -3,6 +3,7 @@ package com.gdyd.gdydapi.controller.mentoring;
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
+import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Tag(name = "Mentoring", description = "Mentoring 관련 API")
 @RestController
@@ -55,7 +58,7 @@ public class MentoringController {
     @Operation(summary = "고등학생 질문 목록 조회 API", description = "고등학생 질문 목록을 페이지네이션으로 조회하는 API")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
-    @Parameter(name = "criteria", description = "정렬 기준 (createAt | likeCount)")
+    @Parameter(name = "criteria", description = "정렬 기준 (createdAt | likeCount)")
     @GetMapping("/high-school-student-questions")
     public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getHighSchoolStudentQuestionList(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -63,10 +66,22 @@ public class MentoringController {
             @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
         Pageable pageable = switch (criteria) {
-            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria).descending());
-            default -> PageRequest.of(page, size, Sort.by(criteria));
+            case "likeCount" -> PageRequest.of(page, size, Sort.by("likeCount", "createdAt").descending());
+            default -> PageRequest.of(page, size, Sort.by("createdAt"));
         };
         PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getHighSchoolStudentQuestions(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "인기 질문글 조회 API", description = "특정 기간 내 인기 질문글 n개를 불러오는 API")
+    @GetMapping("/high-school-student-questions/best")
+    public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getBestHighSchoolStudentQuestionList(
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "period", defaultValue = "1") int period
+    ) {
+        LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
+        Pageable pageable = PageRequest.of(0, size, Sort.by("likeCount", "createdAt").descending());
+        PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getBestHighSchoolStudentQuestions(weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
 
