@@ -12,15 +12,15 @@ public record CreateUniversityStudentAnswerRequest(
         @Schema(description = "대학생 답변 내용", example = "네, 가능합니다.")
         String answer
 ) {
-        public static UniversityStudentAnswer toUniversityStudentAnswer(
-                CreateUniversityStudentAnswerRequest request,
-                UniversityStudent universityStudent,
-                HighSchoolStudentQuestion highSchoolStudentQuestion
-        ) {
-                return UniversityStudentAnswer.builder()
-                        .answer(request.answer())
-                        .universityStudent(universityStudent)
-                        .highSchoolStudentQuestion(highSchoolStudentQuestion)
-                        .build();
-        }
+    public static UniversityStudentAnswer toUniversityStudentAnswer(
+            CreateUniversityStudentAnswerRequest request,
+            UniversityStudent universityStudent,
+            HighSchoolStudentQuestion highSchoolStudentQuestion
+    ) {
+        return UniversityStudentAnswer.builder()
+                .answer(request.answer())
+                .universityStudent(universityStudent)
+                .highSchoolStudentQuestion(highSchoolStudentQuestion)
+                .build();
+    }
 }
