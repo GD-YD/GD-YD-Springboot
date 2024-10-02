@@ -1,8 +1,10 @@
 package com.gdyd.gdydcore.domain.mentoring;
 
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
+import com.gdyd.gdydcore.domain.member.Grade;
 import com.gdyd.gdydcore.domain.member.HighSchoolStudent;
 import com.gdyd.gdydcore.domain.member.LikeList;
+import com.gdyd.gdydcore.domain.member.UniversityMajorCategory;
 import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,6 +42,15 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     @Column(nullable = false)
     Long reportCount;
 
+    @Column(nullable = false)
+    String universityNameTag;
+
+    @Column(nullable = false)
+    UniversityMajorCategory universityMajorTag;
+
+    @Column(nullable = false)
+    Grade universityGradeTag;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     HighSchoolStudent highSchoolStudent;
@@ -57,13 +68,23 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     List<Report> reports = new ArrayList<>();
 
     @Builder
-    public HighSchoolStudentQuestion(String title, String question, HighSchoolStudent highSchoolStudent) {
+    public HighSchoolStudentQuestion(
+            String title,
+            String question,
+            HighSchoolStudent highSchoolStudent,
+            String universityNameTag,
+            UniversityMajorCategory universityMajorTag,
+            Grade universityGradeTag
+    ) {
         this.answerCount = 0L;
         this.likeCount = 0L;
         this.reportCount = 0L;
         this.title = title;
         this.question = question;
         this.highSchoolStudent = highSchoolStudent;
+        this.universityNameTag = universityNameTag;
+        this.universityMajorTag = universityMajorTag;
+        this.universityGradeTag = universityGradeTag;
     }
 
     public void updateHighSchoolStudentQuestionMedias(List<HighSchoolStudentQuestionMedia> highSchoolStudentQuestionMedias) {

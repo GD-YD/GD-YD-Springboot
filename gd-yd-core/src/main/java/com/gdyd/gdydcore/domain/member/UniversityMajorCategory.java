@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @EnableEnumDeserializer
 public enum UniversityMajorCategory {
+    DEFAULT("없음"),
+
     // HumanitiesSocial
     LANGUAGE_LITERATURE("언어문학"),
     SOCIAL_SCIENCE("사회과학"),
