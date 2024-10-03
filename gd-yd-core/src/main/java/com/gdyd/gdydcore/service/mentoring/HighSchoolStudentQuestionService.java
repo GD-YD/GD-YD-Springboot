@@ -28,8 +28,8 @@ public class HighSchoolStudentQuestionService {
         return highSchoolStudentQuestionRepository.findAll(pageable);
     }
 
-    public List<HighSchoolStudentQuestion> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable) {
-        return highSchoolStudentQuestionRepository.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+    public List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(int like, LocalDateTime weeksAgo, Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
     }
 
     @Transactional

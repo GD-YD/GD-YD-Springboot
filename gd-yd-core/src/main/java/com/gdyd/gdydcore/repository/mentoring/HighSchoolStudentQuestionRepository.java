@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HighSchoolStudentQuestionRepository extends JpaRepository<HighSchoolStudentQuestion, Long> {
-    List<HighSchoolStudentQuestion> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable);
+    List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(int like, LocalDateTime weeksAgo, Pageable pageable);
 }

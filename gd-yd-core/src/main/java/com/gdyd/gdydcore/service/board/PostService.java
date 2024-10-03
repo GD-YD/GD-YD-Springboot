@@ -38,8 +38,8 @@ public class PostService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
     }
 
-    public List<Post> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable) {
-        return postRepository.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+    public List<Post> findByLikeCountGreaterThanEqualAndCreatedAtAfter(int like, LocalDateTime weeksAgo, Pageable pageable) {
+        return postRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
     }
 
     @Transactional
