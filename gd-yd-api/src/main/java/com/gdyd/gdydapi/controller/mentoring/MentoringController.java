@@ -74,6 +74,8 @@ public class MentoringController {
     }
 
     @Operation(summary = "인기 질문글 조회 API", description = "특정 기간 내 인기 질문글 n개를 불러오는 API")
+    @Parameter(name = "size", description = "인기글 개수")
+    @Parameter(name = "period", description = "인기글 기준 기간 (주 단위: 값이 1일 경우 1주일 내)")
     @GetMapping("/high-school-student-questions/best")
     public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getBestHighSchoolStudentQuestionList(
             @RequestParam(value = "size", defaultValue = "20") int size,
