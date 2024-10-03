@@ -3,15 +3,11 @@ package com.gdyd.gdydapi.controller.mentoring;
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
-import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
-import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.common.ReportResponse;
-import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
-import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
-import com.gdyd.gdydapi.response.mentoring.DetailHighSchoolStudentQuestionResponse;
-import com.gdyd.gdydapi.response.mentoring.HighSchoolStudentQuestionResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
+import com.gdyd.gdydapi.response.mentoring.*;
 import com.gdyd.gdydapi.service.mentoring.MentoringCommandService;
 import com.gdyd.gdydapi.service.mentoring.MentoringQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -170,6 +166,13 @@ public class MentoringController {
     @PostMapping("/university-student-answer/{universityStudentAnswerId}/report")
     public ResponseEntity<ReportResponse> reportUniversityStudentAnswer(@PathVariable("universityStudentAnswerId") Long universityStudentAnswerId, @RequestBody ReportRequest request) {
         ReportResponse response = mentoringCommandService.reportUniversityStudentAnswer(universityStudentAnswerId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "고등학생 질문 대학생 매칭 API", description = "현재 대학생의 정보를 바탕으로 고등학생 질문글 태그와 매칭되는 질문글을 조회하는 API")
+    @GetMapping("/high-school-student-question/recommendation/tags")
+    public ResponseEntity<PageResponse<RecommendationHighSchoolStudentQuestionResponse>> getTopHighSchoolStudentQuestionsByTags() {
+        PageResponse<RecommendationHighSchoolStudentQuestionResponse> response = mentoringQueryService.getTopQuestionByTagScore();
         return ResponseEntity.ok(response);
     }
 }

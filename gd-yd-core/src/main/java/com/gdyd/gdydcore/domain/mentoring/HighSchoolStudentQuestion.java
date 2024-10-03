@@ -46,9 +46,11 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
     String universityNameTag;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     UniversityMajorCategory universityMajorTag;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     Grade universityGradeTag;
 
     @ManyToOne(fetch = FetchType.LAZY)
