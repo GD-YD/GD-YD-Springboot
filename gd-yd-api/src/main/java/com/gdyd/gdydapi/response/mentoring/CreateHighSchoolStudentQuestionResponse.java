@@ -14,13 +14,25 @@ public record CreateHighSchoolStudentQuestionResponse(
         String title,
 
         @Schema(description = "고등학생 질문 내용", example = "12344로 해당 대학에 입학할 수 있을까요?")
-        String question
+        String question,
+
+        @Schema(description = "질문글에서 답변을 원하는 대학생의 학교명")
+        String universityNameTag,
+
+        @Schema(description = "질문글에서 답변을 원하는 대학생의 학과")
+        String universityMajorTag,
+
+        @Schema(description = "질문글에서 답변을 원하는 대학생의 학년")
+        String universityGradeTag
 ) {
     public static CreateHighSchoolStudentQuestionResponse from(HighSchoolStudentQuestion highSchoolStudentQuestion) {
         return CreateHighSchoolStudentQuestionResponse.builder()
                 .highSchoolStudentQuestionId(highSchoolStudentQuestion.getId())
                 .title(highSchoolStudentQuestion.getTitle())
                 .question(highSchoolStudentQuestion.getQuestion())
+                .universityNameTag(highSchoolStudentQuestion.getUniversityNameTag())
+                .universityMajorTag(highSchoolStudentQuestion.getUniversityMajorTag().getValue())
+                .universityGradeTag(highSchoolStudentQuestion.getUniversityGradeTag().getValue())
                 .build();
     }
 }

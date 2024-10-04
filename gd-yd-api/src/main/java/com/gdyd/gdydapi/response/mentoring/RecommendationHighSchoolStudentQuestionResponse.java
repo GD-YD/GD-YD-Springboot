@@ -14,13 +14,25 @@ public record RecommendationHighSchoolStudentQuestionResponse(
         String title,
 
         @Schema(description = "매칭된 고등학생 질문글 내용", example = "현재 수능 23225 입니다.")
-        String question
+        String question,
+
+        @Schema(description = "매칭된 고등학생 질문글에서 답변을 원하는 대학생의 학교명", example = "단국대학교")
+        String universityNameTag,
+
+        @Schema(description = "매칭된 고등학생 질문글에서 답변을 원하는 대학생의 학과", example = "컴퓨터/SW")
+        String universityMajorTag,
+
+        @Schema(description = "매칭된 고등학생 질문글에서 답변을 원하는 대학생의 학년", example = "1학년")
+        String universityGradeTag
 ) {
     public static RecommendationHighSchoolStudentQuestionResponse from(HighSchoolStudentQuestion highSchoolStudentQuestion) {
         return RecommendationHighSchoolStudentQuestionResponse.builder()
                 .id(highSchoolStudentQuestion.getId())
                 .title(highSchoolStudentQuestion.getTitle())
                 .question(highSchoolStudentQuestion.getQuestion())
+                .universityNameTag(highSchoolStudentQuestion.getUniversityNameTag())
+                .universityMajorTag(highSchoolStudentQuestion.getUniversityMajorTag().getValue())
+                .universityGradeTag(highSchoolStudentQuestion.getUniversityGradeTag().getValue())
                 .build();
     }
 }
