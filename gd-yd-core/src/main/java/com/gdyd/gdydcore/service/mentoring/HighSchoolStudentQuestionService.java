@@ -1,5 +1,7 @@
 package com.gdyd.gdydcore.service.mentoring;
 
+import com.gdyd.gdydcore.domain.member.Grade;
+import com.gdyd.gdydcore.domain.member.UniversityMajorCategory;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
 import com.gdyd.gdydcore.repository.mentoring.HighSchoolStudentQuestionRepository;
 import com.gdyd.gdydsupport.exception.BusinessException;
@@ -30,6 +32,10 @@ public class HighSchoolStudentQuestionService {
 
     public List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         return highSchoolStudentQuestionRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
+    }
+
+    public List<HighSchoolStudentQuestion> findTopQuestionsByScore(String universityNameTag, UniversityMajorCategory universityMajorTag, Grade universityGradeTag, LocalDateTime cutoffDate, Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findTopQuestionsByTag(universityNameTag, universityMajorTag, universityGradeTag, cutoffDate, pageable);
     }
 
     @Transactional

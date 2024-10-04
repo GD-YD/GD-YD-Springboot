@@ -23,6 +23,15 @@ public record DetailHighSchoolStudentQuestionResponse(
         @Schema(description = "고등학생 질문 내용", example = "이번에 모의고사 성적이 나왔는데, 이 성적으로 어떤 대학을 갈수 있을까요?")
         String question,
 
+        @Schema(description = "고등학생 질문에서 답변을 원하는 대학생의 학교명", example = "단국대학교")
+        String universityNameTag,
+
+        @Schema(description = "고등학생 질문에서 답변을 원하는 대학생의 학과", example = "컴퓨터/SW")
+        String universityMajorTag,
+
+        @Schema(description = "고등학생 질문에서 답변을 원하는 대학생의 학년", example = "1학년")
+        String universityGradeTag,
+
         @Schema(description = "고등학생 질문에 대한 좋아요 수", example = "3")
         Long likeCount,
 
@@ -51,6 +60,9 @@ public record DetailHighSchoolStudentQuestionResponse(
                 .highSchoolStudentNickname(highSchoolStudentQuestion.getHighSchoolStudent().getNickname())
                 .title(highSchoolStudentQuestion.getTitle())
                 .question(highSchoolStudentQuestion.getQuestion())
+                .universityNameTag(highSchoolStudentQuestion.getUniversityNameTag())
+                .universityMajorTag(highSchoolStudentQuestion.getUniversityMajorTag().getValue())
+                .universityGradeTag(highSchoolStudentQuestion.getUniversityGradeTag().getValue())
                 .likeCount(highSchoolStudentQuestion.getLikeCount())
                 .awnserCount(highSchoolStudentQuestion.getAnswerCount())
                 .highSchoolStudentQuestionMediaUrls(highSchoolStudentQuestionMediaUrls)
