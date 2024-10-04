@@ -36,6 +36,9 @@ public record CreateHighSchoolStudentQuestionRequest(
             CreateHighSchoolStudentQuestionRequest request,
             HighSchoolStudent highSchoolStudent
     ) {
+        String universityNameTag = request.universityNameTag() == null || request.universityNameTag().isBlank()
+                ? "DEFAULT"
+                : request.universityNameTag();
         UniversityMajorCategory universityMajorTag = request.universityMajorTag() == null
                 ? UniversityMajorCategory.DEFAULT
                 : request.universityMajorTag();
@@ -47,7 +50,7 @@ public record CreateHighSchoolStudentQuestionRequest(
                 .title(request.title())
                 .question(request.question())
                 .highSchoolStudent(highSchoolStudent)
-                .universityNameTag(request.universityNameTag())
+                .universityNameTag(universityNameTag)
                 .universityGradeTag(universityGradeTag)
                 .universityMajorTag(universityMajorTag)
                 .build();
