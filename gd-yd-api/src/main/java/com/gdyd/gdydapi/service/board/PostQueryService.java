@@ -30,8 +30,8 @@ public class PostQueryService {
         return GetPostResponse.from(post);
     }
 
-    public PageResponse<GetPostSummaryResponse> getBestPostList(LocalDateTime weeksAgo, Pageable pageable) {
-        List<Post> posts = postService.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+    public PageResponse<GetPostSummaryResponse> getBestPostList(int like, LocalDateTime weeksAgo, Pageable pageable) {
+        List<Post> posts = postService.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
         return PageResponse.of(posts.stream().map(GetPostSummaryResponse::from).toList());
     }
 }

@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdAndMemberId(Long postId, Long memberId);
 
-    List<Post> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable);
+    List<Post> findByLikeCountGreaterThanEqualAndCreatedAtAfter(int like, LocalDateTime weeksAgo, Pageable pageable);
 }

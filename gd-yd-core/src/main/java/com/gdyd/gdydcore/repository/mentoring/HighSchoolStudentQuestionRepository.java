@@ -27,4 +27,6 @@ public interface HighSchoolStudentQuestionRepository extends JpaRepository<HighS
             @Param("universityGradeTag") Grade universityGradeTag,
             @Param("cutoffDate") LocalDateTime cutoffDate,
             Pageable pageable);
+
+    List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable);
 }

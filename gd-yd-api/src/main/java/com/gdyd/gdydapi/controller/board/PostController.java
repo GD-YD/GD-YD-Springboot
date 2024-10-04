@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 public class PostController {
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
+    private static final String DEFAULT_CRITERIA = "createdAt";
 
     @Operation(summary = "Post 생성 API", description = "Post를 생성하는 API")
     @PostMapping
@@ -48,24 +49,28 @@ public class PostController {
             @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
         Pageable pageable = switch (criteria) {
-            case "likeCount" -> PageRequest.of(page, size, Sort.by("likeCount", "createdAt").descending());
-            default -> PageRequest.of(page, size, Sort.by("createdAt"));
+            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria, DEFAULT_CRITERIA).descending());
+            default -> PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         };
         PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "인기 Post 조회 API", description = "특정 기간 내 인기 게시글 n개를 불러오는 API")
+    @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "인기글 개수")
     @Parameter(name = "period", description = "인기글 기준 기간 (주 단위: 값이 1일 경우 1주일 내)")
+    @Parameter(name = "like", description = "인기글 기준 좋아요 수")
     @GetMapping("/best")
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getBestPostList(
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
-            @RequestParam(value = "period", defaultValue = "1") int period
+            @RequestParam(value = "period", defaultValue = "1") int period,
+            @RequestParam(value = "like", defaultValue = "10") int like
     ) {
         LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
-        Pageable pageable = PageRequest.of(0, size, Sort.by("likeCount", "createdAt").descending());
-        PageResponse<GetPostSummaryResponse> response = postQueryService.getBestPostList(weeksAgo, pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
+        PageResponse<GetPostSummaryResponse> response = postQueryService.getBestPostList(like, weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
 

@@ -30,8 +30,8 @@ public class HighSchoolStudentQuestionService {
         return highSchoolStudentQuestionRepository.findAll(pageable);
     }
 
-    public List<HighSchoolStudentQuestion> findAllByCreatedAtIsAfter(LocalDateTime weeksAgo, Pageable pageable) {
-        return highSchoolStudentQuestionRepository.findAllByCreatedAtIsAfter(weeksAgo, pageable);
+    public List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
     }
 
     public List<HighSchoolStudentQuestion> findTopQuestionsByScore(String universityNameTag, UniversityMajorCategory universityMajorTag, Grade universityGradeTag, LocalDateTime cutoffDate, Pageable pageable) {
