@@ -3,7 +3,6 @@ package com.gdyd.gdydapi.controller.mentoring;
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
-import com.gdyd.gdydapi.response.board.GetPostSummaryResponse;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
 import com.gdyd.gdydapi.response.common.ScrapListResponse;
@@ -34,6 +33,7 @@ import java.time.LocalDateTime;
 public class MentoringController {
     private final MentoringCommandService mentoringCommandService;
     private final MentoringQueryService mentoringQueryService;
+    private static final String DEFAULT_CRITERIA = "createdAt";
 
     @Operation(summary = "고등학생 질문 등록 API", description = "고등학생이 질문을 등록하는 API")
     @PostMapping("/high-school-student-question")
@@ -66,8 +66,8 @@ public class MentoringController {
             @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
         Pageable pageable = switch (criteria) {
-            case "likeCount" -> PageRequest.of(page, size, Sort.by("likeCount", "createdAt").descending());
-            default -> PageRequest.of(page, size, Sort.by("createdAt").descending());
+            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria, DEFAULT_CRITERIA).descending());
+            default -> PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         };
         PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getHighSchoolStudentQuestions(pageable);
         return ResponseEntity.ok(response);
@@ -83,10 +83,10 @@ public class MentoringController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
             @RequestParam(value = "period", defaultValue = "1") int period,
-            @RequestParam(value = "like", defaultValue = "10") int like
+            @RequestParam(value = "like", defaultValue = "10") Long like
     ) {
         LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getBestHighSchoolStudentQuestions(like, weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }

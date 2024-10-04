@@ -30,7 +30,7 @@ public class MentoringQueryService {
         return PageResponse.of(pages.getContent().stream().map(HighSchoolStudentQuestionResponse::from).toList());
     }
 
-    public PageResponse<HighSchoolStudentQuestionResponse> getBestHighSchoolStudentQuestions(int like, LocalDateTime weeksAgo, Pageable pageable) {
+    public PageResponse<HighSchoolStudentQuestionResponse> getBestHighSchoolStudentQuestions(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         List<HighSchoolStudentQuestion> questions = highSchoolStudentQuestionService.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
         return PageResponse.of(questions.stream().map(HighSchoolStudentQuestionResponse::from).toList());
     }

@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 public class PostController {
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
+    private static final String DEFAULT_CRITERIA = "createdAt";
 
     @Operation(summary = "Post 생성 API", description = "Post를 생성하는 API")
     @PostMapping
@@ -48,8 +49,8 @@ public class PostController {
             @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
     ) {
         Pageable pageable = switch (criteria) {
-            case "likeCount" -> PageRequest.of(page, size, Sort.by("likeCount", "createdAt").descending());
-            default -> PageRequest.of(page, size, Sort.by("createdAt").descending());
+            case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria, DEFAULT_CRITERIA).descending());
+            default -> PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         };
         PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
@@ -68,7 +69,7 @@ public class PostController {
             @RequestParam(value = "like", defaultValue = "10") int like
     ) {
         LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         PageResponse<GetPostSummaryResponse> response = postQueryService.getBestPostList(like, weeksAgo, pageable);
         return ResponseEntity.ok(response);
     }
