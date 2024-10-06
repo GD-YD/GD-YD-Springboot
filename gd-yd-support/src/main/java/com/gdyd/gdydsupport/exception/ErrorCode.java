@@ -15,6 +15,7 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "NOT_FOUND_MEMBER", "해당 회원을 찾을 수 없습니다."),
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_TYPE", "유효하지 않은 회원 타입입니다."),
     INVALID_MEMBER_REQUEST(HttpStatus.BAD_REQUEST, "INVALID_MEMBER_REQUEST", "해당 회원은 요청할 수 없습니다."),
+    INVALID_NICKNAME(HttpStatus.BAD_REQUEST, "INVALID_NICKNAME", "이미 사용중인 닉네임입니다."),
 
     // LIKELIST
     ALREADY_LIKED(HttpStatus.BAD_REQUEST, "ALREADY_LIKED", "이미 좋아요를 누른 글입니다."),
