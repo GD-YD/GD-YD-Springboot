@@ -47,4 +47,7 @@ public class HighSchoolStudent extends Member {
         this.highSchoolStudentId = highSchoolStudentId;
     }
 
+    public void updateGrade(Grade grade) {
+        this.highSchoolGrade = grade;
+    }
 }

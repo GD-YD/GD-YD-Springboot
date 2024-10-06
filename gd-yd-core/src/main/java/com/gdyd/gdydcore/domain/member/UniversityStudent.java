@@ -60,4 +60,12 @@ public class UniversityStudent extends Member {
         this.universityMajor = universityMajor;
         this.universityStudentId = universityStudentId;
     }
+
+    public void updateGrade(Grade grade) {
+        this.universityGrade = grade;
+    }
+
+    public void updateUniversityMajorCategory(UniversityMajorCategory universityMajorCategory) {
+        this.universityMajorCategory = universityMajorCategory;
+    }
 }
