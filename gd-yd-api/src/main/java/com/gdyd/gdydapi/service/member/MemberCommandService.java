@@ -36,17 +36,17 @@ public class MemberCommandService {
             throw new BusinessException(ErrorCode.INVALID_NICKNAME);
         }
 
+        member.updateNickname(request.nickname());
+        member.updateProfileImage(request.profileImageUrl());
+        memberService.save(member);
+
         if (member.getType() == MemberType.UNIVERSITY_STUDENT) {
             UniversityStudent universityStudent = universityStudentService.getUniversityStudentByMemberId(memberId);
-            universityStudent.updateNickname(request.nickname());
-            universityStudent.updateProfileImage(request.profileImageUrl());
             universityStudent.updateGrade(request.grade());
             universityStudent.updateUniversityMajorCategory(request.universityMajorCategory());
             universityStudentService.save(universityStudent);
         } else {
             HighSchoolStudent highSchoolStudent = highSchoolStudentService.getHighSchoolStudentByMemberId(memberId);
-            highSchoolStudent.updateNickname(request.nickname());
-            highSchoolStudent.updateProfileImage(request.profileImageUrl());
             highSchoolStudent.updateGrade(request.grade());
             highSchoolStudentService.save(highSchoolStudent);
         }
