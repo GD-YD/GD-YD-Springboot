@@ -23,9 +23,13 @@ public record GetPostSummaryResponse(
         Long likeCount,
 
         @Schema(description = "Post 댓글 수")
-        Long comments
+        Long comments,
+
+        @Schema(description = "Post 썸네일 URL", example = "https://gdyd.s3.ap-northeast-2.amazonaws.com/...")
+        String thumbnailUrl
 ) {
         public static GetPostSummaryResponse from(Post post) {
+                String thumbnailUrl = post.getPostMedias().isEmpty() ? "DEFAULT" : post.getPostMedias().get(0).getUrl();
                 return GetPostSummaryResponse.builder()
                         .postId(post.getId())
                         .memberNickname(post.getMember().getNickname())
@@ -33,6 +37,7 @@ public record GetPostSummaryResponse(
                         .content(post.getContent())
                         .likeCount(post.getLikeCount())
                         .comments((long)post.getComments().size())
+                        .thumbnailUrl(thumbnailUrl)
                         .build();
         }
 }
