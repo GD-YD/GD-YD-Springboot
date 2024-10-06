@@ -5,7 +5,10 @@ import com.gdyd.gdydcore.domain.board.Post;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -42,6 +45,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     String name;
 
+    @Column(nullable = false)
+    String profileImage;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", orphanRemoval = true)
     List<Post> posts = new ArrayList<>();
 
@@ -63,17 +69,18 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.nickname = nickname;
         this.name = name;
+        this.profileImage = "DEFAULT";
     }
 
     public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void updateEmail(String email) {
-        this.email = email;
-    }
-
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

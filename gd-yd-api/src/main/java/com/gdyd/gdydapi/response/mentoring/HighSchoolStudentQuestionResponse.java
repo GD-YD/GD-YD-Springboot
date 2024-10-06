@@ -28,6 +28,9 @@ public record HighSchoolStudentQuestionResponse(
         @Schema(description = "고등학생 질문에서 답변을 원하는 대학생의 학년", example = "1학년")
         String universityGradeTag,
 
+        @Schema(description = "고등학생 질문 썸네일 URL", example = "https://gdyd.s3.ap-northeast-2.amazonaws.com/...")
+        String thumbnailUrl,
+
         @Schema(description = "고등학생 질문에 대한 좋아요 수", example = "3")
         Long likeCount,
 
@@ -40,6 +43,10 @@ public record HighSchoolStudentQuestionResponse(
     public static HighSchoolStudentQuestionResponse from(
             HighSchoolStudentQuestion highSchoolStudentQuestion
     ) {
+        String thumbnailUrl = highSchoolStudentQuestion.getHighSchoolStudentQuestionMedias().isEmpty()
+                ? "DEFAULT"
+                : highSchoolStudentQuestion.getHighSchoolStudentQuestionMedias().get(0).getUrl();
+
         return HighSchoolStudentQuestionResponse.builder()
                 .id(highSchoolStudentQuestion.getId())
                 .highSchoolStudentNickname(highSchoolStudentQuestion.getHighSchoolStudent().getNickname())
@@ -48,6 +55,7 @@ public record HighSchoolStudentQuestionResponse(
                 .universityNameTag(highSchoolStudentQuestion.getUniversityNameTag())
                 .universityMajorTag(highSchoolStudentQuestion.getUniversityMajorTag().getValue())
                 .universityGradeTag(highSchoolStudentQuestion.getUniversityGradeTag().getValue())
+                .thumbnailUrl(thumbnailUrl)
                 .likeCount(highSchoolStudentQuestion.getLikeCount())
                 .answerCount(highSchoolStudentQuestion.getAnswerCount())
                 .createdAt(highSchoolStudentQuestion.getCreatedAt().toString())
