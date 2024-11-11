@@ -12,7 +12,7 @@ public record UpdateProfileRequest(
         @Schema(description = "닉네임", example = "인천교회출신스님")
         String nickname,
 
-        @NotBlank(message = "학년은 필수 입력 값입니다.")
+        @NotNull(message = "학년은 필수 입력 값입니다.")
         @Schema(description = "학년", example = "SECOND")
         Grade grade,
 

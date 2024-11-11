@@ -10,6 +10,7 @@ import com.gdyd.gdydapi.service.member.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,9 @@ public class MemberController {
 
     @Operation(summary = "프로필 수정 API", description = "현재 로그인한 사용자의 프로필 정보를 수정하는 API")
     @PutMapping("/profile")
-    public ResponseEntity<ProfileResponse> updateProfile(UpdateProfileRequest request) {
+    public ResponseEntity<ProfileResponse> updateProfile(
+            @RequestBody @Valid UpdateProfileRequest request
+    ) {
         ProfileResponse response = memberCommandService.updateProfile(request);
         return ResponseEntity.ok(response);
     }
