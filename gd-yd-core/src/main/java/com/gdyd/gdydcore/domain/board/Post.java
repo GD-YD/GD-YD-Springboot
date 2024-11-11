@@ -3,6 +3,7 @@ package com.gdyd.gdydcore.domain.board;
 import com.gdyd.gdydcore.domain.common.BaseTimeEntity;
 import com.gdyd.gdydcore.domain.member.LikeList;
 import com.gdyd.gdydcore.domain.member.Member;
+import com.gdyd.gdydcore.domain.member.ScrapList;
 import com.gdyd.gdydcore.domain.report.Report;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,6 +53,9 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     List<LikeList> likeLists = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
+    List<ScrapList> scrapLists = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", orphanRemoval = true)
     List<Report> reports = new ArrayList<>();
