@@ -2,12 +2,15 @@ package com.gdyd.gdydapi.service.mentoring;
 
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
+import com.gdyd.gdydapi.request.mentoring.UpdateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
-import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.common.ReportResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateHighSchoolStudentQuestionResponse;
 import com.gdyd.gdydapi.response.mentoring.CreateUniversityStudentAnswerResponse;
+import com.gdyd.gdydapi.response.mentoring.DeleteUniversityStudentAnswerResponse;
+import com.gdyd.gdydapi.response.mentoring.UpdateUniversityStudentAnswerResponse;
 import com.gdyd.gdydapi.service.member.MemberQueryService;
 import com.gdyd.gdydauth.jwt.JwtProvider;
 import com.gdyd.gdydauth.jwt.Token;
@@ -20,8 +23,8 @@ import com.gdyd.gdydcore.domain.mentoring.UniversityStudentAnswer;
 import com.gdyd.gdydcore.domain.report.Report;
 import com.gdyd.gdydcore.service.member.LikeListService;
 import com.gdyd.gdydcore.service.member.MemberService;
-import com.gdyd.gdydcore.service.member.ScrapListService;
 import com.gdyd.gdydcore.service.member.ReportService;
+import com.gdyd.gdydcore.service.member.ScrapListService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionMediaService;
 import com.gdyd.gdydcore.service.mentoring.HighSchoolStudentQuestionService;
 import com.gdyd.gdydcore.service.mentoring.UniversityStudentAnswerService;
@@ -107,6 +110,34 @@ public class MentoringCommandService {
         universityStudentAnswerService.save(answer);
         question.increaseAnswerCount();
         return CreateUniversityStudentAnswerResponse.from(answer);
+    }
+
+    /**
+     * 대학생 답변 수정
+     */
+    public UpdateUniversityStudentAnswerResponse updateUniversityStudentAnswer(Long universityStudentAnswerId,UpdateUniversityStudentAnswerRequest request) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
+        if (!answer.getUniversityStudent().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_REQUEST);
+        }
+        answer.updateAnswer(request.answer());
+        return UpdateUniversityStudentAnswerResponse.from(answer);
+    }
+
+    /**
+     * 대학생 답변 삭제
+     */
+    public DeleteUniversityStudentAnswerResponse deleteUniversityStudentAnswer(Long universityStudentAnswerId) {
+        Long memberId = PrincipalUtil.getMemberIdByPrincipal();
+        UniversityStudentAnswer answer = universityStudentAnswerService.getUniversityStudentAnswerById(universityStudentAnswerId);
+        if (!answer.getUniversityStudent().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.INVALID_MEMBER_REQUEST);
+        }
+        // 대학생 답변 삭제 후 고등학생 질문의 답변 수 감소
+        universityStudentAnswerService.delete(answer);
+        answer.getHighSchoolStudentQuestion().decreaseAnswerCount();
+        return DeleteUniversityStudentAnswerResponse.from(answer);
     }
 
     /**

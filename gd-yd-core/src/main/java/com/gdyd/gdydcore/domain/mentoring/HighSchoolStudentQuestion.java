@@ -97,6 +97,10 @@ public class HighSchoolStudentQuestion extends BaseTimeEntity {
         this.answerCount++;
     }
 
+    public void decreaseAnswerCount() {
+        this.answerCount--;
+    }
+
     public void increaseLikeCount() {
         this.likeCount++;
     }

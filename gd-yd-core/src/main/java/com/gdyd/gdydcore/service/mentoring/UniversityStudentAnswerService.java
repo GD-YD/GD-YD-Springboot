@@ -22,4 +22,9 @@ public class UniversityStudentAnswerService {
     public void save(UniversityStudentAnswer universityStudentAnswer) {
         universityStudentAnswerRepository.save(universityStudentAnswer);
     }
+
+    @Transactional
+    public void delete(UniversityStudentAnswer universityStudentAnswer) {
+        universityStudentAnswerRepository.delete(universityStudentAnswer);
+    }
 }
