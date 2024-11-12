@@ -2,6 +2,7 @@ package com.gdyd.gdydapi.controller.mentoring;
 
 import com.gdyd.gdydapi.request.mentoring.CreateHighSchoolStudentQuestionRequest;
 import com.gdyd.gdydapi.request.mentoring.CreateUniversityStudentAnswerRequest;
+import com.gdyd.gdydapi.request.mentoring.UpdateUniversityStudentAnswerRequest;
 import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
@@ -49,6 +50,27 @@ public class MentoringController {
             @RequestBody @Valid CreateUniversityStudentAnswerRequest request
     ) {
         CreateUniversityStudentAnswerResponse response = mentoringCommandService.createUniversityStudentAnswer(highSchoolStudentQuestionId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "대학생 답변 수정 API", description = "대학생이 답변을 수정하는 API")
+    @Parameter(name = "universityStudentAnswerId", description = "대학생 답변글 ID", required = true)
+    @PutMapping("/university-student-answer/{universityStudentAnswerId}")
+    public ResponseEntity<UpdateUniversityStudentAnswerResponse> updateUniversityStudentAnswer(
+            @PathVariable("universityStudentAnswerId") Long universityStudentAnswerId,
+            @RequestBody @Valid UpdateUniversityStudentAnswerRequest request
+    ) {
+        UpdateUniversityStudentAnswerResponse response = mentoringCommandService.updateUniversityStudentAnswer(universityStudentAnswerId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "대학생 답변 삭제 API", description = "대학생이 답변을 삭제하는 API")
+    @Parameter(name = "universityStudentAnswerId", description = "대학생 답변글 ID", required = true)
+    @DeleteMapping("/university-student-answer/{universityStudentAnswerId}")
+    public ResponseEntity<DeleteUniversityStudentAnswerResponse> deleteUniversityStudentAnswer(
+            @PathVariable("universityStudentAnswerId") Long universityStudentAnswerId
+    ) {
+        DeleteUniversityStudentAnswerResponse response = mentoringCommandService.deleteUniversityStudentAnswer(universityStudentAnswerId);
         return ResponseEntity.ok(response);
     }
 

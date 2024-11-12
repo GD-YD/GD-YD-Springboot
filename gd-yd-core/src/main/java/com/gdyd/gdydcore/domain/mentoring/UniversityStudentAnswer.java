@@ -57,6 +57,10 @@ public class UniversityStudentAnswer extends BaseTimeEntity {
         this.highSchoolStudentQuestion = highSchoolStudentQuestion;
     }
 
+    public void updateAnswer(String answer) {
+        this.answer = answer;
+    }
+
     public void increaseLikeCount() {
         this.likeCount++;
     }
