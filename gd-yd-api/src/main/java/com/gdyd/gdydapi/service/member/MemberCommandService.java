@@ -32,7 +32,7 @@ public class MemberCommandService {
         Long memberId = PrincipalUtil.getMemberIdByPrincipal();
         Member member = memberService.getMemberById(memberId);
 
-        if (memberService.existingNickname(request.nickname())) {
+        if (memberService.existingNickname(request.nickname()) && !member.getNickname().equals(request.nickname())) {
             throw new BusinessException(ErrorCode.INVALID_NICKNAME);
         }
 
