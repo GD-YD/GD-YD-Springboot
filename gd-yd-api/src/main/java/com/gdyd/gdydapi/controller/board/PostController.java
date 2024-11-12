@@ -6,8 +6,8 @@ import com.gdyd.gdydapi.request.report.ReportRequest;
 import com.gdyd.gdydapi.response.board.*;
 import com.gdyd.gdydapi.response.common.LikeListResponse;
 import com.gdyd.gdydapi.response.common.PageResponse;
-import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.response.common.ReportResponse;
+import com.gdyd.gdydapi.response.common.ScrapListResponse;
 import com.gdyd.gdydapi.service.board.PostCommandService;
 import com.gdyd.gdydapi.service.board.PostQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,17 +42,21 @@ public class PostController {
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
     @Parameter(name = "criteria", description = "정렬 기준 (createdAt | likeCount)")
+    @Parameter(name = "keyword", description = "검색 키워드 (제목 또는 콘텐츠)")
     @GetMapping
     public ResponseEntity<PageResponse<GetPostSummaryResponse>> getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
-            @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
+            @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria,
+            @RequestParam(value = "keyword", required = false) String keyword
     ) {
         Pageable pageable = switch (criteria) {
             case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria, DEFAULT_CRITERIA).descending());
             default -> PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         };
-        PageResponse<GetPostSummaryResponse> response = postQueryService.getPostList(pageable);
+        PageResponse<GetPostSummaryResponse> response = (keyword != null && !keyword.isBlank())
+                ? postQueryService.searchPostListByKeyword(keyword, pageable)
+                : postQueryService.getPostList(pageable);
         return ResponseEntity.ok(response);
     }
 
@@ -66,7 +70,7 @@ public class PostController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
             @RequestParam(value = "period", defaultValue = "1") int period,
-            @RequestParam(value = "like", defaultValue = "10") int like
+            @RequestParam(value = "like", defaultValue = "10") Long like
     ) {
         LocalDateTime weeksAgo = LocalDateTime.now().minusWeeks(period);
         Pageable pageable = PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());

@@ -30,6 +30,10 @@ public class HighSchoolStudentQuestionService {
         return highSchoolStudentQuestionRepository.findAll(pageable);
     }
 
+    public Page<HighSchoolStudentQuestion> findByKeywordWithPriority(String keyword, Pageable pageable) {
+        return highSchoolStudentQuestionRepository.findByKeywordWithPriority(keyword, pageable);
+    }
+
     public List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         return highSchoolStudentQuestionRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
     }

@@ -78,17 +78,21 @@ public class MentoringController {
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 크기")
     @Parameter(name = "criteria", description = "정렬 기준 (createdAt | likeCount)")
+    @Parameter(name = "keyword", description = "검색 키워드 (제목 또는 콘텐츠)")
     @GetMapping("/high-school-student-questions")
     public ResponseEntity<PageResponse<HighSchoolStudentQuestionResponse>> getHighSchoolStudentQuestionList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
-            @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria
+            @RequestParam(value = "criteria", defaultValue = "createdAt") String criteria,
+            @RequestParam(value = "keyword", required = false) String keyword
     ) {
         Pageable pageable = switch (criteria) {
             case "likeCount" -> PageRequest.of(page, size, Sort.by(criteria, DEFAULT_CRITERIA).descending());
             default -> PageRequest.of(page, size, Sort.by(DEFAULT_CRITERIA).descending());
         };
-        PageResponse<HighSchoolStudentQuestionResponse> response = mentoringQueryService.getHighSchoolStudentQuestions(pageable);
+        PageResponse<HighSchoolStudentQuestionResponse> response = (keyword != null && !keyword.isBlank())
+                ? mentoringQueryService.searchHighSchoolStudentQuestionsByKeyword(keyword, pageable)
+                : mentoringQueryService.getHighSchoolStudentQuestions(pageable);
         return ResponseEntity.ok(response);
     }
 

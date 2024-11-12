@@ -36,6 +36,14 @@ public class MentoringQueryService {
         return PageResponse.of(pages.getContent().stream().map(HighSchoolStudentQuestionResponse::from).toList());
     }
 
+    /**
+     * 고등학생 질문 검색
+     */
+    public PageResponse<HighSchoolStudentQuestionResponse> searchHighSchoolStudentQuestionsByKeyword(String keyword, Pageable pageable) {
+        Page<HighSchoolStudentQuestion> pages = highSchoolStudentQuestionService.findByKeywordWithPriority(keyword, pageable);
+        return PageResponse.of(pages.getContent().stream().map(HighSchoolStudentQuestionResponse::from).toList());
+    }
+
     public PageResponse<HighSchoolStudentQuestionResponse> getBestHighSchoolStudentQuestions(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         List<HighSchoolStudentQuestion> questions = highSchoolStudentQuestionService.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
         return PageResponse.of(questions.stream().map(HighSchoolStudentQuestionResponse::from).toList());
