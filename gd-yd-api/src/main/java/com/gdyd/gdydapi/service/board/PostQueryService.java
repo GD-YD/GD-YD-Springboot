@@ -25,12 +25,17 @@ public class PostQueryService {
         return PageResponse.of(pages.getContent().stream().map(GetPostSummaryResponse::from).toList());
     }
 
+    public PageResponse<GetPostSummaryResponse> searchPostListByKeyword(String keyword, Pageable pageable) {
+        Page<Post> postPage = postService.findByKeywordWithPriority(keyword, pageable);
+        return PageResponse.of(postPage.getContent().stream().map(GetPostSummaryResponse::from).toList());
+    }
+
     public GetPostResponse getPostAndCommentsByPostId(Long postId) {
         Post post = postService.getPostById(postId);
         return GetPostResponse.from(post);
     }
 
-    public PageResponse<GetPostSummaryResponse> getBestPostList(int like, LocalDateTime weeksAgo, Pageable pageable) {
+    public PageResponse<GetPostSummaryResponse> getBestPostList(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         List<Post> posts = postService.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
         return PageResponse.of(posts.stream().map(GetPostSummaryResponse::from).toList());
     }

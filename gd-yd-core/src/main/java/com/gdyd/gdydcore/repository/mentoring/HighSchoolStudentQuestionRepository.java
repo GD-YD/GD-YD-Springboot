@@ -3,6 +3,7 @@ package com.gdyd.gdydcore.repository.mentoring;
 import com.gdyd.gdydcore.domain.member.Grade;
 import com.gdyd.gdydcore.domain.member.UniversityMajorCategory;
 import com.gdyd.gdydcore.domain.mentoring.HighSchoolStudentQuestion;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +28,15 @@ public interface HighSchoolStudentQuestionRepository extends JpaRepository<HighS
             @Param("universityGradeTag") Grade universityGradeTag,
             @Param("cutoffDate") LocalDateTime cutoffDate,
             Pageable pageable);
+
+    @Query("""
+        SELECT q FROM HighSchoolStudentQuestion q
+        WHERE q.title LIKE %:keyword% OR q.question LIKE %:keyword%
+        ORDER BY
+            CASE WHEN q.title LIKE %:keyword% THEN 0 ELSE 1 END,
+            q.createdAt DESC
+    """)
+    Page<HighSchoolStudentQuestion> findByKeywordWithPriority(@Param("keyword") String keyword, Pageable pageable);
 
     List<HighSchoolStudentQuestion> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable);
 }

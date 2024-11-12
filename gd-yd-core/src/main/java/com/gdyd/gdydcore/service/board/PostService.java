@@ -19,11 +19,6 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
 
-    @Transactional
-    public void savePost(Post post)  {
-        postRepository.save(post);
-    }
-
     public Page<Post> getPostListByPagination(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
@@ -38,8 +33,17 @@ public class PostService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.UNAUTHORIZED_MEMBER));
     }
 
-    public List<Post> findByLikeCountGreaterThanEqualAndCreatedAtAfter(int like, LocalDateTime weeksAgo, Pageable pageable) {
+    public List<Post> findByLikeCountGreaterThanEqualAndCreatedAtAfter(Long like, LocalDateTime weeksAgo, Pageable pageable) {
         return postRepository.findByLikeCountGreaterThanEqualAndCreatedAtAfter(like, weeksAgo, pageable);
+    }
+
+    public Page<Post> findByKeywordWithPriority(String keyword, Pageable pageable) {
+        return postRepository.findByKeywordWithPriority(keyword, pageable);
+    }
+
+    @Transactional
+    public void savePost(Post post)  {
+        postRepository.save(post);
     }
 
     @Transactional
